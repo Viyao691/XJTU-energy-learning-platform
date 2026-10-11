@@ -2,6 +2,10 @@
 
 ## 2026-10-11 GitHub introduction
 
+- Online video page: GitHub Pages was previously absent and is now published from `codex/video-demo`, commit `c2c9730`; API site/build status is `built`. It reuses the original Release MP4 without transcoding.
+- Local browser player: duration 315.285333 seconds, metadata/frames readyState 4, playback started and currentTime reached 9.712984 seconds. Public player HTML returned HTTP 200 and matched this tested HTML. Video range request returned HTTP 206, `bytes 0-1023/221642366`.
+- Public-browser navigation and rebinding timed out; no complete public-browser playback, seeking or mobile-device test was run. README/doc whitespace check passed.
+
 - Follow-up problem-statement revision: five separate problem headings with bold action points. A section-isolation check confirms the README content outside this section is unchanged; Git whitespace validation passed after replacing a Markdown trailing-space line break with a separate blockquote paragraph.
 
 - Before the update, GitHub API confirmed public repository ownership, admin/push permissions and main commit `c0751e1fe7d0e48256b09ab34fbeb503bfce0d46`, matching the independent release checkout.

@@ -11,7 +11,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Python%203.12-3b786c?style=flat-square)
 ![Local First](https://img.shields.io/badge/Local-First-b08b50?style=flat-square)
 
-[📦 下载 Windows 便携版](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) · [🎬 完整演示视频](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/platform-demo-2026-10-11/energy-platform-demo-1080p.mp4) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
+[📦 下载 Windows 便携版](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) · [🎬 在线播放完整演示](https://viyao691.github.io/XJTU-energy-learning-platform/) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
 
 </div>
 
@@ -21,9 +21,11 @@
 
 **约 5 分 15 秒，看一遍从论文发现、研读到学习与科研实践的完整操作。**
 
-[![能研智助 · 点击获取完整演示视频](docs/github/screenshots/demo-preview.gif)](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/platform-demo-2026-10-11/energy-platform-demo-1080p.mp4)
+点击下方预览进入播放器，直接观看完整视频，支持进度跳转、音量调节和全屏。
 
-[**完整演示 · 1080p MP4**](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/platform-demo-2026-10-11/energy-platform-demo-1080p.mp4) · [视频发布页](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/platform-demo-2026-10-11)
+[![能研智助 · 点击在线播放完整演示](docs/github/screenshots/demo-preview.gif)](https://viyao691.github.io/XJTU-energy-learning-platform/)
+
+[**▶ 在线播放完整演示**](https://viyao691.github.io/XJTU-energy-learning-platform/) · [下载原版 1080p MP4](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/platform-demo-2026-10-11/energy-platform-demo-1080p.mp4) · [视频发布页](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/platform-demo-2026-10-11)
 
 ## 解决的问题
 

@@ -4,6 +4,8 @@ Updated: 2026-10-11
 
 ## GitHub introduction and project name
 
+Full-video online playback is available at https://viyao691.github.io/XJTU-energy-learning-platform/ . GitHub Pages serves a small native video-player page from the independent `codex/video-demo` branch (`c2c9730`), referencing the existing original MP4 Release asset. README video buttons and the animated preview now open the player; the original download link remains available. The local player loaded the full 315.285333-second video and played to 9.71 seconds. Pages reports `built`; public HTML matches the tested player and the video returned HTTP 206 for a 1024-byte range request. Public-tab automation timed out, so no full playback or seeking check on the deployed page is claimed.
+
 The problem statement was subsequently rewritten around five separate priorities: professional learning, storage-industry understanding, campus/competition opportunities, research practice, and continuity of materials/evidence. Each has a short context paragraph and bold, separated action points; paper reading is one component of the broader learning/research workflow.
 
 The public repository is now named `XJTU-energy-learning-platform`. Its README uses a visual introduction, short problem statements and eight illustrated feature sections. Thirteen demonstration screenshots were added to the original six, alongside an eight-second animated video preview. Clone, download and release links use the new repository name. The requested PDF-cover/private-library paragraph was removed.

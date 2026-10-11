@@ -6,4 +6,5 @@
 - 页面、编年史/城市图片、论文卡片主题插画和校园公开资讯代码属于公开版产品内容。
 - README 提供 19 张真实页面展示，以及平台演示视频的动态预览；页面示例不包含密钥，演示素材说明见 `ASSETS.md`。
 - [完整 1080p 演示视频](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/platform-demo-2026-10-11)单独作为 Release 资产分发，不写入源码历史。
+- [完整演示在线播放](https://viyao691.github.io/XJTU-energy-learning-platform/)由独立 `codex/video-demo` 分支发布到 GitHub Pages，直接播放同一份原视频；README 已提供在线播放与下载两个入口。
 - 首两个发布提交均带 `[skip ci]`，避免首次发布时触发全套 CI；后续常规变更仍使用仓库 CI。
