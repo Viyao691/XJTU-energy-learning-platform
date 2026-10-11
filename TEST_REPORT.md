@@ -2,6 +2,8 @@
 
 ## 2026-10-11 GitHub introduction
 
+- Follow-up problem-statement revision: five separate problem headings with bold action points. A section-isolation check confirms the README content outside this section is unchanged; Git whitespace validation passed after replacing a Markdown trailing-space line break with a separate blockquote paragraph.
+
 - Before the update, GitHub API confirmed public repository ownership, admin/push permissions and main commit `c0751e1fe7d0e48256b09ab34fbeb503bfce0d46`, matching the independent release checkout.
 - Repository rename and description/topics update succeeded through GitHub API.
 - README local file links passed; nineteen static screenshots and one eight-second GIF exist. The requested paragraph and old repository name are absent from README. Git whitespace validation passed.

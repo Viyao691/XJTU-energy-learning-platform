@@ -4,6 +4,8 @@ Updated: 2026-10-11
 
 ## GitHub introduction and project name
 
+The problem statement was subsequently rewritten around five separate priorities: professional learning, storage-industry understanding, campus/competition opportunities, research practice, and continuity of materials/evidence. Each has a short context paragraph and bold, separated action points; paper reading is one component of the broader learning/research workflow.
+
 The public repository is now named `XJTU-energy-learning-platform`. Its README uses a visual introduction, short problem statements and eight illustrated feature sections. Thirteen demonstration screenshots were added to the original six, alongside an eight-second animated video preview. Clone, download and release links use the new repository name. The requested PDF-cover/private-library paragraph was removed.
 
 This documentation update passed a local README-link check and Git whitespace validation. The user-provided full video was inspected with FFprobe: H.264/AAC, 1920×1080, 30 fps, 315.285333 seconds and 221,642,366 bytes. Application source and the existing Windows portable ZIP were not rebuilt for this introduction update.
