@@ -4,7 +4,7 @@ param(
   [string]$Tag = 'v0.1.0-windows-portable',
   [Parameter(Mandatory)][string]$TargetCommit,
   [string]$Owner = 'Viyao691',
-  [string]$Repo = 'energy-storage-research-learning-platform'
+  [string]$Repo = 'XJTU-energy-learning-platform'
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Net.Http

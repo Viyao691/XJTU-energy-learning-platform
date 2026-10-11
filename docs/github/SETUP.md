@@ -59,8 +59,8 @@ docker compose ps
 需要 Node.js 24、Python 3.12 和 `uv`。克隆代码后，可分别在两个终端运行前端与后端。PowerShell 示例：
 
 ```powershell
-git clone https://github.com/Viyao691/energy-storage-research-learning-platform.git
-cd energy-storage-research-learning-platform
+git clone https://github.com/Viyao691/XJTU-energy-learning-platform.git
+cd XJTU-energy-learning-platform
 Copy-Item .env.example .env
 ```
 

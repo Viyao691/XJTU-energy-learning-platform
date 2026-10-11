@@ -1,5 +1,14 @@
 # Release verification
 
+## 2026-10-11 GitHub introduction
+
+- Before the update, GitHub API confirmed public repository ownership, admin/push permissions and main commit `c0751e1fe7d0e48256b09ab34fbeb503bfce0d46`, matching the independent release checkout.
+- Repository rename and description/topics update succeeded through GitHub API.
+- README local file links passed; nineteen static screenshots and one eight-second GIF exist. The requested paragraph and old repository name are absent from README. Git whitespace validation passed.
+- Original video FFprobe: H.264/AAC, 1920×1080, 30 fps, duration 315.285333 seconds, 221,642,366 bytes.
+- GitHub published video Release `platform-demo-2026-10-11` after confirming asset state `uploaded` and exact size 221,642,366 bytes. The original file was uploaded without transcoding.
+- This is an introduction/media update; no application tests, builds, model requests or portable-package rebuilds were run.
+
 ## 2026-10-07 Idea and experiment design deletion
 
 - Backend targeted deletion tests: initial2 failures (405), final2 passed/7 deselected. Covers idea/design cascade scope, independent deletion, dataset preservation and404 responses.
@@ -35,7 +44,7 @@
 - One Windows portable build succeeded and complete Windows backend dependencies were installed. The runtime bundles Python 3.12, Node 24, Pandoc and OCR runtime libraries, with a local runtime proxy, Mock defaults and empty `data`.
 - Cold-start passed from a temporary path containing Chinese characters and spaces, with neither Python nor Node on system PATH. Health, home, dashboard and runtime proxy returned HTTP 200; the empty database initialized Alembic 0029 and campus seed 67. Synthetic PDF upload returned 201; page image and figure card returned 200; DOCX/PPTX creation returned 201 and downloads had PK container format.
 - With port 3100 occupied, the launcher selected 3101. On exit, 8100/3101 closed; temporary data was deleted and stage data is empty. Existing 3001/8001 were untouched.
-- Final asset `Energy-Research-Copilot-Windows-x64.zip`: 926,812,896 bytes (about 884 MiB), empty `data`, bundled licenses and asset manifest. GitHub API confirmed `v0.1.0-windows-portable` is published and the asset is uploaded at the expected size: [Release](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/tag/v0.1.0-windows-portable) · [Download](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip).
+- Final asset `Energy-Research-Copilot-Windows-x64.zip`: 926,812,896 bytes (about 884 MiB), empty `data`, bundled licenses and asset manifest. GitHub API confirmed `v0.1.0-windows-portable` is published and the asset is uploaded at the expected size: [Release](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) · [Download](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip).
 - No Office rendering, real-model/OCR-weight acceptance, or full suites ran.
 
 Release preparation on 2026-10-04:

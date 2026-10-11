@@ -1,6 +1,6 @@
 # Windows 便携安装包
 
-Windows x64 便携版已发布：[直接下载 ZIP（926,812,896 字节，约 884 MiB）](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip)，或打开 [GitHub Releases 发布页](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/tag/v0.1.0-windows-portable)。请下载该 ZIP Release 资产；自动生成的 “Source code” ZIP/TAR 是源码归档。
+Windows x64 便携版已发布：[直接下载 ZIP（926,812,896 字节，约 884 MiB）](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip)，或打开 [GitHub Releases 发布页](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable)。请下载该 ZIP Release 资产；自动生成的 “Source code” ZIP/TAR 是源码归档。
 
 1. 下载 Windows x64 ZIP。
 2. 解压到可写目录。

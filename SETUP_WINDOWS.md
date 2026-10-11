@@ -3,8 +3,8 @@
 Install and start Docker Desktop, clone the public repository, and follow the current [installation guide](docs/github/SETUP.md#windows).
 
 ```powershell
-git clone https://github.com/Viyao691/energy-storage-research-learning-platform.git
-cd energy-storage-research-learning-platform
+git clone https://github.com/Viyao691/XJTU-energy-learning-platform.git
+cd XJTU-energy-learning-platform
 Copy-Item .env.example .env
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start.ps1 -Rebuild
 ```

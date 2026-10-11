@@ -1,6 +1,14 @@
 # Current status
 
-Updated: 2026-10-07
+Updated: 2026-10-11
+
+## GitHub introduction and project name
+
+The public repository is now named `XJTU-energy-learning-platform`. Its README uses a visual introduction, short problem statements and eight illustrated feature sections. Thirteen demonstration screenshots were added to the original six, alongside an eight-second animated video preview. Clone, download and release links use the new repository name. The requested PDF-cover/private-library paragraph was removed.
+
+This documentation update passed a local README-link check and Git whitespace validation. The user-provided full video was inspected with FFprobe: H.264/AAC, 1920×1080, 30 fps, 315.285333 seconds and 221,642,366 bytes. Application source and the existing Windows portable ZIP were not rebuilt for this introduction update.
+
+The full original MP4 is published as the asset `energy-platform-demo-1080p.mp4` in Release `platform-demo-2026-10-11`; GitHub confirmed the uploaded asset state and exact byte count. The existing portable release remains available.
 
 ## Delete research ideas and experiment designs
 
@@ -22,13 +30,13 @@ The embedded reader now remounts when paper, PDF variant or selected page change
 
 ## Windows x64 portable ZIP — released
 
-GitHub Release [v0.1.0-windows-portable](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/tag/v0.1.0-windows-portable) is published from public `main` commit `d1da8994aa19a128acc5be7bd54b0b433985b7e5`. The asset [Energy-Research-Copilot-Windows-x64.zip](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip) is 926,812,896 bytes (about 884 MiB); GitHub API confirmed the release is published and the uploaded asset size matches.
+GitHub Release [v0.1.0-windows-portable](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) is published from public `main` commit `d1da8994aa19a128acc5be7bd54b0b433985b7e5`. The asset [Energy-Research-Copilot-Windows-x64.zip](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip) is 926,812,896 bytes (about 884 MiB); GitHub API confirmed the release is published and the uploaded asset size matches.
 
 Cold-start validation passed from a Chinese/space-containing path without Python or Node on system PATH: health, home, dashboard, and local runtime proxy returned HTTP 200; Alembic 0029 and campus seed 67 initialized; synthetic PDF upload returned 201, page image and figure card returned 200, DOCX/PPTX creation returned 201 and downloads had valid PK container signatures. With 3100 occupied, the launcher chose 3101; 8100/3101 closed on exit, temporary data was removed, and stage data was empty. Existing 3001/8001 were untouched. No Office rendering, real-model/OCR-weight acceptance, or full suites ran.
 
 ## Release scope
 
-The clean public GitHub release of Energy Research Copilot has been pushed to [`Viyao691/energy-storage-research-learning-platform`](https://github.com/Viyao691/energy-storage-research-learning-platform) on `main`. The public version was created in the independent Git directory `outputs/github-release`; the original development directory, its Git history, and personal data remain preserved and must not be pushed to the new repository. Continue future cloud collaboration from the GitHub repository. A clean download starts with an empty personal library and default Mock model configuration.
+The clean public GitHub release of Energy Research Copilot has been pushed to [`Viyao691/XJTU-energy-learning-platform`](https://github.com/Viyao691/XJTU-energy-learning-platform) on `main`. The public version was created in the independent Git directory `outputs/github-release`; the original development directory, its Git history, and personal data remain preserved and must not be pushed to the new repository. Continue future cloud collaboration from the GitHub repository. A clean download starts with an empty personal library and default Mock model configuration.
 
 The first two commits used `[skip ci]` as requested; no full test suites ran. Docker frontend/backend image builds exited successfully and standalone TypeScript check reported 0 errors. Isolated runtime checks on ports 3018/8019 returned HTTP 200 for health, dashboard, paper API proxy, paper 1 figure thumbnail (PNG), and campus sources. Temporary 3018/8019 services, 3019 dev server, and `outputs/github-preview` synthetic demo data have been removed. Original local 3001/8001 services were left untouched.
 
