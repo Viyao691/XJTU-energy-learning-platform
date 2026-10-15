@@ -28,6 +28,7 @@ describe("LearningAnalyticsPanel", () => {
     const { container } = render(<LearningAnalyticsPanel data={fixture} days={7} onDays={vi.fn()} />);
     const chart = container.querySelector<SVGSVGElement>(".la-activity-svg")!;
     expect(Number(chart.getAttribute("viewBox")?.split(" ")[2])).toBeLessThanOrEqual(280);
+    expect(Number(chart.getAttribute("viewBox")?.split(" ")[3])).toBe(180);
     expect(chart.querySelectorAll("rect")).toHaveLength(3);
     expect(chart.textContent).toContain("09-18");
     expect(chart.textContent).toContain("09-24");

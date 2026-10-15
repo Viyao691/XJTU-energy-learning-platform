@@ -482,6 +482,13 @@ export interface ApiSchemas {
     provider: string;
     model_name: string;
   };
+  FeedbackRequest: {
+    message: string;
+    contact?: string | null;
+  };
+  FeedbackResponse: {
+    message: string;
+  };
   FormulaTranscriptionResponse: {
     crop_id: number;
     paper_id: number;

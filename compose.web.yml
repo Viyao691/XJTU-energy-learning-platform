@@ -2,7 +2,7 @@ name: energy-research-web
 
 services:
   backend:
-    image: ${ENERGY_API_IMAGE:-energy-research-api:web-20261015-compact}
+    image: ${ENERGY_API_IMAGE:-energy-research-api:web-20261015-mobile-v2}
     build:
       context: ./backend
       dockerfile: Dockerfile.web
@@ -30,7 +30,7 @@ services:
       retries: 3
 
   frontend:
-    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261015-dock}
+    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261015-mobile-v2}
     build:
       context: .
       dockerfile: frontend/Dockerfile.web

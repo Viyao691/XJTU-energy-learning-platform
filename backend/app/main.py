@@ -54,6 +54,7 @@ from app.storage import make_storage_provider
 from app.task_queue import TaskQueue
 from app.worker import recover_interrupted_tasks
 from app.routers.auth import register_auth_routes
+from app.routers.feedback import register_feedback_routes
 import app.web_model_models  # noqa: F401 -- register the web budget ledger
 
 
@@ -196,6 +197,7 @@ def create_app() -> FastAPI:
             yield db
 
     register_auth_routes(app, get_auth_db)
+    register_feedback_routes(app, get_auth_db)
     register_learning_routes(app, get_db)
     register_paper_research_routes(app, get_db)
     register_learning_review_routes(app, get_db)

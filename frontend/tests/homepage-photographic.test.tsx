@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Hero from "../components/home-hero/Hero";
@@ -24,6 +24,28 @@ describe("photographic category homepage", () => {
   expect(document.querySelector(".hi-photo-scene")?.getAttribute("src")).toBe("/home-hero/scene-light.webp");
   expect(screen.getByTestId("particles").getAttribute("data-theme")).toBe("light");
   expect(screen.queryByText("搜索论文、主题或作者…")).toBeNull();
+ });
+
+ it("keeps four mobile shortcuts and stops the particle scene when the viewport becomes mobile", () => {
+  let mobile = false;
+  let onResize: (() => void) | undefined;
+  vi.stubGlobal("matchMedia", (query: string) => ({ get matches() { return query === "(max-width: 900px)" && mobile; }, addEventListener: (_event: string, listener: () => void) => { if (query === "(max-width: 900px)") onResize = listener; }, removeEventListener: vi.fn() }));
+  render(<Hero theme="light" onTheme={vi.fn()}/>);
+  expect(within(screen.getByRole("navigation", { name: "科研工作入口" })).getAllByRole("link")).toHaveLength(6);
+  expect(screen.getByTestId("particles")).toBeTruthy();
+  mobile = true;
+  act(() => onResize?.());
+  expect(within(screen.getByRole("navigation", { name: "科研工作入口" })).getAllByRole("link").map(link => link.getAttribute("href"))).toEqual(["/library", "/learning", "/research/chronicle", "/research/city-applications"]);
+  expect(screen.queryByTestId("particles")).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "展开论文分类" }));
+  expect(within(screen.getByRole("group", { name: "论文分类菜单" })).getByRole("link", { name: "论文库问答" })).toBeTruthy();
+ });
+
+ it("offers feedback before the notification and theme controls", () => {
+  render(<Hero theme="light" onTheme={vi.fn()}/>);
+  const feedback = screen.getByRole("button", { name: "意见反馈" });
+  const notice = screen.getByRole("link", { name: "科研通知" });
+  expect(feedback.compareDocumentPosition(notice) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
  });
 
  it("returns keyboard focus to the category after Escape and closes after choosing a destination", () => {

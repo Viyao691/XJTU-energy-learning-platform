@@ -398,10 +398,10 @@ class UnavailableEmbeddingProvider:
     model_name = "unavailable"
 
     def embed(self, texts: list[str]) -> list[list[float]]:
-        raise EmbeddingProviderError("尚未配置远端嵌入服务，请联系管理员")
+        raise EmbeddingProviderError("管理员尚未配置远端语义嵌入服务，请等待管理员完成配置")
 
     def test_connection(self) -> tuple[bool, str]:
-        return False, "尚未配置远端嵌入服务，请联系管理员"
+        return False, "管理员尚未配置远端语义嵌入服务，请等待管理员完成配置"
 
 
 class OpenAICompatibleEmbeddingProvider:

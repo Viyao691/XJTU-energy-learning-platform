@@ -1,0 +1,22 @@
+.feedback-trigger { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:0; background:transparent; color:inherit; font:inherit; font-size:13px; cursor:pointer; padding:6px; min-height:36px; white-space:nowrap; }
+.feedback-trigger svg { width:20px; height:20px; flex:none; }
+.hi-photo .hi-photo-account > .feedback-trigger { background:transparent; color:var(--ink); box-shadow:none; border:0; }
+.feedback-trigger:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
+.feedback-dialog { box-sizing:border-box; width:min(480px, calc(100vw - 28px)); max-height:calc(100dvh - 28px); overflow:auto; border:1px solid #8fa7ab; border-radius:18px; padding:22px; color:#173845; background:#f4f5ed; box-shadow:0 22px 80px #071c3655; }
+.feedback-dialog::backdrop { background:#081e30a6; }
+.feedback-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.feedback-dialog h2 { font-size:21px; line-height:1.3; margin:0; }
+.feedback-dialog button { cursor:pointer; font:inherit; min-height:40px; border:1px solid #809da4; border-radius:9px; padding:7px 13px; color:inherit; background:transparent; }
+.feedback-dialog .feedback-note { font-size:13px; line-height:1.6; margin:12px 0 18px; color:inherit; opacity:.8; }
+.feedback-dialog form { display:flex; flex-direction:column; gap:8px; }
+.feedback-dialog label { font-size:14px; }
+.feedback-dialog textarea, .feedback-dialog input { box-sizing:border-box; width:100%; min-width:0; border:1px solid #8da1a5; border-radius:9px; background:#fffdf7; color:#163640; font:inherit; font-size:16px; padding:10px; line-height:1.5; }
+.feedback-dialog textarea { min-height:130px; resize:vertical; }
+.feedback-count { text-align:right; font-size:12px; opacity:.7; margin-top:-4px; }
+.feedback-dialog .feedback-submit { align-self:flex-start; background:#174b58; color:#fffdf3; margin-top:8px; }
+.feedback-dialog button:disabled { opacity:.55; cursor:default; }
+.feedback-dialog [role=alert] { color:#aa3427; margin:4px 0; font-size:13px; }
+.feedback-result { font-size:13px; line-height:1.5; margin:4px 0; }
+[data-theme=dark] .feedback-dialog { background:#152c3c; color:#eaf1ec; border-color:#526b79; }
+[data-theme=dark] .feedback-dialog .feedback-submit { background:#d1ae65; color:#10293a; }
+@media(max-width:900px) { .feedback-trigger { font-size:11px; gap:3px; padding:4px; } .feedback-dialog { padding:16px; border-radius:14px; } .feedback-dialog h2 { font-size:18px; } .feedback-dialog .feedback-note { margin:9px 0 12px; font-size:12px; } .feedback-dialog form { gap:7px; } .feedback-dialog textarea { min-height:110px; } .feedback-dialog button { min-height:44px; } }

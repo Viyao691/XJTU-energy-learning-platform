@@ -13,13 +13,14 @@ function Symbol({ name }: { name: string }) {
  return <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{shapes[name]}</svg>;
 }
 
-export default function Features({ hovered, onHover }: { hovered: PhotographicFeatureId | null; onHover: (feature: PhotographicFeatureId | null) => void }) {
+export default function Features({ hovered, onHover, mobile = false }: { hovered: PhotographicFeatureId | null; onHover: (feature: PhotographicFeatureId | null) => void; mobile?: boolean }) {
+ const cards = mobile ? featureLayout.filter(card => card.id !== 'qa' && card.id !== 'contests') : featureLayout;
  return <>
   <svg className="hi-photo-connectors" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
    {featureLayout.map(card => <g key={card.id} data-feature={card.id} className={hovered === card.id ? 'is-active' : undefined}><path d={card.path}/><circle cx={card.target[0]} cy={card.target[1]} r="5"/></g>)}
   </svg>
   <nav className="hi-photo-features" aria-label="科研工作入口">
-   {featureLayout.map(card => {
+   {cards.map(card => {
     return <Link key={card.id} href={card.href} data-feature={card.id} className={`hi-photo-feature hi-photo-feature-${card.id}${hovered === card.id ? ' is-active' : ''}`} style={{ left: `${card.x / 19.2}%`, top: `${card.y / 10.8}%` }} onPointerEnter={() => onHover(card.id)} onPointerLeave={() => onHover(null)} onFocus={() => onHover(card.id)} onBlur={() => onHover(null)}><Symbol name={card.icon}/><span><strong>{card.title}</strong><small>{card.detail}</small></span></Link>;
    })}
   </nav>

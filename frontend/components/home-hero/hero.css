@@ -65,36 +65,47 @@ body:has(.dashboard>.integrated-hero) .app-footer{display:none}
 .hi-preview{height:100svh;overflow:hidden}
 body:has(.hi-preview) .app-footer{display:none}
 @media(max-width:900px){
- .hi-photo{height:100dvh;min-height:0;display:block;overflow:hidden}
- .hi-photo-frame{width:100%;height:100dvh;min-height:0;container-type:normal;display:flex;flex-direction:column;padding:14px 18px;overflow:hidden}
- .hi-photo-scene{inset:0 auto auto 0;width:100%;height:650px;object-position:center top}
- .hi-photo-frame::before{background:linear-gradient(180deg,rgba(246,237,227,.35),#f2e8dd 640px)}
- .hi-photo.hi-dark .hi-photo-frame::before{background:linear-gradient(180deg,rgba(2,7,12,.16),#080d13 640px)}
+ body:has(.dashboard>.integrated-hero),body:has(.dashboard>.integrated-hero) .app-shell,body:has(.dashboard>.integrated-hero) .app-main,.dashboard:has(.integrated-hero){height:100svh;min-height:0;overscroll-behavior:none}
+ body:has(.dashboard>.integrated-hero) .app-footer{position:fixed;z-index:4;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);display:block;margin:0;padding:4px 12px 6px;font-size:10px;line-height:14px;color:var(--sub,#596674)}
+ html[data-theme="dark"] body:has(.dashboard>.integrated-hero) .app-footer{color:#adc1d4}
+ .hi-photo{height:100svh;min-height:0;display:block;overflow:hidden}
+ .hi-photo-frame{width:100%;height:100svh;min-height:0;container-type:normal;display:flex;flex-direction:column;padding:12px 16px calc(44px + env(safe-area-inset-bottom,0px));overflow:hidden}
+ .hi-photo-scene{inset:0;width:100%;height:100%;object-position:center top}
+ .hi-photo-frame::before{background:linear-gradient(180deg,rgba(246,237,227,.22),rgba(242,232,221,.35))}
+ .hi-photo.hi-dark .hi-photo-frame::before{background:linear-gradient(180deg,rgba(2,7,12,.16),rgba(8,13,19,.35))}
  .hi-photo-header,.hi-photo-copy,.hi-photo-dock{position:relative;top:auto;left:auto;right:auto;width:auto;height:auto}
- .hi-photo .hi-photo-header{display:flex;flex-direction:row;align-items:center;flex-wrap:wrap}
+ .hi-photo .hi-photo-header{display:flex;flex-direction:row;align-items:flex-start;flex-wrap:nowrap;flex:none;gap:4px}
  .hi-photo-brand{gap:5px}
- .hi-photo-brand svg{width:35px;height:35px}
- .hi-photo-brand>span{font-size:15px}
- .hi-photo-brand small{font-size:10px;margin-top:3px}
- .hi-photo-account{gap:7px}
- .hi-photo-notice{width:32px;height:38px}
- .hi-photo-notice svg{width:24px;height:24px}
- .hi-photo-avatar{width:38px;height:38px;font-size:18px}
- .hi-photo-copy{margin-top:16px}
- .hi-photo-copy h1 img{width:min(100%,320px)}
+ .hi-photo-brand svg{width:27px;height:30px}
+ .hi-photo-brand>span{font-size:12px}
+ .hi-photo-brand small{font-size:8px;margin-top:3px}
+ .hi-photo-account{gap:2px;flex:none;align-items:center}
+ .hi-photo .hi-photo-account>.feedback-trigger{width:48px;height:32px;min-width:48px;min-height:32px;padding:0;font-size:11px}
+ .hi-photo .hi-photo-account>.feedback-trigger svg{display:none}
+ .hi-photo .hi-photo-account>.feedback-trigger>span{display:block}
+ .hi-photo-notice{width:28px;height:32px}
+ .hi-photo-notice svg{width:19px;height:19px}
+ .hi-photo .theme-pill-switch{padding:2px;gap:0}
+ .hi-photo .theme-pill-switch__active{left:2px;top:2px;bottom:2px}
+ .hi-photo .theme-pill-switch button{width:28px;height:28px;min-height:28px}
+ .hi-photo .theme-pill-switch button::after{width:18px;height:18px}
+ .hi-photo-avatar{display:none}
+ .hi-photo-copy{flex:none;margin-top:12px}
+ .hi-photo-copy h1 img{width:min(68vw,270px)}
  .hi-photo-description,.hi-photo-motto{display:none}
  .hi-photo-motto::before{width:25px;margin-right:10px}
- .hi-photo-dock{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:auto;padding:8px;border-radius:22px}
- .hi-photo-dock>a,.hi-photo-dock-item>button{flex-direction:column;gap:3px;min-height:60px;text-align:center}
+ .hi-photo-dock{position:relative;flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:auto;padding:6px;border-radius:18px}
+ .hi-photo-dock>a,.hi-photo-dock-item>button{flex-direction:column;gap:2px;min-height:51px;text-align:center}
  .hi-photo-dock>a,.hi-photo-dock-item{border:0}
- .hi-photo-dock-item{position:static}
- .hi-photo-dock-popover,.hi-photo-dock-item:nth-last-child(-n+2) .hi-photo-dock-popover{left:50%;right:auto;translate:-50% 0;bottom:calc(100% + 10px);width:160px;max-width:calc(100vw - 48px);max-height:40dvh}
- .hi-photo-dock svg{width:24px;height:24px}
- .hi-photo-dock strong{font-size:16px}
- .hi-photo-dock small{font-size:12px;margin-top:1px;max-width:100%;white-space:nowrap}
+ .hi-photo-dock-item{position:relative}
+ .hi-photo-dock .hi-photo-dock-item .hi-photo-dock-popover{left:50%;right:auto;translate:-50% 0;bottom:calc(100% + 8px);width:160px;max-width:calc(100vw - 48px);max-height:min(40svh,300px);overscroll-behavior:contain;animation:none}
+ .hi-photo-dock .hi-photo-dock-item:nth-child(3n+1) .hi-photo-dock-popover{left:0;right:auto;translate:0 0}
+ .hi-photo-dock .hi-photo-dock-item:nth-child(3n) .hi-photo-dock-popover{left:auto;right:0;translate:0 0}
+ .hi-photo-dock svg{width:20px;height:20px}
+ .hi-photo-dock strong{font-size:14px}
+ .hi-photo-dock small{font-size:10px;margin-top:1px;max-width:100%;white-space:nowrap}
 }
-@media(max-width:420px){.hi-photo-brand>span{font-size:13px}.hi-photo-brand small{font-size:9px}.hi-photo-avatar{display:none}.hi-photo-dock{gap:4px}}
-@media(max-width:900px) and (max-height:720px){.hi-photo-frame{padding:8px 12px}.hi-photo-copy{margin-top:8px}.hi-photo-copy h1 img{width:min(100%,220px)}.hi-photo-dock{padding:5px;gap:4px}.hi-photo-dock>a,.hi-photo-dock-item>button{min-height:48px;gap:2px}.hi-photo-dock svg{width:20px;height:20px}.hi-photo-dock strong{font-size:14px}.hi-photo-dock small{font-size:10.5px}}
+@media(max-width:900px) and (max-height:720px){.hi-photo-frame{padding:8px 12px calc(42px + env(safe-area-inset-bottom,0px))}.hi-photo-copy{margin-top:8px}.hi-photo-copy h1 img{width:min(62vw,220px)}.hi-photo-dock{padding:5px;gap:3px}.hi-photo-dock>a,.hi-photo-dock-item>button{min-height:47px}}
 @media(min-width:901px){
  .hi-photo-dock-popover{width:100%;padding:8px}
  .hi-photo-dock-summary{font-size:clamp(12px,.9vw,15px);padding:4px 8px 7px}

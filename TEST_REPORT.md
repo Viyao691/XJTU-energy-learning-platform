@@ -1,5 +1,16 @@
 # 最新验证报告 · 2026-10-15
 
+## 2026-10-16 手机Web与反馈
+
+实际执行结果见 CURRENT_STATUS.md 本轮段与 docs/mobile/2026-10-16-mobile-v2-audit.md。后端定向38+21通过、前端7+25+5+5通过，最终生产构建通过。额外知识API 10过2旧标题断言失败，未将其隐去。隔离浏览器反馈保存成功；正式HTTPS版本/健康/空反馈验证通过。未做真实SMTP、远端嵌入、付费模型、Android/iOS真机。
+
+## 参赛介绍Web架构算法版V7
+
+- 核对当前请求拓扑、auth/ownership/database、knowledge/learning_review、ScientificRecipe及web_model。匿名HTTPS GET /dashboard、/login、/backend-api/health/ready均200；未登录、写入或调用模型。
+- Visio16.0实际生成9页332原生形状；VSDX ZIP/XML检查Foreign=0，57860 bytes。九张SVG经原转换库嵌入为矢量图，修正存储符号曲线相交。
+- `verify_report.py --web`最终18页540×960pt、10958可检索字符、3061305 bytes，文本边界问题为空。全部18页联系表已查看，字体修正后近看第4/11/17/18页；最后CV记号修订为ln|ip|对ln(v)后版面边界检查通过。可见Helvetica/Times-Roman span为空。记录 `tmp/pdfs/web-report-v7/validation.json`。
+- 初次公式运算符经宋体分段未显示；改为显式Times数学字符后修复。仅检查文档，不跑应用测试/构建，不改产品依赖、用户数据或部署。
+
 ## 首页电脑端菜单对齐
 
 - 仅CSS改动；Docker生产构建及类型检查通过，原有autoprefixer警告保留。不新增镜像实现的CSS单测，不重跑业务套件。

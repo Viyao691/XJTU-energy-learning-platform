@@ -44,11 +44,12 @@ def install_web_access(app, settings, auth_factory):
         path = request.url.path.rstrip("/") or "/"
         public = request.method in {"GET", "HEAD"} and path in PUBLIC_GET
         auth_route = path.startswith("/api/v1/auth/")
+        feedback_route = request.method == "POST" and path == "/api/v1/feedback"
         token = current_user_id.set(None)
         task_id = None
         queued_user = None
         try:
-            if not public and not auth_route:
+            if not public and not auth_route and not feedback_route:
                 user = authenticate(request, auth_factory)
                 if user is None:
                     return JSONResponse({"detail": "请先登录后使用科研功能"}, status_code=401)

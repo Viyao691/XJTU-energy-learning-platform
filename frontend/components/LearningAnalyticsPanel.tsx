@@ -64,7 +64,7 @@ function ActivityChart({ data, days }: { data: LearningAnalytics; days: Range })
   }, [webMode, daily.length]);
   const peak = Math.max(0, ...daily.flatMap(item => series.map(entry => item[entry.key])));
   const axisTop = Math.max(1, Math.ceil(peak / 4) * 4);
-  const chart = { left: 52, right: 16, top: 18, bottom: 46, width: phoneWidth ?? 900, height: 240 };
+  const chart = { left: 52, right: 16, top: 18, bottom: phoneWidth ? 34 : 46, width: phoneWidth ?? 900, height: phoneWidth ? 180 : 240 };
   const plotW = chart.width - chart.left - chart.right;
   const plotH = chart.height - chart.top - chart.bottom;
   const slot = daily.length ? plotW / daily.length : plotW;

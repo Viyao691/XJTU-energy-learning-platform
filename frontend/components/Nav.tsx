@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import BranchedMenu, { type BranchedMenuItem } from "./react-bits/BranchedMenu";
 import { groups } from "./navigation-groups";
@@ -43,9 +43,11 @@ const menuItems: BranchedMenuItem[] = [
   })),
 ];
 
-export function Nav({ workspace = false }: { workspace?: boolean }) {
+export function Nav({ workspace = false, onNavigate }: { workspace?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { webMode, user } = useAuth();
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const swiped = useRef(false);
   const visibleMenuItems: BranchedMenuItem[] = webMode && !user?.is_admin ? menuItems.map(item => "children" in item ? { ...item, children: item.children.filter(child => !isAdminPage(child.value)) } : item) : menuItems;
   const activeValue = pathname === "/papers" || pathname.startsWith("/papers/")
     ? "/library"
@@ -90,7 +92,20 @@ export function Nav({ workspace = false }: { workspace?: boolean }) {
   }, []);
 
   return (
-    <aside className="app-sidebar app-sidebar--landscape" id={workspace ? "workspace-v2-navigation" : undefined}>
+    <aside className="app-sidebar app-sidebar--landscape" id={workspace ? "workspace-v2-navigation" : undefined}
+      onTouchStart={event => { const touch = event.touches[0]; swiped.current = false; touchStart.current = webMode && workspace && touch ? { x: touch.clientX, y: touch.clientY } : null; }}
+      onTouchCancel={() => { touchStart.current = null; }}
+      onTouchEnd={event => {
+        const start = touchStart.current, end = event.changedTouches[0];
+        touchStart.current = null;
+        if (!start || !end) return;
+        const dx = end.clientX - start.x, dy = end.clientY - start.y;
+        if (dx <= -48 && Math.abs(dx) > Math.abs(dy) * 1.3) { swiped.current = true; onNavigate?.(); }
+      }}
+      onClickCapture={event => {
+        if (swiped.current) { event.preventDefault(); event.stopPropagation(); swiped.current = false; return; }
+        if (webMode && (event.target as Element).closest("a[href]")) onNavigate?.();
+      }}>
       <div className="app-sidebar-landscape" aria-hidden="true"><span /></div>
       <div className="app-sidebar-brand">
         <Link className="app-brand" href="/dashboard">

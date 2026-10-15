@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import MaterialHero from "../../components/workspace/MaterialHero";
 import TitleMotion from "../../components/workspace/TitleMotion";
+import { useAuth } from "../../components/auth/AuthProvider";
 import "../../components/workspace/material-pages.css";
 
 const helpSections = [
@@ -231,12 +232,42 @@ const questions = [
   ["如何切换浅色和深色？", "使用页面右上角的主题按钮切换，浏览器会记住选择。当前没有全站动效开关。"]
 ];
 
+const webHelp: Record<string, string> = {
+  "关于本项目": "储能科研学习智慧平台由 Viyao 主导设计与迭代，提供公开储能知识，以及登录后的个人论文阅读、学习和轻量科研工作区。AI 输出需结合原文证据核验。",
+  "第一次使用": "打开 energy.viyao.cn 即可浏览公开知识。首次使用科研功能，请注册：验证邮箱后设置并确认密码。已有账号默认使用邮箱和密码登录；点击“忘记密码”可切换到邮箱验证码登录，不会自动重设密码。游客登录只开放公开内容。",
+  "配置引导的用途与重复配置": "网站的模型、发信服务与运行参数由管理员维护。普通用户无需重复配置或下载模型；你的论文、笔记和研究记录按账号隔离。遇到连接问题先查看页面提示，再通过首页“意见反馈”提交问题。",
+  "启动、端口与页面缺失": "网站使用 HTTPS，无需在手机安装程序或启动本机服务。手机点击左上角展开导航，点击右侧空白区域或向左滑动侧栏即可收起；内容页可向下滚动，首页固定在可视区域。",
+  "PDF 上传与论文解析": "登录后在“上传论文”选择合法取得的 PDF，系统检查文件类型、大小和重复文件，再读取原生文字层。文件保存在网站服务器的个人研究库；请勿上传无权处理或不宜交给第三方模型的内容。",
+  "混合 OCR 怎么使用": "网站当前采用轻量部署，暂未开放重型 OCR 和本地模型下载。扫描版或文字无法提取的 PDF 不能当作已读取全文；可换用带文字层且来源合法的版本。本机版可另行安装 OCR 模型。",
+  "疑难页云端增强与隐私": "网站暂未开放文档视觉增强。已有原文、摘要和元数据的证据范围仍会分别标注；没有解析出的实验细节不能由 AI 猜补。",
+  "科研创新竞赛工作区": "登录后可以建立竞赛项目、整理研究问题、创新点、证据与里程碑，并进行文字答辩。规则与截止日期须回到官方来源人工确认；网站暂不开放重型语音转写。",
+  "论文库问答与可靠引用": "论文库问答使用独立的远程语义嵌入服务，聊天模型不能替代嵌入模型。管理员配置完成前，页面会明确显示暂不可用；状态检查不会调用嵌入服务。建立索引或提问才会发起相应调用。引用的论文、页码与原文片段来自你的个人库；只有摘要时不会虚构页码。",
+  "研究订阅怎么使用": "网站首版关闭自动运行个人订阅，避免后台任务挤占共享服务器和模型额度。已有公开资讯与手动功能以页面实际开放状态为准；订阅不会自动下载付费全文。",
+  "选择模型供应商与视觉模型": "网站文本模型由管理员统一配置，用户不需要填写 API 密钥。网页只显示允许公开的配置状态；远程语义嵌入与文本问答是独立服务。模型已配置不等于已验证连通。",
+  "费用与预算": "网站试运行按平台每日20元、每月100元，每用户每日10元、每月30元限制模型调用。生成任务会先保守预留额度，完成后按记录结算；余额不足时拒绝新调用。报告当前每份预留3元，最多逐次发起3份仍受平台剩余额度约束。实际供应商扣费以账单为准；不要同时重复提交生成任务。",
+  "API 密钥与隐私": "API 密钥仅存放在服务器后端，网页不会读取完整密钥。个人论文、笔记与研究记录按账号隔离；AI 分析会把必要文本发送给已配置的模型服务，请先确认你有权这样处理。",
+  "删除、备份与恢复": "删除论文可能连同笔记和派生数据一并移除，操作前请仔细确认。网站全站存储与备份属于管理员操作，普通用户不能读取他人的文件或下载全站数据库。备份不包含环境文件与 API 密钥。",
+  "生产诊断与 Ubuntu 部署": "网站与考试大王共用单机服务器，但应用、登录会话与个人资料独立。网站仅通过 HTTPS 对外提供服务，采用轻量 SQLite 与本地受管文件存储；重型 OCR、语音和批量后台任务暂不开放。",
+  "连接诊断": "模型或搜索异常时，记录出现问题的页面、时间和提示。管理员可查看连接诊断；普通用户可从首页“意见反馈”提交，勿附密码、验证码或完整密钥。反馈先保存，通知延迟时页面会如实提示。",
+};
+
+const webQuestions = [
+  ["忘记密码后怎么办？", "登录页点击“忘记密码”，使用邮箱验证码登录。验证码登录不会改写已有密码；旧账号没有密码时也可使用此方式。"],
+  ["为什么个人知识索引暂不可用？", "远程嵌入服务需要单独配置供应商、模型与密钥，不能直接使用 DeepSeek 聊天接口。当前由管理员接入；在完成之前，页面会保留真实的未配置提示。"],
+  ["怎样提交意见反馈？", "首页右上方点击“意见反馈”，填写最多1000字的内容，可选填联系方式。反馈会先保存，再尝试通知网站负责人；发送失败不会丢失已保存内容。"],
+  ["手机侧栏如何关闭？", "点击侧栏右侧的空白区域，或在侧栏内向左滑动；外接键盘也可以按 Escape。"],
+  ["为什么上传后没有完整正文？", "扫描版、特殊字体或损坏的 PDF 可能无法提取文字。网站暂未开放重型 OCR，请改用合法的文字版 PDF；没有全文时不能据此核验全文细节。"],
+  ["如何切换浅色和深色？", "点击右上角的主题按钮，浏览器会记住选择。手机采用静态背景，减少动画开销。"],
+  ...questions.filter(([title]) => ["系统会自动绕过付费墙吗？", "AI 结论可以直接写进论文吗？", "为什么科研配方拒绝计算？", "为什么三种论文理解需要分别生成？", "为什么论文库卡片没有论文原图？", "校园分类或日期为何待确认？"].includes(title)),
+];
+
 export default function HelpPage() {
+  const { webMode } = useAuth();
   const [query, setQuery] = useState("");
   const normalized = query.trim().toLocaleLowerCase();
-  const matchingSections = helpSections.map((section, index) => ({ ...section, index }))
+  const matchingSections = helpSections.map((section, index) => ({ ...section, body: webMode ? webHelp[section.title] ?? section.body : section.body, index }))
     .filter(section => !normalized || `${section.title} ${section.body}`.toLocaleLowerCase().includes(normalized));
-  const matchingQuestions = questions.filter(([question, answer]) =>
+  const matchingQuestions = (webMode ? webQuestions : questions).filter(([question, answer]) =>
     !normalized || `${question} ${answer}`.toLocaleLowerCase().includes(normalized));
   const groups = [
     { id: "start", title: "开始使用" },
@@ -250,7 +281,7 @@ export default function HelpPage() {
       <section className="material-help-hero">
         <MaterialHero kind="help" />
         <div className="material-help-intro">
-          <p className="material-kicker">GUIDE / 储能科研学习平台</p>
+          <p className="material-kicker">GUIDE / 储能科研学习智慧平台</p>
           <h1><TitleMotion text="学习与研究，从这里开始。" variant="focus" /></h1>
           
           <label htmlFor="help-search" className="material-search-label">搜索帮助主题与常见问题</label>

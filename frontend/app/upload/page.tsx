@@ -72,9 +72,9 @@ export default function UploadPage() {
       <div className="material-upload-stage">
         <MaterialHero kind="upload" dragging={dragging} />
         <div className="material-upload-copy">
-          <p className="material-upload-eyebrow">上传论文 / 本地研究库</p>
+          <p className="material-upload-eyebrow">上传论文<span className="upload-desktop-label"> / 本地研究库</span></p>
           <h1><TitleMotion text={"让每一篇论文，\n进入你的研究脉络。"} variant="warp" warpLineHeight="1.5em" /></h1>
-          <p>选择或拖入合法取得的 PDF，建立可追溯的本地阅读路径。</p>
+          <p className="material-upload-description">选择或拖入合法取得的 PDF，建立可追溯的本地阅读路径。</p>
         </div>
         <div className="material-upload-card">
           <form onSubmit={submit}>

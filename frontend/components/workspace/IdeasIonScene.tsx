@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useWebPhone } from "./useWebPhone";
 import "./ideas-ion-reveal.css";
 
 export default function IdeasIonScene({ selectedDataset, quiet }: { selectedDataset: number | null; quiet: boolean }) {
+  const { motion } = useWebPhone();
   const sceneRef = useRef<HTMLDivElement>(null);
   const revealRef = useRef<HTMLDivElement>(null);
 
@@ -11,7 +13,7 @@ export default function IdeasIonScene({ selectedDataset, quiet }: { selectedData
     const scene = sceneRef.current;
     const reveal = revealRef.current;
     const stage = scene?.closest(".ideas-ion-stage");
-    if (!scene || !reveal || !stage) return;
+    if (!motion || !scene || !reveal || !stage) return;
     const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     let visible = true;
     let frame = 0;
@@ -63,7 +65,7 @@ export default function IdeasIonScene({ selectedDataset, quiet }: { selectedData
       document.removeEventListener("visibilitychange", sync);
       media?.removeEventListener?.("change", sync);
     };
-  }, [quiet]);
+  }, [quiet, motion]);
 
   return <div ref={sceneRef} className="ideas-ion-scene" data-testid="ideas-ion-scene" data-selected-dataset={selectedDataset ?? ""} aria-hidden="true">
     <div className="ideas-ion-image" />

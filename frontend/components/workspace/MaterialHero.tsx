@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useWebPhone } from "./useWebPhone";
 
 type MaterialHeroProps = { kind: "upload" | "help"; dragging?: boolean; className?: string };
 
@@ -11,13 +12,14 @@ const tracks = [
 ];
 
 export default function MaterialHero({ kind, className = "" }: MaterialHeroProps) {
+  const { motion } = useWebPhone();
   const root = useRef<HTMLDivElement>(null);
   const image = useRef<HTMLDivElement>(null);
   const points = useRef<SVGCircleElement[]>([]);
   const lines = useRef<SVGPathElement[]>([]);
   useEffect(() => {
     const element = root.current;
-    if (!element || typeof window.requestAnimationFrame !== "function" || typeof window.matchMedia !== "function") return;
+    if (!motion || !element || typeof window.requestAnimationFrame !== "function" || typeof window.matchMedia !== "function") return;
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = true;
     let frame = 0;
@@ -87,7 +89,7 @@ export default function MaterialHero({ kind, className = "" }: MaterialHeroProps
       media.removeEventListener("change", sync);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [kind]);
+  }, [kind, motion]);
 
   return (
     <div ref={root} className={`material-hero material-hero-${kind} ${className}`} aria-hidden="true">

@@ -86,7 +86,22 @@ def register_knowledge_routes(app, get_db) -> None:
                 settings.embedding_model,
                 settings.embedding_timeout_seconds,
             )
-            ready, message = embedding_provider.test_connection()
+            # A status read must never perform a remote embedding or reserve fees.
+            if embedding_provider.name == "unavailable":
+                ready = False
+                message = "管理员尚未配置远端语义嵌入服务，请等待管理员完成配置。"
+            elif settings.web_mode and settings.web_embedding_call_reserve_cny <= 0:
+                ready = False
+                message = "管理员尚未配置嵌入服务的单次费用预留上限，远端语义嵌入暂不可用。"
+            elif embedding_provider.name == "mock":
+                ready = True
+                message = "Mock 向量索引已配置（仅用于演示）。"
+            else:
+                ready = bool(settings.embedding_model.strip() and settings.embedding_base_url.strip())
+                message = (
+                    "嵌入服务配置已就绪，未验证远端连通性；建立索引或提问时会实际调用，远端服务可能计费。"
+                    if ready else "嵌入服务配置不完整，请补充模型名称和服务地址。"
+                )
             chunk_count = (
                 db.scalar(
                     select(func.count())
