@@ -122,14 +122,17 @@ def register_knowledge_routes(app, get_db) -> None:
                 )
                 or 0
             )
+            stale_papers = db.scalar(select(func.count()).select_from(Paper).where(
+                (Paper.knowledge_index_stale.is_(True)) | (~Paper.id.in_(
+                    select(PaperChunk.paper_id).where(PaperChunk.embedding_model == embedding_provider.model_name)
+                ))
+            )) or 0
+            if settings.web_mode:
+                message += f" 每次最多更新5篇，重复点击可继续；待更新{stale_papers}篇，无正文或摘要的资料需先补充内容。"
             return KnowledgeStatusResponse(
                 total_papers=total_papers,
                 indexed_papers=indexed_papers,
-                stale_papers=db.scalar(select(func.count()).select_from(Paper).where(
-                    (Paper.knowledge_index_stale.is_(True)) | (~Paper.id.in_(
-                        select(PaperChunk.paper_id).where(PaperChunk.embedding_model == embedding_provider.model_name)
-                    ))
-                )) or 0,
+                stale_papers=stale_papers,
                 chunk_count=chunk_count,
                 embedding_provider=embedding_provider.name,
                 embedding_model=embedding_provider.model_name,
@@ -163,17 +166,24 @@ def register_knowledge_routes(app, get_db) -> None:
                 settings.embedding_model,
                 settings.embedding_timeout_seconds,
             )
-            ready, message = embedding_provider.test_connection()
-            if not ready:
-                raise HTTPException(503, message)
-
             indexed_papers = 0
             indexed_chunks = 0
             skipped_papers = 0
-            papers = list(db.scalars(select(Paper).order_by(Paper.id)))
+            statement = select(Paper).order_by(Paper.id)
+            if settings.web_mode:
+                statement = statement.where(
+                    (Paper.knowledge_index_stale.is_(True)) | (~Paper.id.in_(
+                        select(PaperChunk.paper_id).where(PaperChunk.embedding_model == embedding_provider.model_name)
+                    )),
+                    (Paper.file_path.is_not(None)) | (Paper.active_parse_run_id.is_not(None)) | (func.trim(Paper.abstract) != ""),
+                ).limit(5)
+            papers = list(db.scalars(statement))
+            if papers or not settings.web_mode:
+                ready, message = embedding_provider.test_connection()
+                if not ready:
+                    raise HTTPException(503, message)
             for paper in papers:
                 note = db.scalar(select(Note).where(Note.paper_id == paper.id))
-                db.execute(delete(PaperClaim).where(PaperClaim.paper_id == paper.id))
                 page_texts: list[str] | None = None
                 source_pages = list(db.scalars(select(PaperPageExtraction).where(
                     PaperPageExtraction.parse_run_id == paper.active_parse_run_id
@@ -188,6 +198,7 @@ def register_knowledge_routes(app, get_db) -> None:
                     except (PdfVisualError, HTTPException):
                         page_texts = None
                 if page_texts is None and not paper.abstract.strip():
+                    db.execute(delete(PaperClaim).where(PaperClaim.paper_id == paper.id))
                     db.execute(
                         delete(PaperChunk).where(PaperChunk.paper_id == paper.id)
                     )
@@ -204,8 +215,13 @@ def register_knowledge_routes(app, get_db) -> None:
                     overlap=settings.knowledge_chunk_overlap,
                     parse_run_id=paper.active_parse_run_id if source_pages else None,
                     source_pages=source_pages,
+                    commit=False,
                 )
+                # Embedding admission writes its budget ledger on another DB
+                # connection, so hold no SQLite write transaction during it.
+                db.execute(delete(PaperClaim).where(PaperClaim.paper_id == paper.id))
                 paper.knowledge_index_stale = False
+                db.commit()
                 if chunk_count:
                     indexed_papers += 1
                     indexed_chunks += chunk_count

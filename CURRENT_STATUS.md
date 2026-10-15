@@ -8,7 +8,9 @@
 
 定向验证：后端反馈/认证38项、嵌入状态/预算21项通过；前端首页7、工作区等25、反馈/帮助5、学习图表5项通过。额外知识API检查10过2失败，均为既有PDF标题提取与旧文件名断言不符，未修改该域；不称全套通过。最终Docker生产构建含类型检查通过。浏览器实读360×640首页页面360×640无滚动/Canvas，390×844菜单上方定位、1920桌面六入口与反馈框；业务页合成数据实查，非Android/iOS真机。反馈浏览器真实提交后本地持久保存，未发真实邮件或调用模型。
 
-已部署API/Web `web-20261015-mobile-v2`，BUILD_ID `Q57Hzi1f4_v45yz2XfsjB`。服务健康，数据库0033→0034，原2账号/3会话/0论文保留；备份 `/srv/energy-research-web/releases/20261016-mobile-v2`。正式HTTPS首页、帮助、ready均200，空反馈422且未保存/发信；版本匹配。考试大王未变更。详见 `docs/mobile/2026-10-16-mobile-v2-audit.md`。云端交接分支和资料页本轮正在同步。
+语义索引接入补丁也已发布：API `energy-research-api:web-20261016-embedding`，image ID `50d1176d49c120dc91ea3f28aa10c09cb3d1f79d28e45ca866038689a7ee2984`，数据库仍0034。Web每次最多5篇当前账号可索引的待更新论文，重复点击继续，已当前的不重做；无正文/摘要条目需先补充资料。重建纳入既有CSRF/队列/费用限制，修复先DELETE旧claims造成独立预算连接SQLite写锁的问题。Python3.12定向test_web_reindex/test_knowledge_status/test_web_model共25项通过，均fake HTTP，无真实费用。回退配置在 `/srv/energy-research-web/releases/20261016-embedding-policy`。
+
+已部署API/Web `web-20261015-mobile-v2`，BUILD_ID `Q57Hzi1f4_v45yz2XfsjB`。服务健康，数据库0033→0034，原2账号/3会话/0论文保留；备份 `/srv/energy-research-web/releases/20261016-mobile-v2`。正式HTTPS首页、帮助、ready均200，空反馈422且未保存/发信；版本匹配。考试大王未变更。详见 `docs/mobile/2026-10-16-mobile-v2-audit.md`。云端交接沿用 `codex/energy-web-handoff-20261015` 与现有私有资料页，初始本轮代码已推送，后续以分支最新版本为准。
 
 ## 参赛介绍 · Web架构算法版V7已完成
 

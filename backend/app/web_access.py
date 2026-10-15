@@ -19,10 +19,10 @@ DISABLED = re.compile(
     r"(?:/document-ai(?:/|$)|/ocr-runs(?:/|$)|/parse-runs(?:/|$)|"
     r"/transcribe-formula$|/cloud-enhance$|/audio$|/contest-sources/\d+/ocr$|"
     r"/visuals/\d+/analyze$|/crops/\d+/(?:analyze|extract-data)$|"
-    r"/research/subscriptions(?:/|$)|/knowledge/reindex$)"
+    r"/research/subscriptions(?:/|$))"
 )
 
-LONG_OPERATION = re.compile(r"/(?:upload|import|analyze|generate|ask|compare|external-comparison|reading-highlights|index)(?:/|$)|/analysis/|/research-ideas/review")
+LONG_OPERATION = re.compile(r"/(?:upload|import|analyze|generate|ask|compare|external-comparison|reading-highlights|index|reindex)(?:/|$)|/analysis/|/research-ideas/review")
 
 
 def install_web_access(app, settings, auth_factory):

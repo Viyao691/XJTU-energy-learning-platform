@@ -40,3 +40,5 @@
 ## 新对话开场
 
 > 在当前 Energy-Research-Copilot-DeepSeek-Harness-2026-08-21 开发我接下来指定的新功能。先读 START_HERE.md、AGENTS.md、CURRENT_STATUS.md 和 docs/handoff/README.md，再核对目标源码与当前运行状态。首页冻结，数据与密钥保留；只做必要定向验证，不自动推进旧路线图。
+
+手机Web修订、反馈与语义索引接入见 [2026-10-16交接](2026-10-16-mobile-v2.md)。

@@ -2,7 +2,7 @@ name: energy-research-web
 
 services:
   backend:
-    image: ${ENERGY_API_IMAGE:-energy-research-api:web-20261015-mobile-v2}
+    image: ${ENERGY_API_IMAGE:-energy-research-api:web-20261016-embedding}
     build:
       context: ./backend
       dockerfile: Dockerfile.web
