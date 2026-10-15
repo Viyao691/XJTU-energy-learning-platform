@@ -30,7 +30,7 @@ services:
       retries: 3
 
   frontend:
-    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261015-compact}
+    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261015-dock}
     build:
       context: .
       dockerfile: frontend/Dockerfile.web

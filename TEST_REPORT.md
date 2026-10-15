@@ -1,5 +1,12 @@
 # 最新验证报告 · 2026-10-15
 
+## 首页电脑端菜单对齐
+
+- 仅CSS改动；Docker生产构建及类型检查通过，原有autoprefixer警告保留。不新增镜像实现的CSS单测，不重跑业务套件。
+- 浏览器1920×1080：系统菜单与入口均245.900009px宽、x1469.287475px，菜单文字22px；选中入口::after内容none。实际截图已观察并保存desktop-menu.jpg。
+- 浏览器360×800：菜单宽160px、字号14px、伪元素none、页面宽360；手机紧凑尺寸保留。已恢复视口并关闭本轮临时预览标签。
+- 本地Docker最初未运行，后台启动已有Docker Desktop后构建完成。发布包6,662,572字节，仅前端；Web BUILD_ID 8yDvKZd36uWibrAIGi575、服务器image ID faa92d8b2180683376bbdd9e499415632821ed1159a54dc9b528de91fb8dc62e；服务健康、真实HTTPS /dashboard 200且版本匹配。
+
 ## Web紧凑布局、密码登录与正式Logo
 
 - GitHub交接分支推送成功，ls-remote匹配 `15ecb811b018a33a01395d0a8d77133c35f07241`。私有Page五个本轮新附件（源码1,727,655字节、静态素材6,948,042字节、审查3,061字节及两张手机截图）均file_access_confirmed=true；读回确认提交/BUILD_ID与五份引用存在。
