@@ -10,7 +10,7 @@ type Props = { items: BranchedMenuItem[]; activeValue: string; className?: strin
 
 const PAD = 6;
 const MARK = 16;
-const ROW = 42;
+const ROW = 44;
 const INDENT = 38;
 const TRUNK = 12;
 const RADIUS = 9;

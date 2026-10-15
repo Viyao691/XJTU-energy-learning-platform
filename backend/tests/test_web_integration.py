@@ -30,7 +30,7 @@ def web_api(tmp_path, monkeypatch):
 def log_in(client, inbox, email):
     client.cookies.clear()
     assert client.post("/api/v1/auth/email-code", json={"email": email, "intent": "register"}).status_code == 202
-    response = client.post("/api/v1/auth/register", json={"email": email, "code": inbox[-1][1]})
+    response = client.post("/api/v1/auth/register", json={"email": email, "code": inbox[-1][1], "password": "integration test password"})
     assert response.status_code == 200, response.text
     client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
 
@@ -64,6 +64,18 @@ def test_web_private_pdf_tasks_and_admin_boundaries(web_api):
     assert client.get("/api/v1/papers").headers["cache-control"] == "private, no-store"
     client.headers.pop("X-CSRF-Token")
     assert client.delete(f"/api/v1/papers/{second.json()['id']}").status_code == 403
+
+
+def test_web_password_validation_never_returns_submitted_secrets(web_api):
+    client, _ = web_api
+    secret = "do-not-return-this-password"
+    for path, payload in (
+        ("login", {"email": "reader@example.test", "password": secret, "code": "123456"}),
+        ("register", {"email": "reader@example.test", "password": secret * 10, "code": "123456"}),
+    ):
+        response = client.post(f"/api/v1/auth/{path}", json=payload)
+        assert response.status_code == 422
+        assert secret not in response.text
 
 
 def test_web_refuses_mock_paid_generation(web_api):

@@ -14,14 +14,19 @@ from datetime import datetime, timedelta
 from email.message import EmailMessage
 
 from fastapi import HTTPException, Request
-from sqlalchemy import func, select, update
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.orm import Session
 
-from app.auth_models import WebEmailCode, WebSession, WebUser
+from app.auth_models import WebEmailCode, WebPasswordFailure, WebSession, WebUser
 from app.config import get_settings
 
 SESSION_COOKIE = "__Host-energy-session"
 _AUTH_LOCK = threading.Lock()
+PASSWORD_ITERATIONS = 600_000
+PASSWORD_WINDOW_SECONDS = 900
+PASSWORD_EMAIL_ATTEMPTS = 5
+PASSWORD_CLIENT_ATTEMPTS = 20
+_DUMMY_PASSWORD_HASH = f"pbkdf2_sha256${PASSWORD_ITERATIONS}${'00' * 16}${'00' * 32}"
 _EMAIL_PATTERN = re.compile(r"[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}\Z")
 
 
@@ -38,6 +43,31 @@ def _secret(value) -> str:
 
 def _hash(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+def hash_password(password: str) -> str:
+    # OWASP PBKDF2-HMAC-SHA256 work factor; salt is unique for each registration.
+    salt = secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, PASSWORD_ITERATIONS)
+    return f"pbkdf2_sha256${PASSWORD_ITERATIONS}${salt.hex()}${digest.hex()}"
+
+
+def _verify_password(password: str, stored: str | None) -> bool:
+    _, iterations, salt, expected = (stored or _DUMMY_PASSWORD_HASH).split("$")
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode(), bytes.fromhex(salt), int(iterations))
+    matches = hmac.compare_digest(digest.hex(), expected)
+    return stored is not None and matches
+
+
+def _client_hash(request: Request, settings) -> str:
+    client = request.client.host if request.client else "unknown"
+    # Enabled only behind the private API and Caddy's overwritten custom header.
+    if settings.auth_trust_proxy:
+        try:
+            client = str(ipaddress.ip_address(request.headers.get("x-energy-client-ip", "")))
+        except ValueError:
+            pass
+    return _hash(client)
 
 
 def _code_hash(email: str, code: str, settings) -> str:
@@ -101,14 +131,7 @@ def issue_email_code(db: Session, email: str, request: Request, intent: Literal[
     require_web_mode(settings)
     require_origin(request, settings)
     now = datetime.utcnow()
-    client = request.client.host if request.client else "unknown"
-    # Enabled only behind the private API and Caddy's overwritten custom header.
-    if settings.auth_trust_proxy:
-        try:
-            client = str(ipaddress.ip_address(request.headers.get("x-energy-client-ip", "")))
-        except ValueError:
-            pass
-    client_hash = _hash(client)
+    client_hash = _client_hash(request, settings)
     code = f"{secrets.randbelow(1_000_000):06d}"
     digest = _code_hash(email, code, settings)
     # Single API worker; reserve the durable send before releasing the lock.
@@ -134,7 +157,43 @@ def issue_email_code(db: Session, email: str, request: Request, intent: Literal[
     return settings.auth_code_resend_seconds
 
 
-def create_login(db: Session, email: str, code: str, request: Request, *, register: bool = False) -> tuple[WebUser, WebSession, str]:
+def _create_session(db: Session, user: WebUser, request: Request, settings, now: datetime) -> tuple[WebUser, WebSession, str]:
+    old_token = request.cookies.get(SESSION_COOKIE)
+    if old_token:
+        db.execute(update(WebSession).where(WebSession.token_hash == _hash(old_token)).values(revoked_at=now))
+    token = secrets.token_urlsafe(32)
+    session = WebSession(user_id=user.id, token_hash=_hash(token), csrf_token=secrets.token_urlsafe(32), created_at=now, expires_at=now + timedelta(days=settings.auth_session_days))
+    db.add(session)
+    db.commit()
+    db.refresh(user)
+    db.refresh(session)
+    return user, session, token
+
+
+def create_password_login(db: Session, email: str, password: str, request: Request) -> tuple[WebUser, WebSession, str]:
+    settings = get_settings()
+    require_web_mode(settings)
+    require_origin(request, settings)
+    email_hash, client_hash = _hash(email), _client_hash(request, settings)
+    # Match the email-code flow's single API worker and durable failure records.
+    with _AUTH_LOCK:
+        now = datetime.utcnow()
+        cutoff = now - timedelta(seconds=PASSWORD_WINDOW_SECONDS)
+        db.execute(delete(WebPasswordFailure).where(WebPasswordFailure.created_at <= cutoff))
+        email_failures = db.scalar(select(func.count()).select_from(WebPasswordFailure).where(WebPasswordFailure.email_hash == email_hash))
+        client_failures = db.scalar(select(func.count()).select_from(WebPasswordFailure).where(WebPasswordFailure.client_hash == client_hash))
+        if email_failures >= PASSWORD_EMAIL_ATTEMPTS or client_failures >= PASSWORD_CLIENT_ATTEMPTS:
+            db.commit()
+            raise HTTPException(429, "登录尝试过于频繁，请稍后重试或使用验证码登录", headers={"Retry-After": str(PASSWORD_WINDOW_SECONDS)})
+        user = db.scalar(select(WebUser).where(WebUser.email == email))
+        if not _verify_password(password, user.password_hash if user else None):
+            db.add(WebPasswordFailure(email_hash=email_hash, client_hash=client_hash, created_at=now))
+            db.commit()
+            raise HTTPException(401, "邮箱或密码错误，请重试或使用验证码登录")
+        return _create_session(db, user, request, settings, now)
+
+
+def create_login(db: Session, email: str, code: str, request: Request, *, register: bool = False, password: str | None = None) -> tuple[WebUser, WebSession, str]:
     settings = get_settings()
     require_web_mode(settings)
     require_origin(request, settings)
@@ -151,19 +210,10 @@ def create_login(db: Session, email: str, code: str, request: Request, *, regist
             raise HTTPException(400, "验证码错误或已失效")
         record.consumed_at = now
         if register:
-            user = WebUser(email=email, created_at=now, verified_at=now)
+            user = WebUser(email=email, password_hash=hash_password(password), created_at=now, verified_at=now)
             db.add(user)
             db.flush()
-        old_token = request.cookies.get(SESSION_COOKIE)
-        if old_token:
-            db.execute(update(WebSession).where(WebSession.token_hash == _hash(old_token)).values(revoked_at=now))
-        token = secrets.token_urlsafe(32)
-        session = WebSession(user_id=user.id, token_hash=_hash(token), csrf_token=secrets.token_urlsafe(32), created_at=now, expires_at=now + timedelta(days=settings.auth_session_days))
-        db.add(session)
-        db.commit()
-        db.refresh(user)
-        db.refresh(session)
-        return user, session, token
+        return _create_session(db, user, request, settings, now)
 
 
 def authenticate_session(db: Session, request: Request) -> tuple[WebUser, WebSession] | None:

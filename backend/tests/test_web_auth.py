@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker
 
 ORIGIN = "https://energy.example.test"
 EMAIL = "reader@example.test"
+PASSWORD = "correct horse battery"
 
 
 @pytest.fixture()
@@ -65,7 +66,7 @@ def login(client, mail, email=EMAIL):
 
 
 def register(client, mail, email=EMAIL):
-    return client.post("/api/v1/auth/register", json={"email": email, "code": mail[-1][1]})
+    return client.post("/api/v1/auth/register", json={"email": email, "code": mail[-1][1], "password": PASSWORD})
 
 
 def test_register_creates_verified_user_and_session(auth_api):
@@ -205,7 +206,7 @@ def test_expiry_and_attempt_limit_never_create_user(auth_api):
     correct = mail[-1][1]
     wrong = "000000" if correct != "000000" else "111111"
     for _ in range(settings.auth_code_max_attempts):
-        assert client.post("/api/v1/auth/register", json={"email": "other@example.test", "code": wrong}).status_code == 400
+        assert client.post("/api/v1/auth/register", json={"email": "other@example.test", "code": wrong, "password": PASSWORD}).status_code == 400
     assert register(client, mail, "other@example.test").status_code == 400
     with factory() as db:
         assert db.scalars(select(WebUser)).all() == []
@@ -243,7 +244,7 @@ def test_exact_origin_and_csrf_for_mutations(auth_api):
     client, _, mail, _ = auth_api
     assert send_code(client).status_code == 202
     assert client.post("/api/v1/auth/login", json={"email": EMAIL, "code": mail[-1][1]}, headers={"Origin": "https://evil.example.test"}).status_code == 403
-    assert client.post("/api/v1/auth/register", json={"email": EMAIL, "code": mail[-1][1]}, headers={"Origin": "https://evil.example.test"}).status_code == 403
+    assert client.post("/api/v1/auth/register", json={"email": EMAIL, "code": mail[-1][1], "password": PASSWORD}, headers={"Origin": "https://evil.example.test"}).status_code == 403
     token = register(client, mail).json()["csrf_token"]
     assert client.post("/private-write", headers={"X-CSRF-Token": token}).status_code == 200
     assert client.post("/private-write").status_code == 403
@@ -273,7 +274,7 @@ def test_desktop_auth_routes_disabled(auth_api):
     settings.web_mode = False
     assert send_code(client).status_code == 404
     assert client.get("/api/v1/auth/me").status_code == 404
-    assert client.post("/api/v1/auth/register", json={"email": EMAIL, "code": "123456"}).status_code == 404
+    assert client.post("/api/v1/auth/register", json={"email": EMAIL, "code": "123456", "password": PASSWORD}).status_code == 404
     assert mail == []
 
 

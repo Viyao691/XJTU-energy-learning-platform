@@ -34,7 +34,7 @@ describe("branched sidebar navigation", () => {
     expect((screen.getByRole("link", { name: "上传论文", hidden: true }) as HTMLAnchorElement).tabIndex).toBe(-1);
   });
 
-  it("keeps all 18 destination links and the active top-level home link", () => {
+  it("keeps all 20 destination links and the active top-level home link", () => {
     route.pathname = "/dashboard";
     render(<Nav />);
     const nav = screen.getByRole("navigation", { name: "主导航" });
@@ -42,7 +42,7 @@ describe("branched sidebar navigation", () => {
     expect(hrefs).toEqual([
       "/dashboard", "/upload", "/search", "/library", "/compare", "/knowledge",
       "/learning", "/research-daily", "/campus", "/contests", "/subscriptions",
-      "/research-data", "/ideas", "/settings", "/diagnostics", "/maintenance",
+      "/research-data", "/ideas", "/research/chronicle", "/research/city-applications", "/settings", "/diagnostics", "/maintenance",
       "/help", "/onboarding"
     ]);
     expect(within(nav).getByRole("link", { name: "首页" }).getAttribute("aria-current")).toBe("page");

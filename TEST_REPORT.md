@@ -1,6 +1,17 @@
 # 最新验证报告 · 2026-10-15
 
+## Web紧凑布局、密码登录与正式Logo
+
+- Python3.12密码、验证码、Web集成、迁移组45passed；密码校验不回显输入1passed。0033在隔离SQLite升级/降级保留账号会话。Linux生产依赖镜像临时库实际HTTP注册200、错密码401、密码登录200、读取会话200，未发邮件或调用模型。初版检查脚本会话工厂名写错，改为项目make_session_factory后通过，不是生产缺陷。
+- 前端web-auth24、WorkspaceShell7、homepage-photographic5、branched-nav3共39passed。新Logo公开资源测试先失败，修复brand白名单后通过；branched-nav旧清单18更新为现有20项，仅补已存在的编年史与城市应用。没有跑全量套件。
+- 最终Docker Web生产构建含类型检查通过，BUILD_ID SeH-5j_0F2ZiqrBHeV3rc；既有autoprefixer警告保留。仅针对实际手机观察发现的Logo资源拦截、关闭按钮被遮挡、菜单字号过大修订后重建；无后续未构建CSS。
+- 360×800登录卡495.6px、注册卡536.2px，document宽360/高800；390×844卡片底681.4/701.7，无水平溢出。长邮箱在151.6px内换行，账户卡122.4px高、底743px。最终首页菜单160×261.8px、文字14px/点击44px；Logo浅深两图均实际加载。验证码/密码切换、游客框、抽屉关闭、隔离合成账号登录进入论文库均浏览器实查。
+- 发布包7,903,654字节含API源码、Alembic0033、Web编译产物和Logo。服务器4份认证/迁移文件摘要、Web BUILD_ID匹配；先一致备份，再迁移0033，原web_users2/web_sessions3/papers0保留，API/Web健康。新镜像均web-20261015-compact；真实HTTPS登录/健康/Logo为200，登录HTML含密码表单和忘记密码。
+- 正式浏览器旧标签刷新及新只读标签打开超时；未把本地截图冒充线上账户流程。未做实际Android/iOS/软键盘测试；不调用付费模型，不发生产验证码。
+
 ## dot 云端交接
+
+- 补齐deploy/web与交接资料入口后的最终源码ZIP1,713,771字节，必要文件和ZIP完整性通过。最终GitHub HEAD `cc79ca55acac9f7209021faf3c7ce69065026d87`，ls-remote只读匹配；资料页源码附件已换成最终包。
 
 - GitHub新分支推送成功，提交 `6bc31ba3b4bc1cf75478988a479d1b2d15e6e0b3`；基于main `3c97a48e17519f009a7eaa145d742e2558e81f78` 叠加240个当前源码/素材文件，没有改动main。
 - 代码快照1,708,587字节，必要构建文件（Next配置、锁文件、轻量后端依赖、Alembic配置、Web Dockerfile、Compose、静态资源优化脚本）存在，ZIP testzip通过。静态图片叠加包6,917,300字节。

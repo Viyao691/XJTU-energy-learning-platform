@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Literal
 
 from fastapi import Depends, HTTPException, Request, Response
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 from sqlalchemy.orm import Session
 
 from app import auth
@@ -22,7 +22,22 @@ class EmailCodeRequest(BaseModel):
 
 
 class LoginRequest(EmailCodeRequest):
+    model_config = ConfigDict(extra="forbid")
+    code: str | None = Field(default=None, pattern=r"^\d{6}$")
+    password: SecretStr | None = Field(default=None, min_length=8, max_length=128, repr=False)
+
+    @model_validator(mode="after")
+    def validate_credentials(self):
+        supplied = self.model_fields_set & {"code", "password"}
+        if len(supplied) != 1 or (self.code is None and self.password is None):
+            raise ValueError("请选择密码或验证码登录")
+        return self
+
+
+class RegisterRequest(EmailCodeRequest):
+    model_config = ConfigDict(extra="forbid")
     code: str = Field(pattern=r"^\d{6}$")
+    password: SecretStr = Field(min_length=8, max_length=128, repr=False)
 
 
 class AuthUserResponse(BaseModel):
@@ -66,14 +81,17 @@ def register_auth_routes(app, get_db) -> None:
 
     @app.post("/api/v1/auth/login", response_model=AuthResponse)
     def login(payload: LoginRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-        user, session, token = auth.create_login(db, payload.email, payload.code, request)
+        if payload.password is not None:
+            user, session, token = auth.create_password_login(db, payload.email, payload.password.get_secret_value(), request)
+        else:
+            user, session, token = auth.create_login(db, payload.email, payload.code, request)
         response.set_cookie(auth.SESSION_COOKIE, token, max_age=auth.get_settings().auth_session_days * 86400, secure=True, httponly=True, samesite="lax", path="/")
         response.headers["Cache-Control"] = "private, no-store"
         return _identity_response(user, session)
 
     @app.post("/api/v1/auth/register", response_model=AuthResponse)
-    def register(payload: LoginRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-        user, session, token = auth.create_login(db, payload.email, payload.code, request, register=True)
+    def register(payload: RegisterRequest, request: Request, response: Response, db: Session = Depends(get_db)):
+        user, session, token = auth.create_login(db, payload.email, payload.code, request, register=True, password=payload.password.get_secret_value())
         response.set_cookie(auth.SESSION_COOKIE, token, max_age=auth.get_settings().auth_session_days * 86400, secure=True, httponly=True, samesite="lax", path="/")
         response.headers["Cache-Control"] = "private, no-store"
         return _identity_response(user, session)

@@ -13,6 +13,7 @@ class WebUser(Base):
     __tablename__ = "web_users"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(254), nullable=False, unique=True)
+    password_hash: Mapped[str | None] = mapped_column(String(256), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     verified_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
@@ -20,6 +21,14 @@ class WebUser(Base):
     def is_admin(self) -> bool:
         from app.auth import get_settings
         return self.email == get_settings().auth_admin_email.strip().lower()
+
+
+class WebPasswordFailure(Base):
+    __tablename__ = "web_password_failures"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    client_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
 
 
 class WebEmailCode(Base):

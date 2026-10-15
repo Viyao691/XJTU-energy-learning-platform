@@ -10,6 +10,10 @@
 
 ## 当前版本
 
+最新为2026-10-15紧凑账号版：API/Web均 `web-20261015-compact`，BUILD_ID `SeH-5j_0F2ZiqrBHeV3rc`，Alembic0033。注册email/code/password，默认登录email/password，忘记密码切email/code；密码8–128字符，旧账号可继续验证码登录。导航232px、账户完整换行、首页无搜索且弹层160px/14px，品牌使用用户选定A-final小尺寸版。后端46/前端39定向检查和生产构建通过，服务器备份迁移后健康，真实HTTPS版本匹配。手机审查见 `docs/mobile/2026-10-15-compact-account-audit.md`。私有页原126秒巡览为此前mobile4版本，新的截图与审查资料单独标记。
+
+以下mobile4信息是上一个部署版本，新的开发应以上段、CURRENT_STATUS和当前源码为准。
+
 2026-10-15 已部署登录、注册、游客入口与手机布局修正。Web 镜像 `energy-research-web:web-20261015-mobile4`，BUILD_ID `Y9lh0Lu-TpxDM0gFSJ-jC`。API 镜像 `energy-research-api:web-20261015-account`。服务器保持 4GB，公开知识可以浏览，科研功能需要登录；重型 OCR 等功能暂未开放。
 
 本次源码快照覆盖当前前后端、迁移、测试、网页构建配置和必要静态图片，不包含模型、数据库、用户论文、环境密钥或服务器会话。它基于仓库 main `3c97a48e17519f009a7eaa145d742e2558e81f78` 叠加本机当前源码；历史资料保留在原仓库。

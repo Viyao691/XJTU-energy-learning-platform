@@ -1,0 +1,12 @@
+.energy-brand-icon { display: inline-flex; flex: 0 0 auto; width: 36px; height: 36px; }
+.energy-brand-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.energy-brand-icon .energy-brand-dark { display: none; }
+html[data-theme="dark"] .energy-brand-icon .energy-brand-light { display: none; }
+html[data-theme="dark"] .energy-brand-icon .energy-brand-dark { display: block; }
+.app-brand > .energy-brand-icon { width: 32px; height: 32px; }
+.hi-photo-brand > .energy-brand-icon { width: calc(47 * var(--u)); height: calc(51 * var(--u)); }
+.hi-photo.hi-dark .energy-brand-icon .energy-brand-light { display: none; }
+.hi-photo.hi-dark .energy-brand-icon .energy-brand-dark { display: block; }
+.hi-photo.hi-light .energy-brand-icon .energy-brand-dark { display: none; }
+.hi-photo.hi-light .energy-brand-icon .energy-brand-light { display: block; }
+@media (max-width: 900px) { .hi-photo-brand > .energy-brand-icon { width: 35px; height: 35px; } }

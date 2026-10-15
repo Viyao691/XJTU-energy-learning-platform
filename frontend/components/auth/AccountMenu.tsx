@@ -19,9 +19,9 @@ export function AccountMenu() {
       <div className="web-account-copy">
         <strong className="web-account-name">{loading ? "正在确认账户" : user ? "科研工作空间" : "游客"}</strong>
         <span className="web-account-detail" title={user?.email}>{loading ? <span role="status">请稍候…</span> : user ? user.email : "浏览公开储能知识"}</span>
+        {!loading && <div className="web-account-status"><span aria-hidden="true" />{user ? (user.is_admin ? "管理员" : "科研用户") : "公开浏览模式"}</div>}
       </div>
     </div>
-    {!loading && <div className="web-account-status"><span aria-hidden="true" />{user ? (user.is_admin ? "管理员" : "科研用户") : "公开浏览模式"}</div>}
     {!loading && <div className="web-account-actions">{user ? <button type="button" disabled={busy} onClick={signOut}>{busy ? "正在退出…" : "退出登录"}</button> : <><Link className="web-account-login" href="/login">登录</Link><Link href="/login?mode=register">注册</Link></>}</div>}
     {error && <span className="web-account-error" role="alert">{error}</span>}
   </div>;

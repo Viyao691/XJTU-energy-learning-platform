@@ -10,6 +10,7 @@ import { EnergyHeaderBackdrop, type EnergyHeaderKind } from "./EnergyHeaderBackd
 import { SpecularInteractions } from "../react-bits/SpecularInteractions";
 import ThemePillSwitch from "../react-bits/ThemePillSwitch";
 import { useAuth } from "../auth/AuthProvider";
+import { BrandMark } from "../BrandMark";
 import "./energy-material-backdrop.css";
 import "./workspace.css";
 import "./page-atmosphere.css";
@@ -115,7 +116,7 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
 
   if (webMode && pathname === "/login") return <div className="web-auth-layout">
     <header className="web-auth-header">
-      <Link className="web-auth-brand" href="/dashboard"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="1" y="1" width="34" height="34" rx="10" fill="currentColor" /><path d="M20 7L11 20H18L16 29L26 15H19L20 7Z" fill="var(--auth-paper)" /></svg><span>能研智助<small>储能科研学习平台</small></span></Link>
+      <Link className="web-auth-brand" href="/dashboard"><BrandMark /><span>能研智助<small>储能科研学习平台</small></span></Link>
       <div className="web-auth-header-actions"><button type="button" onClick={() => chooseTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "深色模式" : "浅色模式"}</button><Link href="/dashboard">返回首页 <span aria-hidden="true">↗</span></Link></div>
     </header>
     <main className="web-auth-main" id="workspace-action-surface">{children}</main>
@@ -127,7 +128,7 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
     <div className="workspace-v2-column">
       <div className="workspace-v2-topbar">
         <button ref={menuButton} type="button" className="workspace-v2-menu-button" aria-label={menuOpen ? "关闭导航" : "打开导航"} aria-controls="workspace-v2-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(open => !open)}>
-          <span aria-hidden="true">☰</span>
+          <span aria-hidden="true">{menuOpen ? "×" : "☰"}</span>
         </button>
         <div className="workspace-v2-location"><small>储能科研学习平台 <span aria-hidden="true">/</span> 研究工作台</small><strong>{title}</strong></div>
         <div className="workspace-v2-topbar-actions">

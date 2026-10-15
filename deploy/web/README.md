@@ -28,6 +28,8 @@ DNSPod新增energy A指向115.159.51.147。追加`energy.Caddyfile`站点块到�
 
 2026-10-15账号入口区分注册与登录：新用户通过`/api/v1/auth/register`创建验证账号，`/login`仅登录已有账号；验证码`intent`为login/register时会先检查账号状态。游客登录为公开浏览弹窗，不创建账号或科研会话。已有用户与会话无需迁移。
 
+2026-10-15紧凑账号版本增加密码：注册须传email/code/password，默认登录传email/password；“忘记密码”切换旧email/code登录。先备份数据库，再显式升级Alembic0033，新增nullable password_hash及持久化失败限流表，保留既有用户/会话。旧账号password为空时使用验证码登录，不代设密码。密码采用随机盐PBKDF2-SHA256；每15分钟邮箱5次/IP20次失败触发限制。手机菜单、账户卡、登录表单及A正式Logo细节见[审查记录](../../docs/mobile/2026-10-15-compact-account-audit.md)。
+
 ## 资源与费用边界
 
 新Web/API上限256/512MiB、CPU0.25/1核。实际服务器不是4096MiB，需要混合负载后判断持续容量；不按配置上限宣称支持某个用户人数。

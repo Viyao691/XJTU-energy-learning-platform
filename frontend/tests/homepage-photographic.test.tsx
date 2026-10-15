@@ -23,6 +23,21 @@ describe("photographic category homepage", () => {
   for (const label of ["论文", "学习", "竞赛", "科研", "系统"]) expect(within(dock).getByRole("button", { name: `展开${label}分类` })).toBeTruthy();
   expect(document.querySelector(".hi-photo-scene")?.getAttribute("src")).toBe("/home-hero/scene-light.webp");
   expect(screen.getByTestId("particles").getAttribute("data-theme")).toBe("light");
+  expect(screen.queryByText("搜索论文、主题或作者…")).toBeNull();
+ });
+
+ it("returns keyboard focus to the category after Escape and closes after choosing a destination", () => {
+  render(<Hero theme="light" onTheme={vi.fn()}/>);
+  const trigger = screen.getByRole("button", { name: "展开论文分类" });
+  fireEvent.click(trigger);
+  const menu = screen.getByRole("group", { name: "论文分类菜单" });
+  within(menu).getByRole("link", { name: "论文搜索" }).focus();
+  fireEvent.keyDown(window, { key: "Escape" });
+  expect(document.activeElement).toBe(trigger);
+  expect(trigger.getAttribute("aria-expanded")).toBe("false");
+  fireEvent.click(trigger);
+  fireEvent.click(within(screen.getByRole("group", { name: "论文分类菜单" })).getByRole("link", { name: "论文库" }));
+  expect(screen.queryByRole("group", { name: "论文分类菜单" })).toBeNull();
  });
 
  it("opens the shared sidebar routes one category at a time and closes on Escape or outside click", () => {

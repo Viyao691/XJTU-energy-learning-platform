@@ -10,26 +10,29 @@ html[data-theme="dark"] .web-auth-layout { --auth-bg: #101e22; --auth-paper: #17
 .web-auth-header-actions a, .web-auth-header-actions button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--auth-muted); font: inherit; font-size: 13px; box-shadow: none; text-decoration: none; cursor: pointer; }
 .web-auth-header-actions a:hover, .web-auth-header-actions button:hover { color: var(--auth-accent); }
 .web-auth-main { width: 100%; max-width: none; margin: 0; display: grid; place-items: center; flex: 1; padding: 10px 32px 20px; }
-.web-auth-layout .web-login { width: min(100%, 1000px); display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; overflow: hidden; background: var(--auth-paper); border: 1px solid var(--auth-line); border-radius: 24px; box-shadow: 0 16px 48px #153c3b0b; color: var(--auth-ink); }
-.web-login-story { display: flex; flex-direction: column; padding: 48px 44px 36px; background: var(--auth-story); color: #b9dcd0; }
+.web-auth-layout .web-login { width: min(100%, 860px); display: grid; grid-template-columns: .9fr 1fr; margin: 0; padding: 0; overflow: hidden; background: var(--auth-paper); border: 1px solid var(--auth-line); border-radius: 20px; box-shadow: 0 16px 48px #153c3b0b; color: var(--auth-ink); }
+.web-login-story { display: flex; flex-direction: column; padding: 30px; background: var(--auth-story); color: #b9dcd0; }
 .web-login-story-label { font-size: 11px; font-weight: 600; }
 .web-login-story h2 { margin: 24px 0 16px; color: #f1f4e9; font-size: clamp(30px, 3vw, 38px); font-weight: 500; line-height: 1.5; text-wrap: balance; }
 .web-login-story p { margin: 0; font-size: 14px; line-height: 1.9; color: #bad1ca; text-wrap: pretty; }
 .web-login-art { width: 100%; height: auto; max-height: 222px; margin: auto 0 16px; padding-top: 20px; flex: 1; }
 .web-login-story-topics { display: flex; flex-wrap: wrap; gap: 18px; padding-top: 19px; border-top: 1px solid #9cc3b830; font-size: 12px; color: #e1eade; }
 .web-login-story small { margin-top: 14px; color: #9fbcb4; font-size: 11px; }
-.web-login-panel { min-width: 0; padding: 32px 44px 26px; }
+.web-login-panel { min-width: 0; padding: 26px 30px; }
 .web-login-heading { display: block; min-height: 0; margin: 0; padding: 0; background: transparent; color: inherit; }
-.web-login-heading h1 { margin: 0 0 10px; color: var(--auth-ink); font-size: 28px; font-weight: 650; line-height: 1.4; text-wrap: balance; }
+.web-login-heading h1 { margin: 0 0 4px; color: var(--auth-ink); font-size: 25px; font-weight: 650; line-height: 1.4; text-wrap: balance; }
 .web-login-heading > p:last-child { margin: 0; color: var(--auth-muted); font-size: 13px; line-height: 1.8; text-wrap: pretty; }
-.web-login-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 20px; padding: 4px; background: var(--auth-soft); border-radius: 11px; }
+.web-login-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 12px; padding: 3px; background: var(--auth-soft); border-radius: 10px; }
 .web-auth-layout .web-login button { min-height: 46px; padding: 10px 14px; border: 1px solid transparent; border-radius: 9px; color: var(--auth-button-ink); background: var(--auth-accent); box-shadow: none; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
 .web-auth-layout .web-login .web-login-modes button { min-height: 44px; padding: 8px; background: transparent; color: var(--auth-muted); font-size: 13px; font-weight: 400; }
 .web-auth-layout .web-login .web-login-modes button[aria-pressed="true"] { background: var(--auth-paper); border-color: var(--auth-line); color: var(--auth-ink); font-weight: 600; box-shadow: 0 1px 3px #153c3b09; }
-.web-auth-layout .web-login form { display: grid; gap: 12px; margin: 20px 0; }
-.web-login-field { display: grid; gap: 8px; min-width: 0; }
+.web-auth-layout .web-login form { display: grid; gap: 10px; margin: 14px 0 12px; }
+.web-login-field { display: grid; gap: 5px; min-width: 0; }
+.web-login-passwords { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+.web-login-options { display: flex; justify-content: flex-end; margin: -8px 0; }
+.web-auth-layout .web-login button.web-login-method { min-height: 44px; padding: 4px 0 4px 14px; border: 0; background: transparent; color: var(--auth-accent); font-size: 12px; font-weight: 500; }
 .web-login-field label { margin: 0; color: var(--auth-ink); font-size: 13px; font-weight: 600; }
-.web-auth-layout .web-login input { width: 100%; min-width: 0; height: 48px; padding: 11px 14px; border: 1px solid var(--auth-line); border-radius: 9px; background: var(--auth-paper); color: var(--auth-ink); font: inherit; font-size: 14px; box-shadow: none; }
+.web-auth-layout .web-login input { width: 100%; min-width: 0; height: 44px; padding: 9px 11px; border: 1px solid var(--auth-line); border-radius: 8px; background: var(--auth-paper); color: var(--auth-ink); font: inherit; font-size: 16px; box-shadow: none; }
 .web-auth-layout .web-login input::placeholder { color: var(--auth-muted); opacity: .75; }
 html[data-theme="dark"] .web-auth-layout #workspace-action-surface .web-login input { background: var(--auth-paper) !important; color: var(--auth-ink) !important; border-color: var(--auth-line) !important; }
 html[data-theme="dark"] .web-auth-layout #workspace-action-surface .web-login input::placeholder { color: var(--auth-muted) !important; }
@@ -42,7 +45,7 @@ html[data-theme="dark"] .web-auth-layout #workspace-action-surface .web-login in
 .web-login [role="alert"] { color: #a32626; }
 html[data-theme="dark"] .web-login [role="alert"] { color: #ffb8a6; }
 .web-login [role="status"] { color: var(--auth-accent); }
-.web-login-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 17px; color: var(--auth-muted); font-size: 11px; }
+.web-login-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--auth-muted); font-size: 11px; }
 .web-login-divider::before, .web-login-divider::after { content: ""; flex: 1; height: 1px; background: var(--auth-line); }
 .web-auth-layout .web-login button.web-guest-trigger { width: 100%; background: transparent; border-color: var(--auth-line); color: var(--auth-ink); font-size: 13px; font-weight: 500; }
 .web-login-footnote { margin: 16px 0 0; color: var(--auth-muted); font-size: 11px; text-align: center; line-height: 1.6; }
@@ -61,37 +64,37 @@ html[data-theme="dark"] .web-login [role="alert"] { color: #ffb8a6; }
 .web-auth-state a { display: block; margin-top: 20px; }
 .web-auth-state button { min-height: 44px; padding: 10px 14px; }
 @media (max-width: 760px) {
-  .web-auth-header { padding: 20px 24px; }
+  .web-auth-header { padding: 10px 20px; }
   .web-auth-header-actions { gap: 16px; }
-  .web-auth-main { padding: 8px 24px 20px; }
-  .web-auth-layout .web-login { width: min(100%, 480px); grid-template-columns: 1fr; border-radius: 20px; }
-  .web-login-story { padding: 24px 28px; }
+  .web-auth-main { padding: 8px 20px 12px; }
+  .web-auth-layout .web-login { width: min(100%, 400px); grid-template-columns: 1fr; border-radius: 16px; }
+  .web-login-story { display: none; }
   .web-login-story h2 { margin: 10px 0 0; font-size: 25px; line-height: 1.45; }
   .web-login-story > p, .web-login-art, .web-login-story-topics, .web-login-story > small { display: none; }
   .web-login-story-label { font-size: 10px; }
-  .web-login-panel { padding: 28px; }
-  .web-login-heading h1 { font-size: 25px; }
+  .web-login-panel { padding: 20px 22px; }
+  .web-login-heading h1 { font-size: 23px; }
+  .web-auth-layout .app-footer { padding: 10px 16px 14px; font-size: 10px; }
 }
 @media (max-width: 420px) {
-  .web-auth-header { padding: 16px 18px; }
+  .web-auth-header { padding: 10px 16px; gap: 10px; }
   .web-auth-brand > span { font-size: 16px; }
   .web-auth-brand small { font-size: 10px; }
   .web-auth-header-actions { gap: 12px; }
   .web-auth-header-actions a, .web-auth-header-actions button { font-size: 11px; }
-  .web-auth-main { padding: 8px 16px 16px; }
-  .web-login-panel { padding: 26px 22px; }
-  .web-login-story { padding: 22px; }
+  .web-auth-main { padding: 6px 14px 10px; }
+  .web-login-panel { padding: 18px; }
   .web-login-code-row { grid-template-columns: minmax(0, 1fr) 104px; gap: 8px; }
   .web-guest-dialog { padding: 24px; }
 }
-.app-sidebar .app-sidebar-user.app-sidebar-user--web { grid-template-columns: minmax(0, 1fr) !important; padding: 12px !important; }
-.web-auth-account { --account-ink: #eff2e9; --account-muted: #b4c7ce; --account-line: rgba(212, 230, 227, .25); --account-avatar: #315267; --account-action: #e4e9df; --account-action-ink: #263d46; display: grid; gap: 12px; width: 100%; min-width: 0; color: var(--account-ink); }
-.web-account-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.web-account-avatar { display: flex; align-items: center; justify-content: center; flex: 0 0 36px; width: 36px; height: 36px; border: 1px solid var(--account-line); border-radius: 12px; background: var(--account-avatar); color: var(--account-ink); font-size: 16px; font-weight: 650; }
+.app-sidebar .app-sidebar-user.app-sidebar-user--web { grid-template-columns: minmax(0, 1fr) !important; padding: 8px !important; }
+.web-auth-account { --account-ink: #eff2e9; --account-muted: #b4c7ce; --account-line: rgba(212, 230, 227, .25); --account-avatar: #315267; --account-action: #e4e9df; --account-action-ink: #263d46; display: grid; gap: 8px; width: 100%; min-width: 0; color: var(--account-ink); }
+.web-account-identity { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.web-account-avatar { display: flex; align-items: center; justify-content: center; flex: 0 0 30px; width: 30px; height: 30px; border: 1px solid var(--account-line); border-radius: 9px; background: var(--account-avatar); color: var(--account-ink); font-size: 16px; font-weight: 650; }
 .web-account-avatar svg { width: 22px; height: 22px; }
-.web-account-copy { display: grid; gap: 4px; min-width: 0; }
+.web-account-copy { display: grid; gap: 2px; min-width: 0; }
 .app-sidebar .app-sidebar-user--web .web-auth-account .web-account-name { color: var(--account-ink) !important; font-size: 13px !important; line-height: 1.4; }
-.web-account-detail { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--account-muted); font-size: 11px; line-height: 1.5; }
+.web-account-detail { display: block; overflow-wrap: anywhere; white-space: normal; color: var(--account-muted); font-size: 11px; line-height: 1.5; }
 .web-account-status { display: flex; align-items: center; gap: 6px; color: var(--account-muted); font-size: 11px; }
 .web-account-status > span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .web-account-actions { display: flex; gap: 8px; }

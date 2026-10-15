@@ -865,7 +865,8 @@ export interface ApiSchemas {
   LoginRequest: {
     email: string;
     intent?: "login" | "register" | null;
-    code: string;
+    code?: string | null;
+    password?: string | null;
   };
   LogoutResponse: {
     message: string;
@@ -1131,6 +1132,12 @@ export interface ApiSchemas {
     ready: boolean;
     version: string;
     reason: string;
+  };
+  RegisterRequest: {
+    email: string;
+    intent?: "login" | "register" | null;
+    code: string;
+    password: string;
   };
   ResearchChallengeResponse: {
     questions: Array<string>;

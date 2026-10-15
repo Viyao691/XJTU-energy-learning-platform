@@ -59,7 +59,10 @@ export default function HomeDock({ papers, subscriptions, model, unread }: Props
       if (!dockRef.current?.contains(event.target as Node)) setOpen(null);
     };
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(null);
+      if (event.key === "Escape") {
+        dockRef.current?.querySelector<HTMLButtonElement>('[aria-expanded="true"]')?.focus();
+        setOpen(null);
+      }
     };
     document.addEventListener("pointerdown", closeOutside);
     window.addEventListener("keydown", closeOnEscape);

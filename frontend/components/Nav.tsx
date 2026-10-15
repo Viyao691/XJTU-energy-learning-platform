@@ -8,6 +8,7 @@ import { groups } from "./navigation-groups";
 import { useAuth } from "./auth/AuthProvider";
 import { AccountMenu } from "./auth/AccountMenu";
 import { isAdminPage } from "./auth/routes";
+import { BrandMark } from "./BrandMark";
 import "./sidebar-landscape.css";
 
 
@@ -93,7 +94,7 @@ export function Nav({ workspace = false }: { workspace?: boolean }) {
       <div className="app-sidebar-landscape" aria-hidden="true"><span /></div>
       <div className="app-sidebar-brand">
         <Link className="app-brand" href="/dashboard">
-          <span className="app-brand-mark" aria-hidden="true"><i /><i /><i /><i /><i /></span>
+          <BrandMark />
           <span className="app-brand-copy"><strong>储能科研学习平台</strong><small>ENERGY RESEARCH</small></span>
         </Link>
       </div>
