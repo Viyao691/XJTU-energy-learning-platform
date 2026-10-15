@@ -242,5 +242,7 @@ Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开
 MIT 适用于项目代码；摄影、字体、图标及其他第三方素材遵循各自许可，来源与署名记录随项目保留。
 # 公网轻量网站部署
 
+云端编辑使用 [dot 交接分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)，启动与编辑范围见[交接说明](docs/handoff/2026-10-15-dot-cloud-handoff.md)。[私有资料页](https://chatgpt.com/space/page_5c4fbfe044d48191b07919ac010fe77e)保存手机视频、审查清单及可编辑素材；需要用户账号访问。GitHub提交不会自动部署网站。
+
 公网版本使用独立`compose.web.yml`和`Dockerfile.web`，邮箱登录后使用个人科研数据；桌面启动命令不变。服务器安装、私密环境、明确数据库迁移、DNS/Caddy及回退步骤见[deploy/web/README.md](deploy/web/README.md)，当前上线边界见[CURRENT_STATUS.md](CURRENT_STATUS.md)。首次网站部署使用空库，不上传本机私人论文或沿用本机会话。
 

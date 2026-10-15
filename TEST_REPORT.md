@@ -1,5 +1,13 @@
 # 最新验证报告 · 2026-10-15
 
+## dot 云端交接
+
+- GitHub新分支推送成功，提交 `6bc31ba3b4bc1cf75478988a479d1b2d15e6e0b3`；基于main `3c97a48e17519f009a7eaa145d742e2558e81f78` 叠加240个当前源码/素材文件，没有改动main。
+- 代码快照1,708,587字节，必要构建文件（Next配置、锁文件、轻量后端依赖、Alembic配置、Web Dockerfile、Compose、静态资源优化脚本）存在，ZIP testzip通过。静态图片叠加包6,917,300字节。
+- 可编辑手机巡览素材1,053,209字节、36张截图，跨系统生成脚本compile语法检查通过；本次未重复渲染原视频。
+- 视频、审查Markdown、线上截图、代码ZIP、素材叠加ZIP与视频可编辑ZIP上传结果均file_access_confirmed=true。私有Page已插入六个真实文件引用和GitHub分支/编辑说明。
+- 未重新构建/部署网站，未验证dot实际云端运行环境、真机浏览器或真实付费科研流程。
+
 ## Web手机适配
 
 - title-motion2、workspace-shell7、markdown-mermaid13、learning-analytics5共27passed；reader-refinement6passed（新增Web手机逐页图像、原件入口与翻页）。学习活动图测试曾以900>280失败，修改后5项通过。没有运行全套或首页哈希。

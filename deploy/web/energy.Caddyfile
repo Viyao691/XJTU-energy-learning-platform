@@ -1,0 +1,17 @@
+# Append this site block to the EXISTING Caddyfile; preserve its global block
+# and viyao.cn site. Validate before reload. No second80/443 listener.
+energy.viyao.cn {
+    encode zstd gzip
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        -Server
+    }
+    @compiled path /_next/static/*
+    header @compiled Cache-Control "public, max-age=31536000, immutable"
+    @private path /backend-api/*
+    header @private Cache-Control "private, no-store"
+    reverse_proxy energy-web:3000 {
+        header_up X-Energy-Client-IP {remote_host}
+    }
+}
