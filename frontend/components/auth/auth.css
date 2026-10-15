@@ -1,0 +1,103 @@
+/* The standalone web account page keeps workspace styles outside its surface. */
+.web-auth-layout { --auth-bg: #f4f3ee; --auth-paper: #fffefa; --auth-ink: #193a3d; --auth-muted: #627574; --auth-line: #d9e0da; --auth-soft: #edf1ec; --auth-accent: #235d59; --auth-button-ink: #fff; --auth-story: #153e43; min-height: 100dvh; display: flex; flex-direction: column; background: var(--auth-bg); color: var(--auth-ink); font-family: "Segoe UI", "Microsoft YaHei", sans-serif; }
+html[data-theme="dark"] .web-auth-layout { --auth-bg: #101e22; --auth-paper: #172a2e; --auth-ink: #e5efea; --auth-muted: #a9bdb7; --auth-line: #354a4b; --auth-soft: #20373a; --auth-accent: #9cc9b9; --auth-button-ink: #15322d; --auth-story: #12363b; }
+.web-auth-header { width: min(1120px, 100%); min-height: 0; margin: 0 auto; padding: 20px 32px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; background: transparent; color: var(--auth-ink); }
+.web-auth-brand { display: flex; align-items: center; gap: 11px; color: var(--auth-ink); text-decoration: none; }
+.web-auth-brand svg { width: 36px; height: 36px; flex-shrink: 0; color: var(--auth-accent); }
+.web-auth-brand > span { font-size: 18px; font-weight: 650; }
+.web-auth-brand small { display: block; margin-top: 3px; font-size: 11px; font-weight: 400; color: var(--auth-muted); }
+.web-auth-header-actions { display: flex; align-items: center; gap: 24px; }
+.web-auth-header-actions a, .web-auth-header-actions button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--auth-muted); font: inherit; font-size: 13px; box-shadow: none; text-decoration: none; cursor: pointer; }
+.web-auth-header-actions a:hover, .web-auth-header-actions button:hover { color: var(--auth-accent); }
+.web-auth-main { width: 100%; max-width: none; margin: 0; display: grid; place-items: center; flex: 1; padding: 10px 32px 20px; }
+.web-auth-layout .web-login { width: min(100%, 1000px); display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; overflow: hidden; background: var(--auth-paper); border: 1px solid var(--auth-line); border-radius: 24px; box-shadow: 0 16px 48px #153c3b0b; color: var(--auth-ink); }
+.web-login-story { display: flex; flex-direction: column; padding: 48px 44px 36px; background: var(--auth-story); color: #b9dcd0; }
+.web-login-story-label { font-size: 11px; font-weight: 600; }
+.web-login-story h2 { margin: 24px 0 16px; color: #f1f4e9; font-size: clamp(30px, 3vw, 38px); font-weight: 500; line-height: 1.5; text-wrap: balance; }
+.web-login-story p { margin: 0; font-size: 14px; line-height: 1.9; color: #bad1ca; text-wrap: pretty; }
+.web-login-art { width: 100%; height: auto; max-height: 222px; margin: auto 0 16px; padding-top: 20px; flex: 1; }
+.web-login-story-topics { display: flex; flex-wrap: wrap; gap: 18px; padding-top: 19px; border-top: 1px solid #9cc3b830; font-size: 12px; color: #e1eade; }
+.web-login-story small { margin-top: 14px; color: #9fbcb4; font-size: 11px; }
+.web-login-panel { min-width: 0; padding: 32px 44px 26px; }
+.web-login-heading { display: block; min-height: 0; margin: 0; padding: 0; background: transparent; color: inherit; }
+.web-login-heading h1 { margin: 0 0 10px; color: var(--auth-ink); font-size: 28px; font-weight: 650; line-height: 1.4; text-wrap: balance; }
+.web-login-heading > p:last-child { margin: 0; color: var(--auth-muted); font-size: 13px; line-height: 1.8; text-wrap: pretty; }
+.web-login-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 20px; padding: 4px; background: var(--auth-soft); border-radius: 11px; }
+.web-auth-layout .web-login button { min-height: 46px; padding: 10px 14px; border: 1px solid transparent; border-radius: 9px; color: var(--auth-button-ink); background: var(--auth-accent); box-shadow: none; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.web-auth-layout .web-login .web-login-modes button { min-height: 44px; padding: 8px; background: transparent; color: var(--auth-muted); font-size: 13px; font-weight: 400; }
+.web-auth-layout .web-login .web-login-modes button[aria-pressed="true"] { background: var(--auth-paper); border-color: var(--auth-line); color: var(--auth-ink); font-weight: 600; box-shadow: 0 1px 3px #153c3b09; }
+.web-auth-layout .web-login form { display: grid; gap: 12px; margin: 20px 0; }
+.web-login-field { display: grid; gap: 8px; min-width: 0; }
+.web-login-field label { margin: 0; color: var(--auth-ink); font-size: 13px; font-weight: 600; }
+.web-auth-layout .web-login input { width: 100%; min-width: 0; height: 48px; padding: 11px 14px; border: 1px solid var(--auth-line); border-radius: 9px; background: var(--auth-paper); color: var(--auth-ink); font: inherit; font-size: 14px; box-shadow: none; }
+.web-auth-layout .web-login input::placeholder { color: var(--auth-muted); opacity: .75; }
+html[data-theme="dark"] .web-auth-layout #workspace-action-surface .web-login input { background: var(--auth-paper) !important; color: var(--auth-ink) !important; border-color: var(--auth-line) !important; }
+html[data-theme="dark"] .web-auth-layout #workspace-action-surface .web-login input::placeholder { color: var(--auth-muted) !important; }
+.web-login-code-row { display: grid; grid-template-columns: minmax(0, 1fr) 116px; gap: 10px; }
+.web-auth-layout .web-login button.web-login-send { padding: 8px; border-color: var(--auth-line); background: var(--auth-soft); color: var(--auth-accent); font-size: 12px; font-variant-numeric: tabular-nums; }
+.web-login form > small { margin-top: -7px; color: var(--auth-muted); font-size: 11px; line-height: 1.6; }
+.web-auth-layout .web-login button.web-login-submit { margin-top: 2px; }
+.web-auth-layout .web-login button:disabled { opacity: .5; cursor: default; }
+.web-login form p { margin: 0; font-size: 12px; line-height: 1.7; text-wrap: pretty; }
+.web-login [role="alert"] { color: #a32626; }
+html[data-theme="dark"] .web-login [role="alert"] { color: #ffb8a6; }
+.web-login [role="status"] { color: var(--auth-accent); }
+.web-login-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 17px; color: var(--auth-muted); font-size: 11px; }
+.web-login-divider::before, .web-login-divider::after { content: ""; flex: 1; height: 1px; background: var(--auth-line); }
+.web-auth-layout .web-login button.web-guest-trigger { width: 100%; background: transparent; border-color: var(--auth-line); color: var(--auth-ink); font-size: 13px; font-weight: 500; }
+.web-login-footnote { margin: 16px 0 0; color: var(--auth-muted); font-size: 11px; text-align: center; line-height: 1.6; }
+.web-auth-layout .app-footer { margin: 0; padding: 16px 24px 24px; border: 0; background: transparent; color: var(--auth-muted); text-align: center; font-size: 11px; }
+.web-auth-layout .app-footer a { color: inherit; text-decoration: none; }
+.web-auth-layout :focus-visible, .web-auth-account :focus-visible { outline: 3px solid #8bafa6; outline-offset: 3px; }
+.web-guest-dialog { width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; overflow: auto; padding: 32px; border: 1px solid var(--auth-line, #d9e0da); border-radius: 20px; background: var(--auth-paper, #fffefa); color: var(--auth-ink, #193a3d); box-shadow: 0 24px 64px #071f2933; }
+.web-guest-dialog::backdrop { background: #071c27a6; }
+.web-guest-dialog .web-login-eyebrow { margin: 0 0 10px; color: var(--auth-muted, #627574); font-size: 11px; }
+.web-guest-dialog h2 { margin: 0 0 14px; color: inherit; font-size: 24px; font-weight: 600; text-wrap: balance; }
+.web-guest-dialog p { margin: 0; color: var(--auth-muted, #627574); font-size: 14px; line-height: 1.85; text-wrap: pretty; }
+.web-guest-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+.web-guest-dialog button { min-height: 44px; padding: 10px 16px; border: 1px solid var(--auth-accent, #235d59); border-radius: 9px; background: var(--auth-accent, #235d59); color: var(--auth-button-ink, #fff); font: inherit; font-size: 13px; cursor: pointer; }
+.web-auth-layout .web-guest-dialog button.web-guest-close { background: transparent; color: var(--auth-ink); border-color: var(--auth-line); }
+.web-auth-state { max-width: 560px; margin: 64px auto; padding: 24px; }
+.web-auth-state a { display: block; margin-top: 20px; }
+.web-auth-state button { min-height: 44px; padding: 10px 14px; }
+@media (max-width: 760px) {
+  .web-auth-header { padding: 20px 24px; }
+  .web-auth-header-actions { gap: 16px; }
+  .web-auth-main { padding: 8px 24px 20px; }
+  .web-auth-layout .web-login { width: min(100%, 480px); grid-template-columns: 1fr; border-radius: 20px; }
+  .web-login-story { padding: 24px 28px; }
+  .web-login-story h2 { margin: 10px 0 0; font-size: 25px; line-height: 1.45; }
+  .web-login-story > p, .web-login-art, .web-login-story-topics, .web-login-story > small { display: none; }
+  .web-login-story-label { font-size: 10px; }
+  .web-login-panel { padding: 28px; }
+  .web-login-heading h1 { font-size: 25px; }
+}
+@media (max-width: 420px) {
+  .web-auth-header { padding: 16px 18px; }
+  .web-auth-brand > span { font-size: 16px; }
+  .web-auth-brand small { font-size: 10px; }
+  .web-auth-header-actions { gap: 12px; }
+  .web-auth-header-actions a, .web-auth-header-actions button { font-size: 11px; }
+  .web-auth-main { padding: 8px 16px 16px; }
+  .web-login-panel { padding: 26px 22px; }
+  .web-login-story { padding: 22px; }
+  .web-login-code-row { grid-template-columns: minmax(0, 1fr) 104px; gap: 8px; }
+  .web-guest-dialog { padding: 24px; }
+}
+.app-sidebar .app-sidebar-user.app-sidebar-user--web { grid-template-columns: minmax(0, 1fr) !important; padding: 12px !important; }
+.web-auth-account { --account-ink: #eff2e9; --account-muted: #b4c7ce; --account-line: rgba(212, 230, 227, .25); --account-avatar: #315267; --account-action: #e4e9df; --account-action-ink: #263d46; display: grid; gap: 12px; width: 100%; min-width: 0; color: var(--account-ink); }
+.web-account-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.web-account-avatar { display: flex; align-items: center; justify-content: center; flex: 0 0 36px; width: 36px; height: 36px; border: 1px solid var(--account-line); border-radius: 12px; background: var(--account-avatar); color: var(--account-ink); font-size: 16px; font-weight: 650; }
+.web-account-avatar svg { width: 22px; height: 22px; }
+.web-account-copy { display: grid; gap: 4px; min-width: 0; }
+.app-sidebar .app-sidebar-user--web .web-auth-account .web-account-name { color: var(--account-ink) !important; font-size: 13px !important; line-height: 1.4; }
+.web-account-detail { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--account-muted); font-size: 11px; line-height: 1.5; }
+.web-account-status { display: flex; align-items: center; gap: 6px; color: var(--account-muted); font-size: 11px; }
+.web-account-status > span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.web-account-actions { display: flex; gap: 8px; }
+.web-account-actions a, .web-account-actions button { display: flex; align-items: center; justify-content: center; flex: 1; min-height: 44px; padding: 8px; border: 1px solid var(--account-line); border-radius: 8px; background: transparent; color: var(--account-ink); font: inherit; font-size: 12px; font-weight: 650; text-decoration: none; cursor: pointer; }
+.web-account-actions .web-account-login { background: var(--account-action); color: var(--account-action-ink); border-color: var(--account-action); }
+.web-account-actions a:hover, .web-account-actions button:hover { border-color: var(--account-ink); }
+.web-account-error { font-size: 12px; line-height: 1.5; color: #ffacac; }
+html:not([data-theme="dark"]) .workspace-v2 .web-auth-account { --account-ink: #2a4651; --account-muted: #52696e; --account-line: #bdc9c2; --account-avatar: #dce4db; --account-action: #2a4651; --account-action-ink: #fff; }
+html:not([data-theme="dark"]) .workspace-v2 .web-account-error { color: #a32626; }

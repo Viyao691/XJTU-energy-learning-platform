@@ -5,6 +5,9 @@ import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import BranchedMenu, { type BranchedMenuItem } from "./react-bits/BranchedMenu";
 import { groups } from "./navigation-groups";
+import { useAuth } from "./auth/AuthProvider";
+import { AccountMenu } from "./auth/AccountMenu";
+import { isAdminPage } from "./auth/routes";
 import "./sidebar-landscape.css";
 
 
@@ -41,6 +44,8 @@ const menuItems: BranchedMenuItem[] = [
 
 export function Nav({ workspace = false }: { workspace?: boolean }) {
   const pathname = usePathname();
+  const { webMode, user } = useAuth();
+  const visibleMenuItems: BranchedMenuItem[] = webMode && !user?.is_admin ? menuItems.map(item => "children" in item ? { ...item, children: item.children.filter(child => !isAdminPage(child.value)) } : item) : menuItems;
   const activeValue = pathname === "/papers" || pathname.startsWith("/papers/")
     ? "/library"
     : menuItems.flatMap(item => "children" in item ? item.children : [item])
@@ -93,13 +98,12 @@ export function Nav({ workspace = false }: { workspace?: boolean }) {
         </Link>
       </div>
       <div className="app-sidebar-navigation">
-        <BranchedMenu items={menuItems} activeValue={activeValue} />
+        <BranchedMenu items={visibleMenuItems} activeValue={activeValue} />
       </div>
-      <div className="app-sidebar-user">
-        <span className="app-sidebar-avatar" aria-hidden="true">V</span>
-        <span><strong className="app-sidebar-user-name">Viyao</strong><small>个人工作空间</small></span>
+      <div className={`app-sidebar-user${webMode ? " app-sidebar-user--web" : ""}`}>
+        {webMode ? <AccountMenu /> : <><span className="app-sidebar-avatar" aria-hidden="true">V</span><span><strong className="app-sidebar-user-name">Viyao</strong><small>个人工作空间</small></span></>}
       </div>
-      <div className="app-nav-footer">本地科研工作空间</div>
+      <div className="app-nav-footer">{webMode ? "个人科研工作空间" : "本地科研工作空间"}</div>
     </aside>
   );
 }

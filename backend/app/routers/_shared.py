@@ -21,6 +21,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
+from app.web_limits import WEB_MAX_EXTRACTED_CHARS, native_parse_slot
 from app.models import (
     Analysis,
     KnowledgeConversation,
@@ -114,10 +115,11 @@ def _setting_response(item: UserSetting) -> SettingsResponse:
 
 
 def _get_setting(db: Session) -> UserSetting:
-    item = db.get(UserSetting, 1)
+    item = db.scalar(select(UserSetting)) if get_settings().web_mode else db.get(UserSetting, 1)
     if item is None:
         item = _default_setting()
-        item.id = 1
+        if not get_settings().web_mode:
+            item.id = 1
         db.add(item)
         db.commit()
         db.refresh(item)
@@ -609,7 +611,7 @@ def _academic_search_diagnostic(
 
 def _read_user_keywords(factory: object) -> list[str]:
     with factory() as db:
-        setting = db.get(UserSetting, 1)
+        setting = db.scalar(select(UserSetting)) if get_settings().web_mode else db.get(UserSetting, 1)
         keywords = [] if setting is None else _json_string_list(setting.keywords)
         if db.in_transaction():
             db.rollback()
@@ -625,13 +627,29 @@ def _strict_query_bool(value: str) -> bool:
 
 
 def _extract_pdf(path: Path) -> tuple[str, int, float, str | None, str, dict[str, object]]:
+    with native_parse_slot():
+        return _extract_pdf_in_slot(path)
+
+
+def _extract_pdf_in_slot(path: Path) -> tuple[str, int, float, str | None, str, dict[str, object]]:
     try:
         document = fitz.open(path)
-        page_count = len(document)
-        texts = [page.get_text("text") for page in document]
-        from app.paper_metadata import pdf_bibliography_metadata
-        document_metadata = pdf_bibliography_metadata(document)
-        document.close()
+        try:
+            page_count = len(document)
+            if get_settings().web_mode and page_count > get_settings().web_max_pdf_pages:
+                raise HTTPException(413, f"轻量网站最多解析 {get_settings().web_max_pdf_pages} 页 PDF")
+            texts = []
+            text_size = 0
+            for page in document:
+                text = page.get_text("text")
+                text_size += len(text) + bool(texts)
+                if get_settings().web_mode and text_size > WEB_MAX_EXTRACTED_CHARS:
+                    raise HTTPException(413, "PDF 提取文本超过轻量网站 200 万字符限制")
+                texts.append(text)
+            from app.paper_metadata import pdf_bibliography_metadata
+            document_metadata = pdf_bibliography_metadata(document)
+        finally:
+            document.close()
     except (fitz.FileDataError, RuntimeError, OSError) as exc:
         raise HTTPException(400, "PDF 无法读取，可能已损坏或受保护") from exc
     extracted = "\n".join(texts).strip()

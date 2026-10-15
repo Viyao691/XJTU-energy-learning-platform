@@ -15,6 +15,8 @@ const { apiMock, routerMock } = vi.hoisted(() => ({
   },
   routerMock: { push: vi.fn() },
 }));
+const authMock = vi.hoisted(() => ({ webMode: false, user: null as { id: number; email: string; is_admin: boolean } | null, loading: false }));
+vi.mock("../components/auth/AuthProvider", () => ({ useAuth: () => authMock }));
 
 vi.mock("../lib/api", async original => ({ ...(await original<typeof import("../lib/api")>()), api: apiMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => routerMock }));
@@ -24,6 +26,7 @@ describe("single-screen category dashboard", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    authMock.webMode = false; authMock.user = null; authMock.loading = false;
     vi.stubGlobal("React", React);
     localStorage.clear();
     document.documentElement.removeAttribute("data-theme");
@@ -81,5 +84,31 @@ describe("single-screen category dashboard", () => {
     fireEvent.click(await screen.findByRole("button", { name: "展开科研分类" }));
     expect(await within(screen.getByRole("group", { name: "科研分类菜单" })).findByText("0 个主题 · — 条未读")).toBeTruthy();
     expect(screen.getByRole("link", { name: /搜索论文、主题或作者/ }).getAttribute("href")).toBe("/search");
+  });
+
+  it("keeps the public web homepage free of private and admin requests", async () => {
+    authMock.webMode = true;
+    apiMock.settings.mockRejectedValue(new Error("请先登录"));
+    apiMock.papers.mockRejectedValue(new Error("请先登录"));
+    render(createElement(Dashboard));
+    expect(await screen.findByRole("heading", { name: "储能科研，洞见未来" })).toBeTruthy();
+    expect(apiMock.settings).not.toHaveBeenCalled();
+    expect(apiMock.papers).not.toHaveBeenCalled();
+    expect(apiMock.listResearchSubscriptions).not.toHaveBeenCalled();
+    expect(apiMock.listResearchRuns).not.toHaveBeenCalled();
+    expect(apiMock.listResearchNotifications).not.toHaveBeenCalled();
+    expect(screen.queryByText("请先登录")).toBeNull();
+  });
+
+  it("loads only personal paper totals for a web user without querying disabled subscriptions or admin settings", async () => {
+    authMock.webMode = true; authMock.user = { id: 2, email: "user@example.org", is_admin: false };
+    apiMock.papers.mockResolvedValue({ total: 7, items: [] });
+    render(createElement(Dashboard));
+    fireEvent.click(await screen.findByRole("button", { name: "展开论文分类" }));
+    expect(await within(screen.getByRole("group", { name: "论文分类菜单" })).findByText("7 篇本地论文")).toBeTruthy();
+    expect(apiMock.settings).not.toHaveBeenCalled();
+    expect(apiMock.listResearchSubscriptions).not.toHaveBeenCalled();
+    expect(apiMock.listResearchRuns).not.toHaveBeenCalled();
+    expect(apiMock.listResearchNotifications).not.toHaveBeenCalled();
   });
 });

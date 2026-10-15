@@ -1,0 +1,446 @@
+{
+  "light": {
+    "17 painted equipment casing": {
+      "baseColor": [
+        0.2549999952316284,
+        0.2849999964237213,
+        0.28999999165534973,
+        1.0
+      ],
+      "metalness": 0.2199999988079071,
+      "roughness": 0.5,
+      "emissiveIntensity": 0.0
+    },
+    "18 satin coated metal": {
+      "baseColor": [
+        0.4099999964237213,
+        0.4350000023841858,
+        0.4350000023841858,
+        1.0
+      ],
+      "metalness": 0.3199999928474426,
+      "roughness": 0.4300000071525574,
+      "emissiveIntensity": 0.0
+    },
+    "19 brushed cold mullion": {
+      "baseColor": [
+        0.11999999731779099,
+        0.1599999964237213,
+        0.18000000715255737,
+        1.0
+      ],
+      "metalness": 0.8799999952316284,
+      "roughness": 0.28999999165534973,
+      "emissiveIntensity": 0.0
+    },
+    "20 landmark crown glazing": {
+      "baseColor": [
+        0.10499999672174454,
+        0.17000000178813934,
+        0.1850000023841858,
+        1.0
+      ],
+      "metalness": 0.25999999046325684,
+      "roughness": 0.11999999731779099,
+      "emissiveIntensity": 0.0
+    },
+    "01 honed warm limestone": {
+      "baseColor": [
+        0.41999998688697815,
+        0.36500000953674316,
+        0.2849999964237213,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.7200000286102295,
+      "emissiveIntensity": 0.0
+    },
+    "02 ivory ceramic cladding": {
+      "baseColor": [
+        0.550000011920929,
+        0.5350000262260437,
+        0.49000000953674316,
+        1.0
+      ],
+      "metalness": 0.02500000037252903,
+      "roughness": 0.4300000071525574,
+      "emissiveIntensity": 0.0
+    },
+    "03 satin anodized aluminium": {
+      "baseColor": [
+        0.38999998569488525,
+        0.4399999976158142,
+        0.4699999988079071,
+        1.0
+      ],
+      "metalness": 0.8999999761581421,
+      "roughness": 0.25999999046325684,
+      "emissiveIntensity": 0.0
+    },
+    "04 warm titanium fins": {
+      "baseColor": [
+        0.25,
+        0.25,
+        0.2199999988079071,
+        1.0
+      ],
+      "metalness": 0.6399999856948853,
+      "roughness": 0.4000000059604645,
+      "emissiveIntensity": 0.0
+    },
+    "05 low iron blue grey glazing": {
+      "baseColor": [
+        0.04500000178813934,
+        0.08500000089406967,
+        0.08699999749660492,
+        1.0
+      ],
+      "metalness": 0.18000000715255737,
+      "roughness": 0.14499999582767487,
+      "emissiveIntensity": 0.0
+    },
+    "06 opaque graphite spandrel": {
+      "baseColor": [
+        0.07500000298023224,
+        0.08799999952316284,
+        0.09000000357627869,
+        1.0
+      ],
+      "metalness": 0.14000000059604645,
+      "roughness": 0.5400000214576721,
+      "emissiveIntensity": 0.0
+    },
+    "07 occupied interior strips": {
+      "baseColor": [
+        0.7200000286102295,
+        0.49000000953674316,
+        0.2549999952316284,
+        1.0
+      ],
+      "metalness": 0.05000000074505806,
+      "roughness": 0.44999998807907104,
+      "emissiveIntensity": 0.12999999523162842
+    },
+    "08 fine mineral paving": {
+      "baseColor": [
+        0.3149999976158142,
+        0.3050000071525574,
+        0.2770000100135803,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.8199999928474426,
+      "emissiveIntensity": 0.0
+    },
+    "09 charcoal roadway": {
+      "baseColor": [
+        0.07199999690055847,
+        0.08100000023841858,
+        0.07999999821186066,
+        1.0
+      ],
+      "metalness": 0.029999999329447746,
+      "roughness": 0.7900000214576721,
+      "emissiveIntensity": 0.0
+    },
+    "10 deep planted soil": {
+      "baseColor": [
+        0.050999999046325684,
+        0.05900000035762787,
+        0.03400000184774399,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.9399999976158142,
+      "emissiveIntensity": 0.0
+    },
+    "11 silver olive foliage": {
+      "baseColor": [
+        0.06700000166893005,
+        0.11999999731779099,
+        0.04100000113248825,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.7799999713897705,
+      "emissiveIntensity": 0.0
+    },
+    "12 pale leaf undersides": {
+      "baseColor": [
+        0.13500000536441803,
+        0.1899999976158142,
+        0.07400000095367432,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.8399999737739563,
+      "emissiveIntensity": 0.0
+    },
+    "13 branches": {
+      "baseColor": [
+        0.09000000357627869,
+        0.07500000298023224,
+        0.04899999871850014,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.9200000166893005,
+      "emissiveIntensity": 0.0
+    },
+    "14 photovoltaic navy": {
+      "baseColor": [
+        0.014000000432133675,
+        0.04100000113248825,
+        0.061000000685453415,
+        1.0
+      ],
+      "metalness": 0.41999998688697815,
+      "roughness": 0.2199999988079071,
+      "emissiveIntensity": 0.0
+    },
+    "15 energy conduit standby": {
+      "baseColor": [
+        0.07699999958276749,
+        0.0860000029206276,
+        0.08500000089406967,
+        1.0
+      ],
+      "metalness": 0.11999999731779099,
+      "roughness": 0.7300000190734863,
+      "emissiveIntensity": 0.0
+    },
+    "16 warm landscape lamps": {
+      "baseColor": [
+        0.6499999761581421,
+        0.5299999713897705,
+        0.3400000035762787,
+        1.0
+      ],
+      "metalness": 0.10000000149011612,
+      "roughness": 0.44999998807907104,
+      "emissiveIntensity": 0.12999999523162842
+    }
+  },
+  "dark": {
+    "17 painted equipment casing": {
+      "baseColor": [
+        0.11500000208616257,
+        0.14000000059604645,
+        0.1550000011920929,
+        1.0
+      ],
+      "metalness": 0.2199999988079071,
+      "roughness": 0.5299999713897705,
+      "emissiveIntensity": 0.0
+    },
+    "18 satin coated metal": {
+      "baseColor": [
+        0.1899999976158142,
+        0.23999999463558197,
+        0.25999999046325684,
+        1.0
+      ],
+      "metalness": 0.3199999928474426,
+      "roughness": 0.46000000834465027,
+      "emissiveIntensity": 0.0
+    },
+    "19 brushed cold mullion": {
+      "baseColor": [
+        0.20000000298023224,
+        0.25,
+        0.2800000011920929,
+        1.0
+      ],
+      "metalness": 0.8799999952316284,
+      "roughness": 0.3100000023841858,
+      "emissiveIntensity": 0.0
+    },
+    "20 landmark crown glazing": {
+      "baseColor": [
+        0.08500000089406967,
+        0.14499999582767487,
+        0.17499999701976776,
+        1.0
+      ],
+      "metalness": 0.25999999046325684,
+      "roughness": 0.14000000059604645,
+      "emissiveIntensity": 0.0
+    },
+    "01 honed warm limestone": {
+      "baseColor": [
+        0.2199999988079071,
+        0.20000000298023224,
+        0.16500000655651093,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.7200000286102295,
+      "emissiveIntensity": 0.0
+    },
+    "02 ivory ceramic cladding": {
+      "baseColor": [
+        0.3400000035762787,
+        0.33000001311302185,
+        0.29499998688697815,
+        1.0
+      ],
+      "metalness": 0.02500000037252903,
+      "roughness": 0.4300000071525574,
+      "emissiveIntensity": 0.0
+    },
+    "03 satin anodized aluminium": {
+      "baseColor": [
+        0.30000001192092896,
+        0.36000001430511475,
+        0.4099999964237213,
+        1.0
+      ],
+      "metalness": 0.8999999761581421,
+      "roughness": 0.2800000011920929,
+      "emissiveIntensity": 0.0
+    },
+    "04 warm titanium fins": {
+      "baseColor": [
+        0.25,
+        0.25,
+        0.2199999988079071,
+        1.0
+      ],
+      "metalness": 0.6399999856948853,
+      "roughness": 0.4000000059604645,
+      "emissiveIntensity": 0.0
+    },
+    "05 low iron blue grey glazing": {
+      "baseColor": [
+        0.01899999938905239,
+        0.04500000178813934,
+        0.061000000685453415,
+        1.0
+      ],
+      "metalness": 0.18000000715255737,
+      "roughness": 0.18000000715255737,
+      "emissiveIntensity": 0.0
+    },
+    "06 opaque graphite spandrel": {
+      "baseColor": [
+        0.03500000014901161,
+        0.04899999871850014,
+        0.05700000002980232,
+        1.0
+      ],
+      "metalness": 0.14000000059604645,
+      "roughness": 0.5400000214576721,
+      "emissiveIntensity": 0.0
+    },
+    "07 occupied interior strips": {
+      "baseColor": [
+        0.7200000286102295,
+        0.49000000953674316,
+        0.2549999952316284,
+        1.0
+      ],
+      "metalness": 0.05000000074505806,
+      "roughness": 0.44999998807907104,
+      "emissiveIntensity": 1.649999976158142
+    },
+    "08 fine mineral paving": {
+      "baseColor": [
+        0.11500000208616257,
+        0.12700000405311584,
+        0.13500000536441803,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.8199999928474426,
+      "emissiveIntensity": 0.0
+    },
+    "09 charcoal roadway": {
+      "baseColor": [
+        0.07199999690055847,
+        0.08100000023841858,
+        0.07999999821186066,
+        1.0
+      ],
+      "metalness": 0.029999999329447746,
+      "roughness": 0.7900000214576721,
+      "emissiveIntensity": 0.0
+    },
+    "10 deep planted soil": {
+      "baseColor": [
+        0.050999999046325684,
+        0.05900000035762787,
+        0.03400000184774399,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.9399999976158142,
+      "emissiveIntensity": 0.0
+    },
+    "11 silver olive foliage": {
+      "baseColor": [
+        0.06700000166893005,
+        0.11999999731779099,
+        0.04100000113248825,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.7799999713897705,
+      "emissiveIntensity": 0.0
+    },
+    "12 pale leaf undersides": {
+      "baseColor": [
+        0.13500000536441803,
+        0.1899999976158142,
+        0.07400000095367432,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.8399999737739563,
+      "emissiveIntensity": 0.0
+    },
+    "13 branches": {
+      "baseColor": [
+        0.09000000357627869,
+        0.07500000298023224,
+        0.04899999871850014,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.9200000166893005,
+      "emissiveIntensity": 0.0
+    },
+    "14 photovoltaic navy": {
+      "baseColor": [
+        0.014000000432133675,
+        0.04100000113248825,
+        0.061000000685453415,
+        1.0
+      ],
+      "metalness": 0.41999998688697815,
+      "roughness": 0.2199999988079071,
+      "emissiveIntensity": 0.0
+    },
+    "15 energy conduit standby": {
+      "baseColor": [
+        0.06400000303983688,
+        0.07699999958276749,
+        0.0860000029206276,
+        1.0
+      ],
+      "metalness": 0.11999999731779099,
+      "roughness": 0.7300000190734863,
+      "emissiveIntensity": 0.0
+    },
+    "16 warm landscape lamps": {
+      "baseColor": [
+        0.6499999761581421,
+        0.5299999713897705,
+        0.3400000035762787,
+        1.0
+      ],
+      "metalness": 0.10000000149011612,
+      "roughness": 0.44999998807907104,
+      "emissiveIntensity": 0.6499999761581421
+    }
+  }
+}

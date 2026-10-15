@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import TechText from "../react-bits/TechText";
 import TrueFocus from "../react-bits/TrueFocus";
 import WarpText from "../react-bits/WarpText";
+import { useAuth } from "../auth/AuthProvider";
 import "./title-motion.css";
 
 export type TitleVariant = "warp" | "tech" | "focus";
@@ -26,6 +27,15 @@ const headerVariants: Record<string, TitleVariant> = {
 export default function TitleMotion({ text, variant, variantKey, warpLineHeight }: Props) {
   const effect = variant ?? (variantKey?.startsWith("LEARNING PACK") ? "focus" : headerVariants[variantKey ?? ""] ?? "focus");
   const [dark, setDark] = useState(false);
+  const { webMode } = useAuth();
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia?.("(max-width: 620px)");
+    const update = () => setCompact(webMode && !!media?.matches);
+    update();
+    media?.addEventListener("change", update);
+    return () => media?.removeEventListener("change", update);
+  }, [webMode]);
   useEffect(() => {
     const update = () => setDark(document.documentElement.dataset.theme === "dark");
     update();
@@ -34,6 +44,7 @@ export default function TitleMotion({ text, variant, variantKey, warpLineHeight 
     return () => observer.disconnect();
   }, []);
   const color = dark ? "#e9f0f1" : "#1d3c4d";
+  if (compact) return <span className="title-motion-mobile" style={{ whiteSpace: "pre-line" }}>{text}</span>;
   if (effect === "warp") return <WarpText text={text} color={color} fontSize="1em" fontWeight={650} lineHeight={warpLineHeight ?? 0.9} warpStrength={0.05} pointerStrength={0.28} refraction={0.012} className="title-motion-warp" />;
   if (effect === "tech" && Array.from(text).length <= 7) return <span className="title-motion-tech" style={{ "--title-chars": Array.from(text).length } as React.CSSProperties}><TechText text={text} color={color} accentColor={dark ? "#9fcbd0" : "#477985"} fontSize={42} sweep={false} /></span>;
   return <TrueFocus text={text} className="title-motion-focus" />;

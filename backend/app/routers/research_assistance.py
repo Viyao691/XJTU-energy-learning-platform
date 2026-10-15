@@ -21,6 +21,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
+from app.web_limits import assert_owned_storage_capacity
 from app.models import ExperimentDesign, Paper, ResearchExport, ResearchIdea, ScientificAnalysisRun, ScientificDataset, ScientificImport
 from app.providers import ModelProviderError, make_provider
 from app.schemas import ExperimentDesignResponse, ResearchExportResponse, ResearchIdeaResponse, ScientificDatasetListResponse, ScientificDatasetResponse, ScientificDatasetStateUpdate, ScientificImportResponse
@@ -155,6 +156,8 @@ def _table_metadata(rows: list[list[object]]) -> tuple[int, int, dict[str, str],
     if not rows:
         raise HTTPException(status_code=400, detail="数据文件没有可读取内容")
     width = max(len(row) for row in rows)
+    if get_settings().web_mode and (width > 200 or len(rows) > 10_001):
+        raise HTTPException(413, "轻量网站的数据表最多 10000 行、200 列")
     if width > 5_000 or len(rows) > 100_001:
         raise HTTPException(status_code=400, detail="数据维度超过 100000 行或 5000 列限制")
     header = [str(value).strip() or f"column_{index}" for index, value in enumerate(rows[0], 1)]
@@ -177,7 +180,12 @@ def _csv_rows(data: bytes) -> list[list[object]]:
             continue
     if decoded is None or "\x00" in decoded:
         raise HTTPException(status_code=400, detail="CSV 必须使用 UTF-8 或 GB18030 编码")
-    return [list(row) for row in csv.reader(io.StringIO(decoded))]
+    rows = []
+    for row in csv.reader(io.StringIO(decoded)):
+        if get_settings().web_mode and (len(rows) >= 10_001 or len(row) > 200):
+            raise HTTPException(413, "轻量网站的数据表最多 10000 行、200 列")
+        rows.append(list(row))
+    return rows
 
 
 def _xlsx_rows(path: Path, selected_sheet: str | None = None) -> tuple[list[str], str, list[list[object]]]:
@@ -186,7 +194,7 @@ def _xlsx_rows(path: Path, selected_sheet: str | None = None) -> tuple[list[str]
             files = archive.infolist()
             expanded = sum(item.file_size for item in files)
             compressed = max(sum(item.compress_size for item in files), 1)
-            if expanded > 200 * 1024 * 1024 or expanded / compressed > 100:
+            if expanded > (20 if get_settings().web_mode else 200) * 1024 * 1024 or expanded / compressed > 100:
                 raise HTTPException(status_code=400, detail="XLSX 解压体积或压缩比异常")
             if any(item.filename.startswith("xl/vbaProject") for item in files):
                 raise HTTPException(status_code=400, detail="不支持含宏的工作簿")
@@ -209,7 +217,10 @@ def _xlsx_rows(path: Path, selected_sheet: str | None = None) -> tuple[list[str]
         sheet = selected_sheet or sheets[0]
         if sheet not in sheets:
             raise HTTPException(status_code=422, detail="选择的工作表不存在")
-        rows = workbook.get_sheet_by_name(sheet).to_python(skip_empty_area=False)
+        selected = workbook.get_sheet_by_name(sheet)
+        if get_settings().web_mode and (selected.total_height > 10_001 or selected.total_width > 200):
+            raise HTTPException(413, "轻量网站的数据表最多 10000 行、200 列")
+        rows = selected.to_python(skip_empty_area=False)
     except HTTPException:
         raise
     except Exception as exc:
@@ -268,7 +279,7 @@ def register_research_assistance_routes(app, get_db) -> None:
             raise HTTPException(status_code=400, detail="仅支持无宏 XLSX；不支持 XLS、XLSM 或 XLSB")
         if suffix not in {".csv", ".xlsx"}:
             raise HTTPException(status_code=400, detail="科研数据仅支持 CSV 或 XLSX")
-        max_size = min(get_settings().max_upload_size_mb, 50) * 1024 * 1024
+        max_size = min(get_settings().max_upload_size_mb, 5 if get_settings().web_mode else 50) * 1024 * 1024
         data = bytearray()
         try:
             while chunk := await file.read(1024 * 1024):
@@ -286,6 +297,7 @@ def register_research_assistance_routes(app, get_db) -> None:
         directory = get_settings().paper_storage_dir / "scientific-imports"
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / f"{digest}{suffix}"
+        assert_owned_storage_capacity(len(raw))
         path.write_bytes(raw)
         try:
             if suffix == ".csv":
@@ -644,7 +656,9 @@ def register_research_assistance_routes(app, get_db) -> None:
         directory = get_settings().paper_storage_dir / "research-exports"
         directory.mkdir(parents=True, exist_ok=True)
         source = directory / f"{export.id}.md"
-        source.write_text("\n".join(slides) if payload.export_type == "pptx" else markdown, encoding="utf-8")
+        export_text = "\n".join(slides) if payload.export_type == "pptx" else markdown
+        assert_owned_storage_capacity(len(export_text.encode("utf-8")))
+        source.write_text(export_text, encoding="utf-8")
         export.file_path = str(source)
         if payload.export_type != "markdown":
             executable = shutil.which("pandoc")
@@ -657,6 +671,10 @@ def register_research_assistance_routes(app, get_db) -> None:
                 if payload.export_type == "pptx":
                     command.append("--slide-level=2")
                 subprocess.run(command, check=True, timeout=120, capture_output=True)
+                assert_owned_storage_capacity(0, ignore_path=source)
+            except HTTPException:
+                source.unlink(missing_ok=True); destination.unlink(missing_ok=True); db.rollback()
+                raise
             except (subprocess.SubprocessError, OSError) as exc:
                 source.unlink(missing_ok=True); destination.unlink(missing_ok=True); db.rollback()
                 raise HTTPException(status_code=502, detail="Pandoc 导出失败") from exc

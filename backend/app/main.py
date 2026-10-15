@@ -10,11 +10,13 @@ from time import perf_counter
 import httpx
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
+from sqlalchemy.orm import sessionmaker
 
 from app.config import get_settings, reset_settings_cache
 from app.database import ensure_database_directory, make_engine, make_session_factory
@@ -51,6 +53,8 @@ from app.observability import observe
 from app.storage import make_storage_provider
 from app.task_queue import TaskQueue
 from app.worker import recover_interrupted_tasks
+from app.routers.auth import register_auth_routes
+import app.web_model_models  # noqa: F401 -- register the web budget ledger
 
 
 _REQUEST_LOGGER = logging.getLogger("energy_research.http")
@@ -67,17 +71,32 @@ def create_app() -> FastAPI:
     reset_settings_cache()
     engine = make_engine()
     factory = make_session_factory()
+    settings = get_settings()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        _apply_migrations()
+        if settings.web_mode:
+            config = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
+            with app.state.engine.connect() as connection:
+                version = connection.execute(text("SELECT version_num FROM alembic_version")).scalar()
+            if version != ScriptDirectory.from_config(config).get_current_head():
+                raise RuntimeError("Run the explicit web database migration before starting the API")
+            from app.models import TaskRun
+            with sessionmaker(bind=engine)() as db:
+                db.query(TaskRun).filter(TaskRun.status.in_(["queued", "running"])).update({
+                    "status": "interrupted", "error_code": "server_restarted", "completed_at": datetime.utcnow()
+                })
+                db.commit()
+        else:
+            _apply_migrations()
         with app.state.session_factory() as db:
             seed_sources(db)
         get_settings().paper_storage_dir.mkdir(parents=True, exist_ok=True)
         app.state.document_ai_manager.recover_interrupted(app.state.session_factory)
         recover_interrupted_tasks(app.state.session_factory)
-        await app.state.research_scheduler.start()
-        await app.state.campus_service.start()
+        if not settings.web_mode:
+            await app.state.research_scheduler.start()
+            await app.state.campus_service.start()
         await app.state.backup_scheduler.start()
         try:
             yield
@@ -123,6 +142,10 @@ def create_app() -> FastAPI:
     app.state.backup_scheduler = BackupScheduler(app.state.backup_manager)
     app.state.task_queue = TaskQueue(get_settings())
 
+    if settings.web_mode:
+        from app.web_access import install_web_access
+        install_web_access(app, settings, sessionmaker(bind=engine, expire_on_commit=False))
+
     @app.middleware("http")
     async def record_metrics(request: Request, call_next):
         started = perf_counter()
@@ -141,7 +164,7 @@ def create_app() -> FastAPI:
         return response
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
+        allow_origins=[settings.web_origin] if settings.web_mode else [
             "http://localhost:3000",
             "http://localhost:3001",  # local `npm run dev` frontend
         ],
@@ -168,6 +191,11 @@ def create_app() -> FastAPI:
         finally:
             db.close()
 
+    def get_auth_db():
+        with sessionmaker(bind=app.state.engine, expire_on_commit=False)() as db:
+            yield db
+
+    register_auth_routes(app, get_auth_db)
     register_learning_routes(app, get_db)
     register_paper_research_routes(app, get_db)
     register_learning_review_routes(app, get_db)

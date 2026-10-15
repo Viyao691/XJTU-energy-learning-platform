@@ -1,4 +1,5 @@
 import type { ApiSchemas } from "./api.generated";
+import { csrfHeaders } from "../components/auth/session";
 export type FormulaTranscription = ApiSchemas["FormulaTranscriptionResponse"];
 export type PaperNoteDraftRequest = ApiSchemas["PaperNoteDraftRequest"];
 export type ResearchChallenge = ApiSchemas["ResearchChallengeResponse"];
@@ -268,7 +269,10 @@ export function errorDetail(body: { detail?: unknown }, status: number): string 
 }
 
 async function request<T>(path: string, init?: RequestInit, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(`${BASE}${path}`, { ...init, headers: { ...(init?.body instanceof FormData ? {} : { "Content-Type": "application/json" }), ...init?.headers }, cache: "no-store", signal: signal ?? init?.signal });
+  const headers = new Headers(init?.headers);
+  if (!(init?.body instanceof FormData) && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  Object.entries(csrfHeaders(init?.method)).forEach(([name, value]) => headers.set(name, value));
+  const response = await fetch(`${BASE}${path}`, { ...init, headers, cache: "no-store", signal: signal ?? init?.signal });
   if (!response.ok) { const body = await response.json().catch(() => ({})); throw new Error(errorDetail(body, response.status)); }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;

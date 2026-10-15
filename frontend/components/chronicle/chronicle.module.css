@@ -56,3 +56,13 @@
 :global(html[data-theme]) .chronicleGlideMenu :global(.glide-select__pill){background:color-mix(in srgb,var(--v2-accent,#2d5f9e) 18%,var(--v2-surface,#fffdfa))}
 :global(html[data-theme]) .chronicleGlideMenu :global(.glide-select__check){color:var(--v2-accent,#2d5f9e)}
 @media(max-width:600px){.selectors{width:100%}.selectors label{flex:1;min-width:0}.selectors :global(.glide-select){width:100%;min-width:0}.subjects label{min-width:0;max-width:100%}}
+@media(max-width:620px){
+  :global(.web-mobile-ready) .root .year{font-size:64px;margin:16px 5%;line-height:1.1}
+  :global(.web-mobile-ready) .root .year.word{font-size:36px}
+  :global(.web-mobile-ready) .root .stageContent{padding:0 18px 140px}
+  :global(.web-mobile-ready) .root .intro,:global(.web-mobile-ready) .root .article p,:global(.web-mobile-ready) .root .article li{font-size:14px;line-height:1.8}
+  :global(.web-mobile-ready) .root .credit,:global(.web-mobile-ready) .root .credit small,:global(.web-mobile-ready) .root .facts small{font-size:11px}
+  :global(.web-mobile-ready) .root .facts strong{font-size:22px}
+  :global(.web-mobile-ready) .root .visual{height:260px;bottom:auto;opacity:.5}
+  :global(.web-mobile-ready) .root .photo{width:100%;object-fit:contain;animation:none;transform:none}
+}

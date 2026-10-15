@@ -1,65 +1,665 @@
-# Current status
+# 当前状态 · 2026-10-15
 
-Updated: 2026-10-11
+## Web手机适配与巡览视频 · 已部署
 
-## GitHub introduction and project name
+按390×844与360×800浏览器视口逐页观察24种业务页面布局，并检查关键弹层、长表单、学习包全部页签、配置引导1–7步、原文图像、报告表格和流程图。Web小屏标题25px（论文顶端原19px保留），论文卡标题16px；手机关闭桌面标题Canvas/WebGL材料背景，缩小插画并让材料堆叠独占区域。修复学习活动图固定900px导致裁切、学习目标和学习日复选框竖排、数据详情整页撑宽、手机账号卡隐藏、流程图默认裁切与缩放失效。手机PDF改为已有逐页图像阅读，保留原件链接和翻页；桌面首页及论文顶端冻结字号未改。最后储能史手机照片改contain并关闭漂移动画。
 
-Full-video online playback is available at https://viyao691.github.io/XJTU-energy-learning-platform/ . GitHub Pages serves a small native video-player page from the independent `codex/video-demo` branch (`c2c9730`), referencing the existing original MP4 Release asset. README video buttons and the animated preview now open the player; the original download link remains available. The local player loaded the full 315.285333-second video and played to 9.71 seconds. Pages reports `built`; public HTML matches the tested player and the video returned HTTP 206 for a 1024-byte range request. Public-tab automation timed out, so no full playback or seeking check on the deployed page is claimed.
+定向前端27+6=33项通过，最终Docker生产构建含类型检查通过，既有autoprefixer警告未改。24种布局均有实际截图；有内容状态使用隔离容器中的合成论文/报告，不是真实科研结论或鉴权端到端验证。最终360px截图无整页水平溢出；照片修订在最终构建再次实读object-fit=contain。正式HTTPS登录200且BUILD_ID匹配，线上390px论文库已实际查看，既有账号仍可访问，实际论文数0。未发真实验证码、运行重型OCR或调用付费模型。
 
-The problem statement was subsequently rewritten around five separate priorities: professional learning, storage-industry understanding, campus/competition opportunities, research practice, and continuity of materials/evidence. Each has a short context paragraph and bold, separated action points; paper reading is one component of the broader learning/research workflow.
+最终Web镜像energy-research-web:web-20261015-mobile4，BUILD_ID Y9lh0Lu-TpxDM0gFSJ-jC，服务器image ID 97e8bcfff220072d94562540c08992868ebd0f546399e1f72dc49151fb4d4d98。发布包6,659,544字节；仅frontend更新，API/数据库及考试大王无变更。/srv/energy-research-web/releases/20261015-mobile4保留上一版本环境备份。
 
-The public repository is now named `XJTU-energy-learning-platform`. Its README uses a visual introduction, short problem statements and eight illustrated feature sections. Thirteen demonstration screenshots were added to the original six, alongside an eight-second animated video preview. Clone, download and release links use the new repository name. The requested PDF-cover/private-library paragraph was removed.
+交付：output/mobile/2026-10-15/能研智助_手机界面巡览.mp4，1080×1920、24fps、126秒、36个实际手机视口截图视图、4,682,585字节；无声截图巡览，非连续录屏或真机录像。整段3024帧解码通过。逐页审查见docs/mobile/2026-10-15-mobile-audit.md；交付目录有章节清单、素材来源和线上截图。后续如需具体Android/iOS真机反馈，以实际设备结果为准。
 
-This documentation update passed a local README-link check and Git whitespace validation. The user-provided full video was inspected with FFprobe: H.264/AAC, 1920×1080, 30 fps, 315.285333 seconds and 221,642,366 bytes. Application source and the existing Windows portable ZIP were not rebuilt for this introduction update.
+本轮两个隔离预览容器已移除，Dev服务已停止，临时标签关闭、浏览器视口恢复；正式网站标签保留，DNSPod标签未动。线上实读标题25px、document.scrollWidth375<=390。无额外待部署CSS。
 
-The full original MP4 is published as the asset `energy-platform-demo-1080p.mp4` in Release `platform-demo-2026-10-11`; GitHub confirmed the uploaded asset state and exact byte count. The existing portable release remains available.
+## 登录页视觉美化 · 2026-10-15
 
-## Delete research ideas and experiment designs
+已发布独立Web登录页：暖白/深青双栏、静态SVG储能线稿、紧凑验证码输入与发送按钮、统一游客dialog、小屏单栏；有返回首页和主题切换。仅Web /login使用新Shell分支，不渲染工作台侧栏及全局玻璃按钮层。局部修复旧header样式、深色input!important覆盖，以及登录页刷新恢复主题；账号卡与认证请求保留，冻结首页未改。
 
-Saved ideas now have a delete action whose confirmation shows the associated design count. Deleting an idea removes all its designs in one transaction; an individual design can also be deleted from its list entry or editor. Successful deletion clears related editing/export state; cancellation or failure preserves it. Source papers and datasets remain. Backend2 and frontend3 targeted tests passed, generated contracts were refreshed, and both local services were updated. Isolated Edge verified cancellation, individual deletion of duplicate-title designs, cascade count and editor cleanup using temporary records only. Existing personal records were untouched; no model calls or full suites ran. The October4 Windows ZIP has not been rebuilt.
+账号定向21项、原WorkspaceShell7项通过，最终生产构建通过（既有autoprefixer警告）。浏览器实际检查桌面浅色、390px手机深色与注册/游客弹窗，无水平溢出；修复后标题按句换行，最终构建刷新恢复dark且input背景rgb(23,42,46)。截图在.verification/login-polish/login-desktop.jpg，是同一生产构建的无登录预览。临时容器/预览标签已清理，浏览器视口恢复，正式用户标签与登录保留。
 
-## Paper diagrams and model output budget
+仅更新服务器frontend，后端/数据库/配额无变更。最终BUILD_ID X2k2_WsiPUFlOk6E7C3bv，服务器Web image ID 7fc40bea184cb41d57c0a4855790405c1af16b932cf974d2fa28169a36a0ec94；编译产物包5,675,222字节。Compose frontend健康，真实HTTPS /login为200，返回页面的BUILD_ID及独立布局匹配。发布目录/srv/energy-research-web/releases/20261015-login-polish保留旧环境备份；没有发送验证码或调用模型。
 
-At the user's request, Codex subsequently repaired six truncated diagram tails using local evidence while preserving original prose. All eight diagrams in those six reports rendered in isolated previews, and saved API content matched the repairs. No DeepSeek requests were made. Private report contents, evidence and backups remain local and are excluded from this repository.
+## 公网账号入口修正 · 2026-10-15
 
-Flowchart square-node labels containing literal pipes are quoted for display so complete diagrams can render. The backend rejects clearly unfinished fenced or unfenced diagram tails while preserving previous reports. DeepSeek paper reports now allow64000 output tokens while retaining thinking; other providers and campus budgets are unchanged. Length errors distinguish empty and partial answers. Targeted frontend13/backend12 tests passed, both services were updated, and local health/API access passed. Missing diagram content requires evidence-based repair or regeneration and cannot be recovered by quoting labels alone. No paid-model requests were made, and the existing Windows ZIP remains unchanged.
+已部署明确的“邮箱登录 / 注册账号”：注册通过邮箱验证码创建账号并登录，登录仅接受已有账号；重复注册不修改既有账号。验证码intent在发信前检查账号状态，原有用户、会话和配额保留，无数据库迁移。原“继续浏览公开知识”替换为“游客登录”原生dialog，说明公开范围并进入/dashboard。左下角窄列蓝字入口替换为全宽身份卡，显示头像、邮箱/游客说明、角色与账号操作。
 
-## Quiz layout and scientific notation
+后端认证/集成27项、前端账号21项通过；新API Linux镜像受控smoke通过，OpenAPI与生成类型同步。最终Web生产构建通过。浏览器核对线上账号卡宽199.2px，既有管理员会话保留；同一正式构建的独立游客预览核对注册切换、弹窗、ESC返回焦点及游客进入公开首页。修正全局玻璃按钮ID样式覆盖，最终深色模式选中背景与未选中透明背景已实读区分。冻结首页源码与素材未改。
 
-Quiz radio controls are now 22×22px, aligned beside their option text with a 12px gap and at least a 44px clickable row. Prompts, options, explanations and reference points use the existing Markdown/math renderer; common k0 and numeric powers are formatted for display while source text and answer letters remain unchanged. Focused regression and production build passed; isolated desktop-dark and narrow-screen-light checks confirmed alignment, math rendering and label selection. The local frontend was updated. Backend and personal records were unchanged; the existing Windows release ZIP has not been rebuilt.
+服务器仅更新新站API/Web镜像，编译产物包6,672,278字节，复用现有依赖；后端代码摘要及Web BUILD_ID匹配本机构建，Compose健康。最终Build ID：ZSBLPGtFH01m3RXI_IxoX；服务器API image ID：9f8b392c723a81c513f8f84744c2fabc047ff93d2e35a067d078f92ae7ba9618，Web：397d14a70c19511259002aefd1f83a86c43f8ecb367ed815efd82e3cd6619a23。发布目录/srv/energy-research-web/releases/20261015-account2保存环境备份。此次未发送真实注册验证码、调用模型或重复负载检查；真实新账号注册收信仍由用户体验验证。下一步使用网站试运行，现有远端嵌入/重型能力限制延续。
 
-## PDF page navigation fix
+## 公网网站轻量试运行 · 2026-10-14
 
-The embedded reader now remounts when paper, PDF variant or selected page changes. Previously only the URL fragment changed while the native PDF viewer stayed on its prior page. Targeted reader tests (5) and the related detail test (1) passed. One frontend build and local frontend deployment succeeded; isolated Edge confirmed next/thumbnail/previous navigation reloads the PDF with no page errors. Backend and personal data were unchanged. The October 4 Windows portable ZIP has not been rebuilt; this fix is in current source.
+用户已批准开始实施、独立用户会话、复用考试大王SMTP发信邮箱作为管理员，并选择复用储能平台本机正式DeepSeek配置。公网DNS及DNSPod界面均确认energy.viyao.cn的A记录为115.159.51.147，默认线路TTL600；身份验证由用户本人完成。
 
-## Windows x64 portable ZIP — released
+已实现Web模式邮箱验证码/会话/CSRF、私有模型所有权及用户文件目录、管理员边界、轻量依赖、远端嵌入接口、有界任务/预算/存储/PDF解析；默认桌面行为保留。冻结首页源码与素材不改。正式前端升级Next.js15.5.27并构建成功，Web专用页脚复用当前viyao.cn备案链接；部署素材减少16,299,718字节，不等同于实测首屏提升。最终后端Linux镜像已通过非root/SQLite3.54.0/迁移/两用户PDF与笔记运行检查，含DeepSeek输入/输出费用边界。
 
-GitHub Release [v0.1.0-windows-portable](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) is published from public `main` commit `d1da8994aa19a128acc5be7bd54b0b433985b7e5`. The asset [Energy-Research-Copilot-Windows-x64.zip](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip) is 926,812,896 bytes (about 884 MiB); GitHub API confirmed the release is published and the uploaded asset size matches.
+网站已接入https://energy.viyao.cn；/help及/backend-api/health/ready为200、未登录论文API为401，原考试大王/api/health仍为200。已有Caddy配置备份/validate后reload，仅追加新站点。新站在/srv/energy-research-web，私密SMTP/管理员及模型环境已生成；SMTP TLS认证与DeepSeek模型权限/型号可用性检查通过。用户已批准核实价格后开放，单次3元保守占用、平台日20元/月100元，每用户日10元/月30元；实际供应商收费仍未知，按保守占用，每用户最多3次单份报告/UTC日，平台最多6次。跨论文向量检索尚无远端嵌入供应商，Office导出缺Pandoc；重型能力保持关闭。
 
-Cold-start validation passed from a Chinese/space-containing path without Python or Node on system PATH: health, home, dashboard, and local runtime proxy returned HTTP 200; Alembic 0029 and campus seed 67 initialized; synthetic PDF upload returned 201, page image and figure card returned 200, DOCX/PPTX creation returned 201 and downloads had valid PK container signatures. With 3100 occupied, the launcher chose 3101; 8100/3101 closed on exit, temporary data was removed, and stage data was empty. Existing 3001/8001 were untouched. No Office rendering, real-model/OCR-weight acceptance, or full suites ran.
+实际主机3655MiB；启动后快照available2123MiB、磁盘11.82GiB，新前端70.26MiB/256MiB、后端122MiB/512MiB。未改考试大王配额/卷，未上传本机私人论文。最终镜像manifest：API633562715457bacdabab06641d74e464f74355a0bfb78874b3315a045deb17b2，Web3e85ea1e0d6fd7a4ec8c13ed2b742e19b0a3a081203015af93b63759e82721e7。首次启动核对误用config ID已改为两端一致的manifest；前端监听容器主机名导致健康失败，已用HOSTNAME=0.0.0.0修复，不重建镜像。
 
-## Release scope
+新增后端相关组77项通过；补充存储/导出/下载/解析限额及DeepSeek请求边界各自定向测试通过。真实HTTPS链路的临时会话/合成PDF上传、笔记、两用户文件/任务/写入隔离和SQLite备份副本恢复通过；不是邮箱验证码业务验收或线上原库回滚。单次真实DeepSeek快速理解返回957字符、AI归纳（待原文证据核验）；按3元保守占用写账，用户批准调高额度，运行配置核实本UTC日平台剩17元。仅保留无有效会话的模型测试身份供费用审计，私有测试文件/笔记/报告/任务已清理。
 
-The clean public GitHub release of Energy Research Copilot has been pushed to [`Viyao691/XJTU-energy-learning-platform`](https://github.com/Viyao691/XJTU-energy-learning-platform) on `main`. The public version was created in the independent Git directory `outputs/github-release`; the original development directory, its Git history, and personal data remain preserved and must not be pushed to the new repository. Continue future cloud collaboration from the GitHub repository. A clean download starts with an empty personal library and default Mock model configuration.
+一次约10分钟公开页面/两站健康混合请求1116次，1115次200、1次error，P95 0.196秒、最低MemAvailable1988MiB。期间含模型启用时API配置重建，没有记录逐URL错误，不能将1次error断言为某一具体请求。不是零失败、真实AI双并发/重型解析峰值或公网浏览器LCP验收；后台重建后PID变化，其进程RSS未连续采样。用户已确认真实验证码收信及网站登录成功，服务器只读核实有1名非测试验证用户。
 
-The first two commits used `[skip ci]` as requested; no full test suites ran. Docker frontend/backend image builds exited successfully and standalone TypeScript check reported 0 errors. Isolated runtime checks on ports 3018/8019 returned HTTP 200 for health, dashboard, paper API proxy, paper 1 figure thumbnail (PNG), and campus sources. Temporary 3018/8019 services, 3019 dev server, and `outputs/github-preview` synthetic demo data have been removed. Original local 3001/8001 services were left untouched.
+[部署操作](deploy/web/README.md)与[实施计划](docs/superpowers/plans/2026-10-14-public-web-implementation.md)为当前交接。原始设计阶段记录如下，不能代表当前部署状态。
 
-The GitHub release includes the Next.js frontend, FastAPI backend, SQLite/Docker Compose local runtime, current feature source, and materials listed in the source/credit manifests. Personal papers, data, local database contents, model weights, and secrets are excluded. Code license: MIT; media follows separate asset rights and attribution records.
+### 原部署设计记录
 
-## Product boundary
+用户确认复用考试大王服务器和 viyao.cn 子域名，知识公开展示、科研功能登录后使用；保持4核4GB，先开放轻量科研，重型OCR等后续开放。[部署方案草案](docs/superpowers/specs/2026-10-14-public-web-deployment-design.md)已保存，建议子域名energy.viyao.cn、独立Web/API与SQLite、复用既有Caddy。需先补齐账号与所有权隔离、轻量依赖、远端嵌入、有界任务及性能优化；不直接照搬旧六容器生产方案。
 
-- Runs locally and is operated through a browser; no public website or native mobile apps are provided.
-- Single-user local application. Public multi-user hosting requires authentication, user isolation, and production storage choices.
-- Campus information connects to Xi'an Jiaotong University public information sources. Availability follows the source sites and network.
-- Record only checks actually completed during the release; the first release used `[skip ci]` and no full test suites ran.
+当前本地考试大王Compose容器上限合计3552MiB，不能直接叠加储能服务；候选配额必须用管理员资源读数及原有业务峰值验证，若无余量先发布静态知识。此轮未登录服务器测容量，未改考试大王配额、应用源码、DNS、密钥或线上服务。实际只读GET viyao.cn/api/health为200且status/database均ok；本项目Compose当前无运行容器；本机查询energy.viyao.cn返回名称不存在。不声称网站部署或性能优化已经完成。下一步用户审阅方案后编写实施计划，先做容量与公开内容核查。
 
-## Release docs
+## 参赛简介 承诺书与支撑材料 · 2026-10-14
 
-- `README.md`: public overview and screenshots.
-- `docs/github/PORTABLE.md`: Windows portable package instructions.
-- Portable package README/setup link to the published ZIP and release page.
-- `docs/github/SETUP.md`: Docker installation and local development setup.
-- Backend Docker dependencies use `requirements.lock.txt` for the current Python 3.12 Linux CPU image; Windows local venv uses `requirements.txt`. Frontend Docker build defaults to npmjs and supports optional `NPM_REGISTRY`.
-- `docs/github/WORKFLOWS.md`: paper-to-learning and research-data workflows.
-- `docs/github/ASSETS.md`: media sources and license boundary.
-- `docs/github/RELEASE.md`: public-release handoff.
+最新简介批注：按用户要求删除案例介绍单元格中的括号填写说明，仅保留250字正文；桌面`_原格式修正版`Word/PDF已同步替换，仍为单页并已查看最终渲染。
+
+最新纠正：用户明确要求删除承诺书开头的“／本团队____________（团队名称）”，已从`_原格式修正版`DOCX/PDF删除并替换桌面同名稿，其余填写下划线和原签名保留。最终仍为单页并已查看渲染。
+
+格式纠正：用户要求恢复原附件下划线。已另存两份`_原格式修正版`DOCX/PDF至同一桌面提交目录，应以修正版提交。承诺书恢复原“本人／本团队”结构与未使用的团队空线，姓名、作品名、赛道、学校及年月日填入带下划线的文字段，保留原签名锚点和媒体。简介原件本无下划线，已恢复原表格及300字括号提示，正文填在同一单元格内。两份修正版仍各1页，已渲染查看；支撑ZIP未变。
+
+已按用户提供的两份官方模板完成作品简介和个人参赛承诺书，作品名与OPC方向经用户确认。简介250字；承诺书保留原文件已有签名图片，日期按用户确认填写2026年10月14日。两份均保留DOCX并导出单页PDF；系统要求的打印签字/扫描提交步骤见交付目录中的提交说明。本轮未生成或替换签名。
+
+支撑ZIP为5,257,288字节，24个文件，包含四份PDF（操作手册4页、系统设计3页、作者实践3页、公开交付及来源说明2页）、已有Visio/SVG源图、公开文献数据复现文件和许可记录。不包含视频、另一个对话制作的作品介绍PDF、安装包、私人论文、数据库或密钥。工作输出在`output/competition/2026-10-14/能研智助参赛材料/`，提交文件已复制到用户指定桌面文件夹的`参赛材料_20261014`子目录；原模板未覆盖。
+
+已检查全部14页渲染、简介字数、模板非正文包部件保留、ZIP完整性及大小。临时副本执行复现脚本成功，11个模拟工况效率均值95.32545454545453%、样本标准差2.311793086054044个百分点。学习记录沿用2026-10-08、科研工具实践沿用2026-10-04并注明日期；本次原后端8001端口不能连接，未宣称当前业务端到端通过，也未启动服务、调用模型或运行全套测试。未提交专利、软著或第三方试点证明。
+
+## 参赛作品介绍文档 · V6 Visio矢量图版已完成
+
+最新PDF：`output/pdf/大学生AI创新创业赛道+能研智助+作品介绍-论文汇报版V6.pdf`；可编辑图源：`output/diagrams/能研智助-学术流程图V6.vsdx`。用户要求继续美化、减少防御性写作，可用Visio。实际调用已安装Microsoft Visio 16.0后台新建六页图源，包含架构、RAG、学习反馈、任务路由、数据实践及OPC迭代。240个原生形状、无Foreign位图形状，所有标签及连线可编辑。使用分组容器、存储圆柱、决策菱形、曲线反馈、线描图标与统一间距。
+
+Visio原生PDF导出内部异常，应用显示产品激活失败；SVG导出及VSDX保存成功。使用临时svglib/ReportLab转换SVG为矢量PDF，并显式规范字体定位、曲线fill与箭头，再嵌入报告。中文宋体、数字/字母Times New Roman；未使用Helvetica/Times-Roman绘制可见文字。精简正文中的重复限定语，以机制、关系和成果说明功能；原2026-10-08数量与案例口径保留，不混入新平台发布状态。
+
+最终12页540×960 pt、7613可检索字符、4082208 bytes，文本边界无越界。全部联系表及第3/5/7/10页全图已查看；VSDX包核对六页形状数67/48/35/37/31/22。源及导出位于 `docs/competition/2026-10-08/work-introduction/portrait-report/visio-v6/`，制作说明见 `visio-v6/README.md`；验证 `verify_report.py --visio` 在 `tmp/pdfs/visio-report/`。仅修改参赛报告及记录，不改应用、用户数据、视频或公开仓库。下一步用户审阅V6。
+
+## 完整前端接入交晓智核实 · 2026-10-13
+
+用户明确要求保留精美前端，不以聊天框替代完整平台。已重新检查当前学校账号菜单与渠道配置：未找到网页源码、Git部署、前端构建、容器或外部网页应用入口；HiAgent应用未配置且禁用，WebSDK嵌入设置因服务停用不能打开。本次仅只读核实，未改变权限或服务开关。
+
+学校公开资料提供域名/IP、统一身份认证、主机托管和单位主页建设服务，但没有确认学生可自助申请Next.js/FastAPI托管。推荐保留完整独立平台部署，另请网信中心确认校内运行资源、外部应用入口/iframe/代理与域名/统一认证。不能因账号未见入口而断言管理员没有额外能力。证据和可直接询问网信中心的问题见[前端接入核实](docs/handoff/2026-10-13-jiaoxiaozhi/frontend-verification.md)。
+
+## 交晓智校内智能体 · 已提交渠道审核 / 2026-10-13
+
+已在学校个人空间创建“能研智助｜储能学习与科研助手”，复用 `output/logo/2026-10-10/A-final/A-icon-light.png` 正式“研能之环”Logo。智能体 `db6f9aldh9462bghgudg` 的 `v1.0.0` 配置已发布成功，页面显示“运行中”；已勾选学校智能体中心渠道并提交发布，最终弹窗显示“已提交发布”，要求到审批中心查看进度。**这是渠道审核待处理，不是已确认进入学校智能体中心上线。**
+
+原生工作流“能研智助_储能论文证据研读” `db6fd7tdh94dtskdq8u0` 的 `1.0.0` 已发布并挂接：Start/query → 大模型/input → End/output，Markdown报告，区分全文、节选、摘要、元数据与AI推断。独立工作流两次定向试运行成功（初始JSON、最终Markdown）；智能体实测执行记录显示实际调用该工作流并返回摘要范围与缺失信息报告。详见[发布交接](docs/handoff/2026-10-13-jiaoxiaozhi/README.md)。
+
+Web服务/API/MCP/WebSDK/A2A开关保持停用或未配置，未生成API密钥。自动审批拒绝“将独立Web入口开放给所有平台认证用户”的访问权限设置，因为此前只明确授权学校平台发布；已单独询问用户，尚未获得答复。渠道提交结果会列出多个待发布集成，但不表示这些服务开关已启用。
+
+本次是学校平台原生校内版，不是整个Next.js/FastAPI/SQLite网站迁移；未接原平台本地PDF、私人数据库、OCR后台或笔记。未改产品代码，未启动、重建或停止原平台服务。下一步查看学校审批进度；用户另行明确授权后再配置独立Web入口。
+
+## GitHub 介绍与仓库改名 · 2026-10-11
+
+在线播放入口的 README 更新已推送为 `3c97a48`；GitHub API 确认 main 与 README blob 均和本地一致，两个公开发布目录最终 clean，本地测试服务器已停止。
+
+完整演示现可通过 [GitHub Pages 播放页](https://viyao691.github.io/XJTU-energy-learning-platform/) 在线播放。页面在独立 `codex/video-demo` 分支（`c2c9730`），原生播放器直接引用既有 Release 原视频，无压缩或复制。README 视频按钮与动态预览改为进入播放器，保留原版下载入口。本地浏览器已加载315.285333秒并播放至9.71秒；GitHub Pages构建成功，公网页面200且HTML与实测页一致，视频Range请求206。公网浏览器自动化超时，未声称整片、拖动跳转或移动端实际验收。
+
+随后按用户反馈，仅重写 README“解决的问题”正文：以专业学习、行业认知、校园与竞赛、科研实践、资料与成果接续五个独立小节展示重点，每节配短说明和分行加粗要点，论文阅读作为整体流程的一环。其余 README 内容保持一致，章节隔离与空白检查通过；提交 `351a58a` 已经本机系统代理推送到 GitHub。
+
+GitHub 仓库已按用户要求改名为 `Viyao691/XJTU-energy-learning-platform`，简介与主题标签同步更新。公开 README 改为首页大图、视频预览及八组功能图文；“解决的问题”拆为六条要点，新增十三张真实页面截图，共十九张静态展示图，删除用户指定的 PDF 封面与空白个人资料库段落。安装、克隆和 Release 链接已同步新仓库名称。
+
+用户指定的《能研智助》原视频已发布为独立 Release `platform-demo-2026-10-11`，资产为 `energy-platform-demo-1080p.mp4`；原视频未转码，FFprobe 实读为 H.264/AAC、1920×1080、30fps、315.285333 秒、221,642,366 字节，GitHub 确认上传状态与字节数。README 另含第 17–25 秒的动态 GIF 预览。
+
+本轮公开源码提交在独立发布目录 `outputs/github-release`，不推开发目录历史。README 本地链接及 Git 空白检查通过；仅介绍、素材和仓库地址更新，无应用构建或安装包重打包。最终提交 `7b95b39` 已推送到公开 main；GitHub API 实读确认新仓库名、README 二十处图片引用（十九张静态图及一份 GIF）、指定段落已删除及视频 Release 已公开。发布目录 clean，下一步以新仓库地址协作。
+
+## 视频定稿 · V25已导出 / 2026-10-11
+
+用户确认定稿后，ChatCut正式时间线全范围0—9458帧以1920×1080、30fps、H.264 MP4本地浏览器模式导出，文件名为`能研智助_定稿_1080p.mp4`，时长5分15.27秒。导出任务`1739eab7-f51f-4c57-b529-192cc411efa0`已返回complete，输出221,642,366字节；完成于2026-10-10 23:56:35（北京时间）。浏览器报告已触发下载。
+
+未在默认Downloads或已检查的项目输出、临时目录发现对应文件；浏览器控制连接不稳定，未确认最终保存路径，未执行本地ffprobe检查。无重复导出或时间线修改。见[导出记录](docs/competition/2026-10-07/chatcut-preparation/export-v25-2026-10-11.md)。
+
+## 首页剩余深色帧与背景音乐 · V25已更新
+
+V24首页PNG续接仍有视频→图片显示色差；现已删除760—784帧的静态接层，首页直接用指定转场视频的同一末帧循环保持，保留后续浅色主题演示。常规背景音乐三段提升3dB至-17dB，用户认可的转场音乐整段保持-14dB，避让深度保持-4.2dB。
+
+核对修正后8个合成帧、四段音乐属性及121条字幕，句尾逗号/句号仍为0；全片仍9458帧 / 5分15.27秒。蓝色Marker仅作备注定位，不影响剪辑或导出，本轮未删除。未整片实时播放、混音试听或导出。见[V25记录](docs/competition/2026-10-07/chatcut-preparation/revision-v25-2026-10-10.md)、[V25状态](docs/competition/2026-10-07/chatcut-preparation/v25-state.json)。
+
+## 视频颜色、框选、字幕与片尾品牌 · V24已更新
+
+已修正0:25首页接缝及四处研读放大时的颜色跳变：沿用转场落点画面，去除研读PNG的BT.709色彩标记并保持像素数据；1:30白虚线框对准右侧图像预览。全部121条字幕仅删除句尾逗号和句号，共97条更新，句内标点保留。5:07—5:15片尾替换为透明SVG Logo＋标题，并在右上加入用户提供的西安交通大学标签。
+
+实际查看19个合成帧并逐条比对121条字幕正文；全片仍9458帧 / 5分15.27秒，旁白和配乐沿用V23。字幕工具对53张卡片外部范围自动调整少量留白，最大7帧，抽查逐字时点未变。未整片实时播放、混音试听或导出。见[V24记录](docs/competition/2026-10-07/chatcut-preparation/revision-v24-2026-10-10.md)、[V24状态](docs/competition/2026-10-07/chatcut-preparation/v24-state.json)。
+
+## 用户指定首页落点转场 · V23已接入正式ChatCut
+
+用户指定transition-with-next-preview.mp4已完整替换原14.9—18.267秒转场，313帧 / 10.433秒；转场音乐延长到新片段结束，源内旧音轨静音，保留现行旁白。后续画面、配音、字幕、品牌和音效后移212帧，末帧以24帧渐隐接入完整首页，避免回切旧入场动画。正式时间线现在9458帧 / 5分15.27秒。
+
+实读确认29段主画面连续、77段旁白；121条字幕与文稿逐段一致、无溢出。查看19个实际合成帧，核对转场入口、源内拼接、视频→末帧→首页及后续首章；未整片实时播放、混音试听或导出。见[V23记录](docs/competition/2026-10-07/chatcut-preparation/revision-v23-2026-10-10.md)、[V23状态](docs/competition/2026-10-07/chatcut-preparation/v23-state.json)。下方旧版长度及独立转场未接入说明为历史状态，今后按V23新时间轴定位。
+
+## Remotion首页末段衔接 · 7.5秒修订完成 / 2026-10-10
+
+按最新要求：首页移到最后，从约第164帧后首次进入，早段聚焦改为真实论文研读界面；225帧/7.5秒/30fps，末段平滑推近并减速到用户新视频首帧的真实大小、位置、透视与标题。工程位于 `output/video/remotion-home-handoff-2026-10-10/`，保留之前版本，不改产品或ChatCut时间线。
+
+最终Remotion Player转场：H.264、1920×1080、yuv420p、limited/BT.709、无音轨、3,043,349字节。新增连续预览：转场225帧＋后段88帧，共313帧/10.433333秒，前段静音、后段沿用原音频。用户新文件是带控件录屏；仅去上下HUD、不拉伸主内容，原文件未覆盖。帧时间戳规范为30fps；接缝有效画面匹配。
+
+最终TypeScript检查通过；主代理查看末段170/210/224采样、修正版210帧、最终分镜与接缝221—228相邻帧。实际发现标题截图暗矩形与浮金边，修正后仅重导38帧；预览帧率/时间戳问题修正后完整313帧。未整段实时播放或混音试听。交付7.5秒静音替换片段、连续预览与可编辑源码；下方6.13秒末三卡版是历史版本。
+
+## Remotion黑色网格转场 · 独立素材已完成 / 2026-10-10
+
+按最新要求重新设计：背景保持原#080d12、48px静态网格；前景只使用真实深色主页、论文研读、2024储能编年史与科研想法截图，移除学习咨询人物图片。参考运动结构为前冲减速、主页聚焦与品牌、横移依次展开三卡、末尾停稳。独立工程和成片在 `output/video/remotion-black-grid-transition-2026-10-10/`。
+
+实际完成184帧Remotion Player截图与MP4编码，1920×1080 / 30fps / 6.133333秒，H.264、yuv420p、BT.709、limited range、无音轨，1,940,849字节。主代理查看65/183关键帧与最终12帧联系表，未整段实时播放。因本机Edge CDP启动失败，使用同一Remotion组件的Player initialFrame逐帧导出；没有改动画计算或剪辑工程。可编辑源码和本机导出脚本随交付提供；跨机器需按README设置FFmpeg及浏览器路径。未改应用或ChatCut时间线。
+
+用户要求使用Remotion独立生成，本轮不接入剪辑工程。下方浅色7秒初稿仅作为历史版本，已被本版替换素材方案取代。
+
+## 视频12项画面、语速与字幕修订 · V22已更新
+
+开场首页下方三个流程框随后仅将高度78px改为50px，中心及箭头高度保持，文字字体/字号未改；查看660、690帧合成图，流程框与下方字幕不再重叠。无其他画面或声音调整。
+
+随后按用户要求将除当前0:14—0:18以外的背景音乐提升3dB；例外区间音量保持，18秒处按同一音源连续分段，旁白/画面时长不变。核对5段音乐属性，保留原自动避让深度-4.2dB。见[背景音乐记录](docs/competition/2026-10-07/chatcut-preparation/revision-v22-music-2026-10-10.md)。
+
+正式ChatCut时间线已更新为9246帧 / 5分08.20秒：开场右猫缩小下移，开场和7章左上角使用透明SVG Logo＋标题；删除指定覆盖说明段落，四个研读入口接入真实点击、连续聚焦与对应白虚线框，移除原1:21翻页。SQLite和去重完整句重录，两个复字单独采用标准字体。77段旁白按同一目标语速调整，保留操作停顿，29段主画面连续，动画和音效同步重排。
+
+121条字幕与新版77段文稿逐字一致，无溢出或少于5帧的残留字幕；引号保留，字幕上移。检查15个合成样本、14个不同帧及配音峰值/语速记录；未整片实时播放、混音试听或导出。见[V22记录](docs/competition/2026-10-07/chatcut-preparation/revision-v22-2026-10-10.md)、[V22状态](docs/competition/2026-10-07/chatcut-preparation/v22-state.json)。续接按V22新时码；下方V21及独立Remotion说明中的正式时间线长度属于历史状态，独立转场预览仍未接入。
+
+## Remotion浅色转场初稿 · 历史版本 / 2026-10-10
+
+按用户视频参考制作3D悬浮卡片走廊：前冲减速、真实首页聚焦与品牌标题、横移展示学习咨询/行业认知/科研实践。Astra拆解与审查，Sol实现；工程在 `output/video/remotion-painpoint-transition-2026-10-10/`，复用现有首页、选定Logo、插画及照片。
+
+已实际渲染7秒/210帧/1920×1080/30fps无音轨MP4；最终H.264、yuv420p、BT.709、limited range，2,905,592字节。TypeScript检查通过；两次渲染中第一次像素审查发现痛点前景遮挡与行业长页取景问题，第二次仅修复这两处并查看最终联系表。未改产品或正式ChatCut时间线；原工程仍为8784帧。下一步依据预览反馈决定接入位置及与旁白的同步，不按旧绝对时间盲替换。
+
+## 视频32项旁白与镜头修订 · V21已更新
+
+重录26条问题旁白，功能名与解释连读；全片78段短录音完成整帧静音尾保护，无旧V20旁白、无A1重叠。开场从0.5秒念起，增加右上固定猫图；保留原猫图动效。变量关系之后停顿1秒；两处入口加入立体翻页，删除研读跳闪覆盖片段，编年史录屏跳过加载空白，行业插画逐渐缩小，“践”字换用标准字形。29段主画面连续，当前8784帧 / 4分52.80秒。
+
+125张字幕与用户稿逐段逐字一致、无溢出，67张已校正，引号保留。检查78条波形：无削波、最后100毫秒静音、时长整帧；查看24个实际合成画面并核对编年史原录屏精确源帧。旧录音结尾和取帧存在边界风险，但未证明所有杂音的唯一原因或软件加载故障；未整片实时播放/混音试听或导出。见[V21记录](docs/competition/2026-10-07/chatcut-preparation/revision-v21-2026-10-10.md)、[V21状态](docs/competition/2026-10-07/chatcut-preparation/v21-state.json)。用户稿、原录屏和产品代码保持不变。续接按V21新时间线定位。
+
+## 视频旁白连读、停顿与整体提速 · V20已更新
+
+沿用用户确认的本地曼波克隆声音，79段独立短旁白保持原音高加速至1.2倍，缩短录音头尾空白；重录“提示词”等四处异常短语，最终“提—示—词”连续，无内部空隙。开场完整原句与“资料检索”衔接约0.17秒，猫咪保留至该词开始。29段主画面及实际操作、配乐、音效、标题同步重排；当前8901帧 / 4分56.70秒。
+
+实读确认79段V20音频且A1无旧V19片段；29段V3画面连续，141张字幕与用户修改稿逐段逐字一致、无溢出，引号和界面术语保留。查看18个实际合成帧。未做整片混音实时试听或MP4导出，自动时间戳不能保证自然重音听感完美。见[V20修订](docs/competition/2026-10-07/chatcut-preparation/revision-v20-2026-10-10.md)、[V20状态](docs/competition/2026-10-07/chatcut-preparation/v20-state.json)。产品代码、用户稿和原录屏未修改。
+
+V19完成本地克隆、79段声音生成及29段画面同步，用户认可样音；随后指出“提示词”断开并要求全片1.2倍节奏，现以V20为准。V19已删除133个旧原旁白/配乐素材，替换“研读模式”“学习反馈”、移除“工程交付”介绍框，调大点击/键盘音效，装入猫咪开场及首页三步流程框，并将行业插画移到导航演示前。运行脚本在`docs/competition/2026-10-07/chatcut-preparation/local-voice-runtime/`，本地环境仍为临时`ccv19-venv`与`ccv19-torch`。
+
+## 视频旁白已删除，等待用户改稿 · 2026-10-10 / V18
+
+已提取V17当前文稿为29段可编辑纯旁白稿，用户将添加标点和删减；A1全部64段旁白已从时间线删除，素材库原声保留，画面及配乐/音效时间位置保持，9957帧 / 5分31.90秒。实读确认A1为空，A2六段转场音效、A3两段配乐、A4一段键盘音效保留。已备份旧旁白安排和126个字幕Cards。未生成新声音或导出。见[用户修改稿](docs/competition/2026-10-07/chatcut-preparation/当前旁白稿-请在此添加标点和删减.md)、[V18记录](docs/competition/2026-10-07/chatcut-preparation/revision-v18-2026-10-10.md)。下一步只按用户改好的文稿重录并同步画面/字幕，等待改稿期间不生成旁白或主动调整动效。
+
+## 视频真实论文图表与首章删段 · 2026-10-10 / V17已完成
+
+原0:32—0:39画面及全部旁白删除；五个首章功能清单语音片段移除，后续画面、旁白、操作、音效和字幕同步前移7秒。原2:04相邻图文画中画改为当前展示论文第2页Fig. 1真实截图（新约1:56—1:58），保留原位置和停顿。当前9957帧 / 5分31.90秒，29段主画面连续、64段自然1倍旁白。字幕已刷新，12个实际合成帧已检查；未整片实时播放、完整混音试听或导出。见[V17修订](docs/competition/2026-10-07/chatcut-preparation/revision-v17-2026-10-10.md)、[V17稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V17真实图表与首章删段.md)、[状态](docs/competition/2026-10-07/chatcut-preparation/v17-state.json)。原稿、原录屏和原论文未覆盖。
+
+## 视频四处画面修订 · 2026-10-10 / V16已完成
+
+首章C卡片保持原尺寸居中，取消收窄左移和真实导航/右侧截图；报告机制左侧插画放大至约300—320像素，文字与右侧同级；学习流程改为铺开的菱形，连接线采用少弯的缓弧并避让插画/文字；研究框架左侧替换为新生成的灯泡、双烧瓶实验与结果图表透明PPT插画。其余六章导航及V15旁白/字幕/音效不变。当前仍10167帧 / 5分38.90秒、29段主画面。
+
+四处源码读回一致；9个实际合成帧已查看。未整片实时播放、混音试听或导出。新插画由内置imagegen生成并保存/导入；产品与原录屏未修改。续接以[V16修订](docs/competition/2026-10-07/chatcut-preparation/revision-v16-2026-10-10.md)、[V16稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V16首章与插画排版.md)、[状态](docs/competition/2026-10-07/chatcut-preparation/v16-state.json)为准。
+
+## 视频局部修订 · 2026-10-10 / V15已完成
+
+按本轮15项反馈更新同一ChatCut工程：痛点增停4.5秒；删指定资料关联、执行日志与复习日期旁白及对应画面；三项研读功能补短解释；报告机制改持续单画面分支汇聚；原文对照加画中画/停顿并修正框选；研究框架撤底层、加左侧PPT插画；“方法”卡片增停；学习流程改PPT插画。修正检索接入闪黑、术语框选、三处中文标题、行业/本地插画连线及文字对齐。15个底部介绍框缩至870×84、左160上910，替换用户已选“研能之环”Logo，实际合成避开字幕。
+
+当前10167帧 / 5分38.90秒，29段V3主画面连续、69个自然1倍A1旁白片段、131字幕Cards无溢出。重点合成帧、检索接入相邻帧、报告分支、白框及最后一次介绍框/字幕避让已查看；未整片实时播放、完整混音试听或导出。原正式稿、原录屏与产品代码未覆盖。最新以[V15修订](docs/competition/2026-10-07/chatcut-preparation/revision-v15-2026-10-10.md)、[V15稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V15停顿插画与品牌同步.md)、[状态](docs/competition/2026-10-07/chatcut-preparation/v15-state.json)、[同步表](docs/competition/2026-10-07/chatcut-preparation/v15-narration-sync-map.json)续接。旧反馈时间点已改变，下一步按当前播放反馈及语句定位修改。
+
+## 智慧平台 Logo 候选 · 2026-10-10
+
+用户已选择A“研能之环”。精修版在 `output/logo/2026-10-10/A-final/`：规整圆弧、平衡左右书页、能量核居中，增加小尺寸与留透明轨道间隔的单色版。11份透明SVG与512px透明PNG、预览、说明统一打包 `A-研能之环-正式交付.zip`。本轮11份SVG通过XML解析、一次实际渲染及透明Alpha检查；预览已查看并修正全称字标的卡片底部留白，仅重渲染预览。候选和原A保留，未接入产品；下一步依据用户反馈或明确授权决定使用位置。
+
+按用户要求依据真实浅色/深色首页和当前界面配色设计六款标识：研能之环、晶格能芯、能量书页、洞见之窗、材料叠层、源点共振。候选保存在 `output/logo/2026-10-10/`，`index.html` 可切换深浅色展示，`energy-platform-logo-options.zip` 包含42份透明SVG与说明。每款提供深浅色、单色图标，以及“能研智助”和“储能科研学习智慧平台”两种路径字标。
+
+候选轮次只读访问3001首页HTTP200；42份独立SVG均通过XML解析、实际渲染、透明Alpha与无嵌入位图检查，文字均已转轮廓。深浅色总览已查看；总览的文字布局修正后单独重渲染。未修改应用、数据、冻结首页或视频工程。
+
+## 章节导航新版 · 2026-10-10 / V14已完成
+
+按用户选定的C双色错层卡改七处章节：中央卡片完整入场后只收窄外框、内部布局固定，再左移；中间真实展开导航按旁白选中状态切换，右侧对应正文截图去除导航、自上而下累积。18张原始取帧已导入；论文库问答收起状态已换成正确展开帧。七段新增功能清单沿用原声音/自然1倍，各项间停0.4秒；原正文保留，后段画面、字幕、音效与底乐同步。
+
+ChatCut正式时间线10428帧/5分47.60秒，29段主画面连续、63个自然1倍旁白片段、136字幕Cards无溢出。七章合成、卡片入场/收窄/左移及问答修正帧已核对。未整片实时播放、完整混音试听或导出；未改产品、原录屏或用户最终稿。续接以[V14修订](docs/competition/2026-10-07/chatcut-preparation/revision-v14-2026-10-10.md)、[V14稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V14双色错层卡与功能导航.md)、[状态](docs/competition/2026-10-07/chatcut-preparation/v14-state.json)为准。旧时间点已后移，下一步按用户新反馈调整。
+
+## 参赛视频剪辑 · 2026-10-09 / V13
+
+同一ChatCut工程按本轮三项更新：痛点采用中心卡片与四个环绕PPT插画/标签，前两项讲完各停1.2秒并缩小收进最左侧同列，第三项直接接品牌转场。品牌大标题延后约1秒前摇。架构讲完描绘加粗圆角实线框，整体等比例缩到左上角并下标整体架构，持续保留到右侧资料解析讲完；资料解析标题置顶，移除旧左上标题和架构底部大字卡。旁白原措辞/1倍语速，后续内容同步移动。当前9056帧/5分01.87秒，29段主画面连续、39个旁白片段源时长与时间线对应1倍，112字幕Cards无溢出；重点前端合成像素已核对，未整片实时播放、完整混音试听或导出。原稿、产品、数据及录屏未覆盖。续接见[V13修订记录](docs/competition/2026-10-07/chatcut-preparation/revision-v13-2026-10-09.md)、[V13状态](docs/competition/2026-10-07/chatcut-preparation/v13-state.json)、[V13文稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V13痛点与架构同步.md)。下一步按当前播放反馈继续局部修改。
+
+### 历史：V12
+
+ChatCut同一工程按本轮八项修订至8986帧/4分59.53秒：痛点卡片随对应旁白依次入场，课堂图改真实图书馆照片；架构与报告机制换新生成纯色PPT插画。删除检索题名/作者/入口、术语辅助解释、资讯阅读衔接三段旁白及对应画面，检索框选开放获取选项。三组科研插画加粗弧形虚线连接，进入GitHub改真实来页翻转及纸页声。30段主画面连续，36个旁白片段自然1倍，112字幕Cards无溢出；下游画面、章节、音效和音乐同步缩短。重点实际合成帧及最终架构标签/翻页已核对；未整片实时播放、完整混音试听或导出MP4。原正式稿、产品和原录屏未覆盖。续接见[V12修订与时间表](docs/competition/2026-10-07/chatcut-preparation/revision-v12-2026-10-09.md)、[V12状态](docs/competition/2026-10-07/chatcut-preparation/v12-state.json)、[V12文稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V12卡片与插画同步.md)。下一步按当前播放反馈继续局部修改。
+
+### 历史：V11
+
+ChatCut同一工程按本轮六项修订至9253帧/5分08.43秒：简答自评/模型反馈两句删除，复习日期及科研数据介绍精简；机制动画停顿缩至0.6秒并同步加快。科研数据、本地电脑/外部服务器换纯色PPT卡通小图；资讯四环节按顺时针布局，各配真实截图与插画。30段主画面连续，36个旁白片段自然1倍，116字幕Cards无溢出，操作/章节/音效/配乐同步前移。重点合成及最终复习淡出/章节衔接已核对；未整片实时播放、试听混音或导出。原正式稿、产品、用户数据、冻结首页和原录屏未覆盖。续接见[V11修订与时间表](docs/competition/2026-10-07/chatcut-preparation/revision-v11-2026-10-09.md)、[V11状态](docs/competition/2026-10-07/chatcut-preparation/v11-state.json)、[V11文稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V11精简与插画同步.md)。下一步按当前播放反馈继续局部修改。
+
+### 历史：V10
+
+最新局部调整：5:02的本地电脑/外部服务器两幅图缩至85%；已核对9060帧合成，时长与旁白未变。
+
+ChatCut同一工程已按本轮11项反馈修订至9651帧/5分21.70秒：课堂配图、架构/科研数据精简稿、研读三个真实页签逐项停留、准确选区与工具栏聚焦、复习框提前收起、科研候选删指定句。模型/规则/人工复核改纯色PPT插画先后展示并留停顿，思维导读改插画中心连线，订阅机制合为同一构图。后续章节、旁白、字幕、音效及音乐同步移动；30段主画面连续，33个旁白片段均对应1倍，字幕118 Cards无溢出。编辑器旧画面已同步并核对新版真实合成帧；未完整实时播放、试听混音或导出。原正式稿、产品、数据、冻结首页与原录屏未覆盖。续接见[V10修订与时间表](docs/competition/2026-10-07/chatcut-preparation/revision-v10-2026-10-09.md)、[V10状态](docs/competition/2026-10-07/chatcut-preparation/v10-state.json)、[V10文稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V10局部精简与动画停留.md)。下一步按用户当前时间线播放反馈继续局部修订。
+
+### 历史：V9
+
+ChatCut同一工程按本轮11项反馈更新至9685帧/5分22.83秒：保留23段1倍旁白，比较单卡对应真实结果、科研候选删除上层剥离并增加步骤/规则/复核动画、行业改思维导读及六阶段显示、企业点击改原生视频段、城市入场翻页配纸页声、校园/竞赛焦点和选区修正、本地管理换大幅立体插画。新增七个编号章节导航，30段V3连续无空隙，下游画面/音效/字幕同步后移。重点合成抽帧已查看，企业切换及翻页显示预期内容；字幕refresh canonical/changedCards=0。未完整实时播放、全片混音试听或MP4导出。未改产品、数据、冻结首页、原正式稿和原录屏。续接见[最新视频记录与时间表](docs/competition/2026-10-07/chatcut-preparation/revision-v9-2026-10-09.md)、[V9状态](docs/competition/2026-10-07/chatcut-preparation/v9-state.json)、[V9同步](docs/competition/2026-10-07/chatcut-preparation/v9-narration-sync-map.json)。下一步按用户当前时间线播放反馈继续局部修订。
+
+### 历史：V8
+
+ChatCut同一工程已按本轮13项反馈修订至9370帧/5分12.33秒：旁白全部1倍，仅报告机制段精简重配；框选、单卡加大实操、翻页、输入/校园静帧保底、订阅稳定画面与MIT真实新闻、GitHub目录树剥离已修改。最终定向预览确认订阅旧MG残影已排除；23段主画面连续、23段旁白，字幕refresh canonical/changedCards=0。未全片实时播放或完整混音试听，未导出MP4；未改应用、数据、冻结首页和原录屏。续接见[最新视频记录](docs/competition/2026-10-07/chatcut-preparation/revision-v8-2026-10-09.md)、[V8状态](docs/competition/2026-10-07/chatcut-preparation/v8-state.json)、[V8同步稿](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-V8统一语速与局部修订.md)。下一步按用户播放反馈继续局部修订。
+
+## OPC参赛适配审查 · 建议已完成，未实施
+
+用户选择“大学生OPC创新创业AI agent”，本轮明确只要改进优先级与方案；距提交约10天，暂无真实试用者或付费用户。建议保留专业学习平台，以储能论文专题学习包验证首个服务，优先补3–5人试用、单次成本/人工耗时、反馈迭代和服务说明；代码仅建议学习包流程引导及可复现的交付阻断修复。详见[审查与建议](docs/competition/2026-10-08/OPC赛道审查与改进建议.md)。
+
+一次只读核对：8001健康/数据库ok，3001学习页HTTP200，35篇资料/33篇索引/2678分块；包1两项completed、2来源/14卡片/15题，包2自测failed、包3pending。源码已有Markdown/JSON学习包导出；所查模型路径未带Token实际用量。未触发模型生成、写用户数据、改产品/视频/PDF或跑测试/构建。下一步用户选定改动范围后再由Sol/Luna实施；无需赛前重构多智能体或支付系统。以下报告与交付记录保留。
+
+## 参赛作品介绍文档 · V5示例图式与字体修订已完成
+
+最新文件：`output/pdf/大学生AI创新创业赛道+能研智助+作品介绍-论文汇报版V5.pdf`。依据用户提供的两张示例重构图式：分层架构结合三个业务域插画与存储圆柱；RAG分组展示索引/检索/上下文及问题直达路径；任务编排以任务类型分支到模型生成/确定性计算，再汇合校验保存；学习对象采用环形布局，虚线反馈回相关卡片；OPC流程增加模板修订回路。图形与文字采用原生ReportLab元素，内置image_gen生成六格简洁科研插画作局部配图；不声称可指定image2.5。
+
+全部报告正文、标题、图表标签中文为宋体，数字/字母为Times New Roman，界面截图保留原貌。按humanizer技能精简重复限定、对比句与防御性注记，以机制与案例产出说明成效，仍不虚构学习增益或收入。12页540×960 pt、7629可检索字符、6549302 bytes。最终字体资源为SimSun/Times系列和未使用的默认Helvetica；全部联系表及第4/5/7页全图已查看，最终第5页修复类名拆字换行后近看通过，文本边界无越界。源 `build_refined_report.py`，验证 `verify_report.py --refined`，图件说明与提示词为 `refined-figures.md` / `refined-figure-prompts.json`。未改应用、数据或视频。下一步用户审阅V5，以下为历史。
+
+### 历史：V4图式与公式修订
+
+最新文件：`output/pdf/大学生AI创新创业赛道+能研智助+作品介绍-论文汇报版V4.pdf`。用户要求规范截图中的余弦检索表达，并参考Transformer/Nature图式美化流程图。已核对当前 `backend/app/knowledge.py`：嵌入先L2归一化，`cosine_similarity`以向量内积计算得分。第4页改为查询文本/文档分块/嵌入函数的定义、粗斜体向量与下标、二范数分式及公式编号，元数据用中文概念说明。保持12页论文汇报结构和七项赛事必需内容。
+
+架构与RAG两图使用内置image_gen定向编辑，保留原节点/标签/箭头关系，采用蓝/绿/橙/紫低饱和填色、细线和圆角模块；原生流程与条形图同步配色、补充数量坐标。图件及完整提示词见 `publication-figures.md`、`publication-figure-prompts.json`。源文件 `build_publication_report.py`，验证 `verify_report.py --publication`。最终12页540×960 pt、7153可检索字符、6429003 bytes；检查全部联系表和第4页全图，文本边界无越界。未改产品、用户数据或视频。下一步用户审阅V4，以下为历史。
+
+### 历史：V3论文汇报版
+
+最新文件：`output/pdf/大学生AI创新创业赛道+能研智助+作品介绍-论文汇报版.pdf`。用户要求减少AI感、采用论文汇报格式和三线表、以术语说明架构，可使用图像生成模型重绘图。V3采用题名/摘要/5关键词、连续章节、宋体正文与首行缩进、无底色无竖线三线表、图表编号和实现依据；去除大号页序、口号、营销卡片及黑色强调块。12页、540×960 pt精确9:16，7139可检索字符、约6.65MB。
+
+正文展开按业务域划分的分层架构、RAG、bge-m3嵌入与余弦检索、ModelProvider协议、任务上下文/输入契约/结构校验、状态控制、来源元数据、Schema与版本快照、学习对象依赖、ScientificRecipe与复现；覆盖七项必需内容。内置image_gen生成分层架构与RAG两张学术示意图，已修正RAG嵌入输出箭头；工具无版本选择，未声称确认image2.5。图、提示词与说明保存在 `portrait-report/report-assets/`、`academic-figure-prompts.json`、`academic-figures.md`。生成脚本 `build_academic_report.py`，页索引 `academic-page-index.json`，验证采用 `verify_report.py --academic`。
+
+已渲染检查全部12页联系表并近看第2-4页正文/三线表/图/公式，无文本越界。记录在 `tmp/pdfs/academic-report/`。本轮沿用最近核对的同日运行与历史案例数据，没有再次重复模型或应用测试，也未修改产品、资料或视频。下一步用户审阅V3；以下为V2历史。
+
+### 历史：V2评审修订
+
+最新PDF仍为 `output/pdf/大学生AI创新创业赛道+能研智助+作品介绍.pdf`，由 `docs/competition/2026-10-08/work-introduction/portrait-report/build_review_report.py` 生成。用户明确不接受以限制说明为主线，要求按评审七项介绍产品与架构。V2直接用“作品名称与关键词、作品概要、解决教育（产业）痛点、技术创新点、落地场景、应用成效”组织内容，并在第2页列必需项索引；名称与5关键词第1页，概要第2页，痛点第3页，业务架构第4页、技术与数据第5页、任务编排第6页，创新第6-9页，场景第10-11页，成效第12-13页，总结第14页。
+
+架构说明三条业务主线、三类输入、文档/OCR与来源处理、ModelProvider、本地嵌入检索、科学计算、SQLite关系与文件、持久化产物。学习机制说明证据/卡片/题目/作答/薄弱项/复习关联；实践机制说明分析与方案两条路径、15项算法配方及具体交付。突出当前产品成果，集中说明数据口径。新增用户原始录屏中的学习包截图；未改视频工程。14页精确9:16、最终正文9018字符、约4.11MB，全部页面渲染检查无文本越界。当前只读再次确认35资料/33索引/2678分块、3订阅及学习包案例；15分析配方由当前API确认。V1以下记录为历史。
+
+### 历史：V1报告
+
+用户选择第四套，并明确作品是专业学习平台。已深读当前技术谱系、城市场景、术语咨询、资料库问答、资讯/订阅/校园、学习训练和实践工作台源码，按“专业认知—学习咨询—行业理解—持续学习—实践交付”重写完整报告。正式文件：`output/pdf/大学生AI创新创业赛道+能研智助+作品介绍.pdf`；14页、540×960 pt精确9:16、内嵌中文字体、正文可检索、约4.30MB，不制作PPTX。
+
+报告含5关键词、概要、痛点、科学问题与拟议研究设计、技术路线覆盖图、六维知识组织、行业条件表、八类场景、双模式咨询机制、资讯异常流程、学习循环、系统架构、差异化矩阵、OPC交付、真实功能成效及改进建议。使用既有原始截图和重绘矢量图。来源代码、只读对象快照与未来验证分别说明；没有编造教育提升率或商业数据。
+
+本轮只读HTTP：8001健康/数据库ok；个人资料35篇、33篇有索引、2678分块；单个学习包2来源/14卡片/15题、2开放薄弱项，另有失败/待生成对象；3个主题订阅均启用且有成功记录；校园312条包含历史与不确定日期，未作为312个当前机会写入PDF。全部14页已渲染并目视检查，修正复习回环箭头及多行图文，最终文本边界检查无越界。脚本与页索引位于 `docs/competition/2026-10-08/work-introduction/portrait-report/`，渲染记录在 `tmp/pdfs/portrait-report/`。未修改应用、首页、用户数据或视频，未调用应用模型、跑全套或重建。
+
+下一步：用户审阅正式PDF；提交时文件名补负责人姓名和学校，另按赛事模板填写签字简介/承诺书。统一咨询入口、场景任务学习包、真实试用与成本台账均为建议，尚未实施。下列预览记录为历史。
+
+### 历史：四套竖版报告预览
+
+用户最新纠正：七项必需内容应组成汇报型PDF，9:16竖版，不是PPT样式。已重新生成并查看A蓝白循证/B青绿能源/C紫灰学研/D石墨香槟四套竖版报告预览，每套8页，存于 `docs/competition/2026-10-08/work-introduction/portrait-report/`。同目录README给出最新8页结构，完整覆盖作品名、5关键词、概要、教育痛点、技术创新、落地场景、应用成效；采用连续正文、编号小节、图注和表格。旧横版图与16页提纲保留为历史，不再作为制作依据。
+
+下一步用户选择新A/B/C/D或混合方案后生成正式9:16 PDF，不制作PPTX。PNG为概念预览，页幅/细字/架构箭头/参考资料存在生成偏差；最终PDF应精确页面比例、内嵌中文字体、正文可检索，使用原始截图和准确重绘图表。最新纠正轮未额外调用应用模型、修改数据、应用或视频工程。以下为首次预览阶段的记录，版式相关结论已由上述说明覆盖。
+
+用户已选择大学生AI创新创业赛道的大学生OPC创新创业AI agent方向；要求先提供四套学术风格缩略预览，再选定正式文档设计。本轮内置image_gen已分别生成A蓝白循证/B青绿能源/C紫灰学研/D石墨香槟，每套3列×4行、12个代表页，全部像素已查看、副本保存在 `docs/competition/2026-10-08/work-introduction/`。工具不暴露模型版本，不能指定或确认“image 2.5”。预览细字/截图/架构箭头存在生成偏差，只作视觉选择，正式稿需使用原始截图与准确可编辑图文重建。
+
+同目录[汇报结构与证据说明](docs/competition/2026-10-08/work-introduction/汇报结构与证据说明.md)给出16页正式稿建议、机制和研究问题、成效评价设计、OPC服务路径及事实边界；`image-prompts.json`保存四套完整提示词。2026-10-08只读HTTP核对8001 health=ok/database=ok；学习包1为2篇来源、14张卡片、15题、2个未解决薄弱概念，卡片/自测completed；另有failed与pending学习包，今日任务与到期复习为空。无学生效果试验证据。历史公开模拟数据图注明10月4日验证，不作为平台学习效果。
+
+未修改应用/首页/用户数据、调用用户模型API、运行测试全套或重建。Docker CLI权限受限，未核实容器列表；HTTP可访问。最终PDF/PPTX尚未制作，这是用户要求的设计选择阶段。下一步由用户选A/B/C/D或混合方向，并补负责人姓名/学校正式名称，再制作PDF与可编辑PPTX。赛道改进仅建议：明确专业学习包交付、小规模真实试用、单次任务成本与反馈记录，未实施应用改动。
+
+## 科研想法与实验设计删除 · 已部署3001/8001
+
+想法条目新增删除按钮，确认框显示关联实验设计数量，确认后同事务删除想法及设计；每个设计入口和当前设计编辑区可单独删除。取消或失败保留状态，成功清除对应列表、编辑及导出状态；来源论文和数据集保留。后端2项、前端3项定向测试通过，OpenAPI与前端类型同步，一次前端生产构建及后端源码镜像刷新通过。隔离Edge用临时想法和3个同名设计验证取消、单独删除、关联删除数量2及编辑清理，pageerror=[]，临时记录已清理。未删除用户原有记录、调用模型或跑全套；本轮同步干净公开源码，旧Windows ZIP未重打包。实施计划见 `docs/superpowers/plans/2026-10-07-idea-design-deletion.md`。
+
+## ChatCut参赛视频 · V7本轮13项修订已写入5分16.5秒工程
+
+用户选择B暗色精密组件，三组无文字透明生图素材已装入资料入库、论文库问答、多篇比较，文字与连接线由MG准确排版。三个痛点按旁白逐个放大/复原；首页原摇摆不变，稳定后白线切换真实深浅首页，取消该处虚线画中画。执行三卡加入真实界面截图并移除底部标题；只精简原2/3/5/11段，重新自然1倍配音并加快对应动画。报告机制移到研读界面后，问答机制跟随真实问答演示；修正字面换行符。敲字前停帧2秒，输入框虚线下沿对齐，键盘声增加6dB；阅读器重复开场和四个白底题型图标删除。自测空白视频层替换真实题目截图，前端合成已显示内容。
+
+活动时间线仍为 `b4b0f9b3-ece1-44d2-b63b-164f7a54cfb4`；9496帧、1920×1080/30fps、5分16.5秒，89普通条目及1音乐交叉淡化，23主画面/23旁白连续安排。真实截图8张、组件素材3张通过同机桥接成功导入；编辑器更新通知刷新后恢复连接。前端合成抽帧检查本轮重点，字幕维持A1单行，纠正新配音的Next.js/SQLite/ModelProvider识别及场站字词。后半部分只随重排平移；未改应用、冻结首页、原录屏、原正式稿，未完整实时播放/试听混音，未导出MP4。
+
+当前续接：`docs/competition/2026-10-07/chatcut-preparation/revision-v7-2026-10-08.md`、`v7-state.json`、`旁白正式稿-V7局部精简与重排.md`、`v7-narration-sync-map.json`。下一步用户继续审阅新版，按后续反馈改；以下V6为历史。
+
+### 历史：V6最终稿已写入5分44.3秒工程
+
+用户指定 `docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-第一版.md` 为最终稿；23段正文重新配音，标题、编号和括号内处理注释不朗读，原稿未覆盖。用户明确选择“改用立体动画”，已用真实资料多层翻转、品牌/三主线透视卡片重做片头片尾，未依赖AI视频生成。活动时间线 `b4b0f9b3-ece1-44d2-b63b-164f7a54cfb4`，10330帧、1920×1080/30fps、5分44.3秒；23段“大壹”旁白均自然1倍，替换旧重复和长等待时序。
+
+23个新整段MG及1个黑白Celebrity改版，专业机制按旁白词时进入并呈现分支/汇聚；学习咨询、行业认知、科研实践并列。真实操作界面圆角缩小/白线网格，重点平移、恢复全景后转焦、虚线/剥离画中画；手敲flow battery完整可见且带键盘声，城市固定倍率沿地点平移后进入原理，GitHub采用2.5D。自测已换实际题目答案，订阅避开整理等待，校园先筛选再转官方页面。3张额外静帧导入同步超时且辅助上传缺少ffmpeg/ffprobe，最终直接引用已有原录屏，无需失败导入。
+
+字幕仅A1、30px透明单行，135 Cards全部读回无溢出/多行，6处识别纠正保留；最后refresh canonical/changedCards=0，revision `fnv1a:7cfab9d1`。当前92普通条目（56 MG / 36音频）、1个音乐交叉淡化已读回。23段代表合成与关键转场邻帧已实际检查，定向修正卡片过暗、输入裁切、空白和等待；自测最后600px框高微调只通过源码校验，未重复抽帧。
+
+整片实时播放/混音试听尚未完成，未导出MP4；抽帧不证明全部中间帧或连续鼠标跟踪。应用、冻结首页、最终稿与原始录屏未修改。当前权威续接：[V6修订记录](docs/competition/2026-10-07/chatcut-preparation/revision-v6-2026-10-08.md)、`v6-state.json`、`v6-narration-sync-map.json`、`v6-timeline-readback.txt`。下一步在现有单一编辑器播放全片核对听感，按具体反馈调整，明确要求后再导出。以下V5及旧文稿审查记录均为历史。
+
+## ChatCut历史 · V5的14分50.9秒工程
+
+### 初改稿审查 · 先给出文稿建议
+
+按用户要求另生成 [旁白正式稿第一版](docs/competition/2026-10-07/chatcut-preparation/旁白正式稿-第一版.md)，23段、正文1781字符，附同名TXT及原段落对应JSON。恢复痛点与平台引入，合并重复内容；正文检查无第一人称或剪辑方式复述。仅生成稿件供审阅，原初改稿与工程未替换。
+
+用户已编辑Markdown初改稿，同名TXT仍为旧稿；以Markdown为准。本轮完成逐段审查，另存 [审查与修改建议](docs/competition/2026-10-07/chatcut-preparation/初改稿-审查与修改建议.md) 和 [23单元旁白建议稿](docs/competition/2026-10-07/chatcut-preparation/旁白-修订建议稿.md)，原稿未覆盖。建议恢复痛点与简短平台引入、合并01–04、删除19重复旁白并将有效画面并入17–18；将操作/剪辑复述改为机制和信息价值，合并问答/订阅日报/片尾重复内容。补正知识卡片与自测题、判分/自评边界、JSON向量存储及编年史六类知识组织。
+
+只读核对当前相关源码，建议旁白未出现第一人称或剪辑方式词。本轮未生成新配音、重排字幕或删剪视频，工程仍为V5。下一步根据审稿后的最终文字重新配音与排镜头，删除重复及空窗，保持学习/行业/科研三主线；旧时间点不作为新稿时长。
+
+活动工程 [能研智助参赛视频](https://app.chatcut.io/zh/editor/918164fe-71f9-436b-b7bb-6dfdfb7551c9)，时间线 `b4b0f9b3-ece1-44d2-b63b-164f7a54cfb4`，26727帧、1920×1080、30fps。开头改为“储能专业学习平台”，三条主线并列：学习咨询、行业认知、科研实践。整体架构改为三领域分支；新增学习快照/卡片/自测、判定/自评/薄弱项/复习闭环，以及技术知识地图/城市/资讯订阅运行逻辑，论文作为证据入口。
+
+真实手敲flow battery已替换旧粘贴素材，重点镜头配虚线框/画中画、保持倍率平移；城市截停后逐点平移再展示展开原理，GitHub为真实截图2.5D与局部抬起。原纸条/Vibe、黑白Celebrity字卡、五类模板、白线网格、深浅首页划线与ASCII雨保留。33段旁白全部自然1倍，14段新稿/19段保留，按源音频时长排画面；新音乐6段循环/5个1秒交叉淡化，2.8秒键盘声及三处城市点击已落位。
+
+字幕仅A1、34px单行透明背景；最后refresh canonical/changedCards=0，校正技术名词后revision `fnv1a:1bfaa65`。新主要场景的合成抽帧已实际查看，A1读回33段，新音效/缩放/音乐交叉淡化已读回；未完整实时播放或试听整片混音、未导出MP4。应用代码、冻结首页与原始录屏未修改。
+
+当前权威记录：[V5修订记录](docs/competition/2026-10-07/chatcut-preparation/revision-v5-2026-10-08.md)、`v5-state.json`、`v5-narration-sync-map.json`。下一步在现有单一编辑器完整播放，根据指定问题进一步微调；导出依用户明确请求。以下V4及片头记录均为历史。
+
+## ChatCut历史 · V4的7分40秒工程
+
+活动工程 [能研智助参赛视频](https://app.chatcut.io/zh/editor/918164fe-71f9-436b-b7bb-6dfdfb7551c9)，时间线 `b4b0f9b3-ece1-44d2-b63b-164f7a54cfb4`，13800帧/460秒、1920×1080、30fps。用户最新反馈缩放过大、视角不跟鼠标：V4已将12处缩放降至1.5–2.2倍，按真实录屏鼠标的已审看采样写入平滑焦点曲线，兼顾正文位置；静止/稀疏鼠标段保持可靠焦点。自测近景扩至3秒、1.5倍保留题目与答案。实际查看首页横移、自测跟随与三处操作近景。
+
+基础流程图已换成五种实际库模板：Savings Plan Sidebar展示架构，Tip List Title Card讲证据核查，Timeline Progress Bar展示片头/学习/研究路径，Checklist Tick Animation展示优点，Team Members — Leadership Grid展示计算/模型/复核分工。五套原模板源码与像素已查看，并适配内容、黑白金配色；七处新图解的最终像素已查看。五章节、Vibe标题、首页悬停与片尾品牌改用Chill Huo Gothic厚重黑体，接近用户最后参考图方向。外圈白线网格、等比例圆角窗口、17处黑白Celebrity Quote Flashcards、片头纸条、首页深浅划线、ASCII雨、真实点击音效及GitHub录屏继续保留。
+
+24段新“大壹”旁白替换旧50片段，约1984个非标点中文字符，多数约4.8字/秒；新推进感纯音乐三段覆盖全片、两个1秒交叉淡化、淡入淡出及自动避让旁白。字幕仅A1、198个Cards、34px单行白字透明背景；最后refresh canonical changedCards=0，revision fnv1a:75ba1588。实际时序已核对，整片尚未完整实时播放/混音试听；未导出MP4，不能把时序核对当作音质验收。
+
+当前权威交接见 [V4修订记录](docs/competition/2026-10-07/chatcut-preparation/revision-v4-2026-10-08.md)、`v4-state.json`；本轮音频未改，继续使用`v3-narration-sync-map.json`。最终字幕refresh canonical、changedCards=0、198 Cards；旧V3的4–6倍缩放与旧图解、6分58秒记录均为历史。下一步在现有单一编辑器完整播放一次，再按具体听感/画面问题微调；导出按用户明确请求进行。应用代码、冻结首页与原始录屏未修改。
+
+以下为片头阶段的历史记录。
+
+最新按用户要求将操作界面改为等比例缩小的圆角矩形窗口，外圈继续黑色网格背景，后续全片界面演示沿用这一布局原则，窗口比例按内容调整。当前首页16–24秒窗口为左160/上105、1600×779.831933、圆角28px，保持1904:928清洁界面比例；静帧右至左入场和真实录屏共用窗口边界。原录屏保留，通过原生尺寸缩小与上层SVG圆角外部遮罩裁去浏览器/任务栏；原1.5倍推拉仍在窗口内。悬停书法大字移至左200/上865，下方网格留白区，不遮挡操作内容。已实际查看617/599/600/719帧；7帧批量预览曾超时，单帧/小批量恢复。24秒样片仍待确认，未扩展全片或导出。
+
+最新按用户“我要艺术字体”将最后四个悬停大字改为Ma Shan Zheng书法字体（ChatCut search_fonts已确认支持），124px、正常400字重、1px字距，与首页毛笔标题搭配；透明背景、金色下划线、原悬停动画和位置保持。MG源码验证无错误、动态分析非阻断警告保持；最终前端合成617/719帧实际查看，书法字体已加载，最长“科研创新竞赛”完整可见，无功能框遮挡。
+
+最新按用户反馈去掉最后悬停大字的黑色背景：删除底板、边框和底板阴影，仅保留白色动画大字、金色下划线及轻微文字阴影，保持原悬停同步时段、字号和位置。前端合成617/719帧已实际查看，透明背景生效，长标题完整可读，没有遮挡功能方框。源码验证无错误，动态分析非阻断警告仍存在。
+
+本轮按用户要求在最后20–24秒的放大首页录屏中增加悬停对应的动画大字。真实源视频10–14秒的功能框高亮边线逐帧核对：论文库[602,623)、论文库问答[643,668)、学习中心[683,708)、科研创新竞赛[714,720)，均为30fps时间线半开区间。大字只在对应悬停区间显示，移走后收起；采用108px白字、金色下划线、半透明黑色底板、快速放大回弹。位于左70/上670、850×210，避开功能框和鼠标。最后一项只有6帧，使用2帧快速进场；视频时长保持24秒。前端合成8帧实际查看已确认对应大字与悬停框同步，未遮挡功能方框；24秒样片仍待确认，未扩展全片或导出。
+
+按用户指出的“学后易忘”合照不合适，本轮仅将shot4替换为真实论文图文截图。来源为Brosa Planella等《A Continuum of Physics-Based Lithium-Ion Battery Models Reviewed》（arXiv:2203.16091），原PDF第7页Figure 3和完整图注的横向区域；直接渲染原PDF，未生成或改写图文。导入资产1f0ecfee-7933-4668-814d-84126c404ae0，云上传完成。来源文字及图片属性标签同步更新，原动画和卡片位置保持。MG验证无错误/警告；前端合成第185帧（6.167秒）实际查看，论文图文、标题和底部纸条没有互相遮挡。其余时段未重复检查。
+
+最新修订只替换前段右侧两张图片，左侧保留EES封面，右侧为EES Batteries官方展示封面与LMU Lotsch研究组2025年论文封面。同屏四张图片互不重复；两张新素材导入、云上传及MG源码验证通过，最终前端合成第75帧已实际查看，未遮挡标题或图片主体。其余时段和完整播放未重复检查；仍待样片确认，未扩展全片。详情见[剪辑记录](docs/competition/2026-10-07/chatcut-preparation/editorial-revision.md)。
+
+最新按用户指定实际应用 Hand-Drawn Paper Lower Third（0–7秒底部说明）与 Vibe Effects Title Card（13–16.267秒独立转场），中文字体和颜色匹配现有黑底/薄荷绿/金色。痛点配图换成2张RSC官方期刊封面、2张武汉大学官网新闻照片、1张NASA Glenn官方YouTube高清缩略图，5张导入及云上传完成，原录屏保留。新参考视频已本地抽帧查看，标题转场加入细线选框、空心字构建→实心标题；流程段10–13秒逐框缩放、线段连接，转场开始完全退场。16–17.5秒首页从右向左推出，取消斜插透视，20秒仍匹配原首页视频。18帧合成检查后修正来源文字位置与流程残影，最后75/400/495帧定向复核；纸条/图片/标题避开主要信息，风格一致。仍为无配音的24秒风格样片，待用户确认；未制作全片或导出MP4。详见[本轮剪辑记录](docs/competition/2026-10-07/chatcut-preparation/editorial-revision.md)。以下为上一轮证据。
+
+最新按用户反馈消除单套模板重复：检索/研读左右双痛点、消息/记忆斜向上下双痛点、前沿主题全景展开，各图文独立进场；流程图删除流动光点，6个流程框按序缩放进入、SVG线条逐段延伸连接。保持24秒时序、真实图片与首页衔接。官方源码验证无错误/警告，前端实际合成抽帧8/25/75/118/135/185/220/250及310–470分阶段帧确认布局与流程动画，599/600衔接正常；尚未完整实时播放验收。待用户看新版确认后扩展全片。
+
+新剪辑对话已挂载59个官方工具，并实际创建[能研智助｜电信T.A杯展示视频](https://app.chatcut.io/zh/editor/918164fe-71f9-436b-b7bb-6dfdfb7551c9)，1920×1080/30fps。16段原录屏全部导入；原文件和应用源码未改。用户反馈30秒样片运动不足，现同一工程改为720帧/24秒：五类痛点各2秒，加入5张原录屏真实图片，三层卡片快速进出、大幅翻转、横移穿插与缩放回弹；后接准确简化架构流线、首页透视展平匹配及0.3秒快速推拉。5张图片云上传完成，实际合成抽帧已检查翻转、真实图片、599/600帧衔接和最终600/609/630/705/719帧推拉；未做完整实时播放验收。当前无配音/配乐，未导出MP4、未制作8分钟全片，待用户观看确认新版风格。用户已允许裁掉多余等待与跳转。具体工程/时间线/素材ID与连接恢复注意见[剪辑交接](docs/competition/2026-10-07/chatcut-preparation/README.md)。以下为旧连接准备记录，不代表新会话仍缺工具。
+
+用户已明确授权新建剪辑对话；创建同项目本机任务“能研智助参赛视频剪辑”（`01a115bb-b333-7de1-bdb4-62e70fc5fb1d`），完整交接已带入。续接诊断确认服务本身可发现59个工具，但本旧对话没有挂载；没有ChatCut素材导入或工程编辑。新任务先核验工具，再导入16段原素材制作20–30秒可编辑样片。
+
+用户提供 `C:\Users\28742\Videos\展示视频原素材` 的16段1080p录屏，总长约13分37秒、95.3MB；全部可读取，已作元信息清单及四张采样联系表，原文件未改。Hosted ChatCut已注册并添加Codex surface header，官方OAuth返回登录成功，用户确认在Edge完成授权；用户环境CLI确认enabled/OAuth。当前对话仍没有ChatCut工具，未创建工程、导入、剪辑或导出。续接先检查工具是否加载，缺失时重启Codex重新进入此对话，无需重复注册。详见[连接和素材交接](docs/competition/2026-10-07/chatcut-preparation/README.md)。新学习素材已可见自测题；数据案例与原稿需对应更新，不能沿用旧失败状态或旧储热数值。应用代码未改。
+
+## 论文流程图兼容与模型输出预算 · 已部署 3001/8001
+
+用户指定论文36。只读复现：快速理解的方法图节点含未引号的字面 `||`，另外两份报告的图直接结束于 `D["` / `C["`。前端仅为含竖线的未引号方框标签补引号；部署后快速理解由1/2变为2/2 ready。用户随后要求使用Codex补齐、不得使用DeepSeek额度；已依据提取文本补齐4篇中的6份残缺尾图，原正文保留、图注与证据状态标明Codex归纳，旧报告备份在本地。
+
+当前设置只读确认为DeepSeek/deepseek-flash；用户已选择保留深度思考并将三类论文报告预算由16000/12000/20000统一提高到64000，其他供应商预算及校园预算未改。后端增加明显残缺的围栏式/未围栏式图拒存与专属提示；明确length时区分无正文与部分正文，保留旧报告。旧总分析入口已410，当前入口为三种分报告。官方文档默认思考high、默认thinking输出64K；没有原失败响应，不能确定用户所述提示对应哪次调用。
+
+Sol前端回归13 passed，后端最终定向12 passed/57 deselected；必要前端构建及依赖复用后端构建成功，两个服务更新成功。最终health=ok、经前端代理论文数35，Edge pageerror=[]；部署中曾在容器未就绪时提前查health失败，等待healthy后检查通过。已补齐论文7/16各通俗、36通俗+审稿人、31快速+审稿人共6份尾图；隔离页面真实渲染检查6份报告共8张图全部ready、无pageerror，事务写回并逐字段确认API内容一致。曾因不存在的updated_at列回滚，修正后写入；追加prompt版本号触发旧报告过滤，已恢复原兼容版本，以图注/证据状态记录Codex来源。未使用DeepSeek额度、未全面重写或学术校订原正文。私有证据/备份/修复稿在 `outputs/paper-render-2026-10-07/codex-repair/`，不上传。公开源码提交351040f含代码修复，Windows ZIP未重打包。
+
+## 自测选项与科学文本排版 · 已部署 3001
+
+仅修改学习包自测区域：选择按钮固定22×22px，选项使用两列网格、12px间距和至少44px整行点击区域；题干、选项、解析和参考要点接入现有Markdown/KaTeX，显示层转换常见 `k0`、`10^-3`，保留代码及已有数学分隔符。题目原文、答案值、作答记录、后端和首页未改；含义不明确的化学文本未自动纠正。
+
+Sol定向回归red 1 failed/22 skipped，green 1 passed/22 skipped（3.75s），确认格式化选项仍提交原字母B。首次构建发现解析字段可空的类型错误，补条件后必要重构建通过；仅frontend3001更新成功。最终隔离Edge：1920深色及390浅色均测得按钮22×22px、文字间距12px、行高44px，第二题5个数学节点、无KaTeX/pageerror错误，整行点击可选中且选项在视口内。未提交真实答案、调用模型或运行全套。公开源码同步本次修复；现有Windows ZIP未重打包。
+
+## PDF 外层翻页不响应 · 已修复并部署 3001
+
+原 iframe 仅改变 `#page`，外层页码更新但浏览器内置 PDF 没有重新载入。现在以论文 ID、PDF 版本和目标页码作为 React key，外层翻页/缩略图/图表跳页会重建阅读器；未改 CSS、后端、首页或论文数据。
+
+Sol 回归 red 2 failed/3 passed，修复后阅读器5项及相关详情1项通过。扩跑 paper-experience 整文件35/40 passed、5 failed，已见帮助页及外部比较标题断言，其余因输出截断未定位，不声称整文件通过。一次 Docker 前端构建及仅 frontend3001 更新 exit0；隔离 Edge 在本地13页 PDF 验证下一页2、缩略图4、上一页3，旧 iframe 均移除、PDF请求从修前1次变为4次、最终 `#page=3`，pageerror=[]。未做内置工具栏双向同步、人工可视验收或全套。公开源码同步修复；10月4日便携 ZIP 未重打包。见[交接](docs/handoff/2026-10-07-pdf-navigation.md)。
+
+## 当前任务：电信T.A杯参赛审查与视频方案（文档阶段完成）
+
+已核对官方参赛要求、公开发布源码、本机学习概览及用户提供的三支短参考视频，形成[参赛审查](docs/competition/2026-10-07/01-参赛审查.md)、[约8分钟视频方案与解说稿](docs/competition/2026-10-07/02-视频方案与解说稿.md)、[提交清单与展示PDF提纲](docs/competition/2026-10-07/03-提交材料与展示PDF提纲.md)。建议以储能专业学生自主学习与科研入门为主线；个人本科生无教师时优先考虑大学生OPC方向，个人AI+教学资格需组委会明确。公开实现支持多环节AI工作流，尚不足以支撑多智能体编排主张。
+
+公开本地树fb5dce8，本轮未成功核对远端Git HEAD；未改应用、调用模型、构建或运行全套。10月7日8001学习概览仍有自测failed/题目0的既有记录，卡片14/来源2；没有新增学生试用成效证据。三支参考均已抽帧查看（约2.67–3.73秒），只支持局部风格判断。ChatCut技能已读，但当前未接通可调用剪辑服务；未制作时间线、成片或最终展示PDF，未上传提交材料。下一步先准备成功学习任务与真实试用/本人实践证据，再提供分段录屏，接通ChatCut后用短样片核对透视与转场效果。草稿含自测未成功时的替代旁白，不能将计划写成已验证结果。
+
+## Windows x64 便携版 · 已发布
+
+GitHub Release [v0.1.0-windows-portable](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/tag/v0.1.0-windows-portable) 已发布，目标提交为 `d1da8994aa19a128acc5be7bd54b0b433985b7e5`。资产 [Energy-Research-Copilot-Windows-x64.zip](https://github.com/Viyao691/energy-storage-research-learning-platform/releases/download/v0.1.0-windows-portable/Energy-Research-Copilot-Windows-x64.zip) 大小为 926,812,896 字节（约 884 MiB）；GitHub API 确认 Release 已发布，资产状态 uploaded 且大小吻合。
+
+安装包包含 Python 3.12、Node 24、Pandoc、OCR 运行库和完整 Windows 后端依赖，采用本机 runtime proxy，默认 Mock 并首次创建空 `data` 资料库。冷启动在含中文与空格的路径及系统 PATH 没有 Python/Node 的环境通过：health、首页、dashboard、runtime proxy 200；新库 Alembic 0029、campus seed 67；合成 PDF 上传 201、页图和图卡 200；DOCX/PPTX 创建 201，下载文件 PK 容器签名正确。端口避让由 3100 切至 3101，退出后 8100/3101 关闭，临时数据清除，stage data 为空；原 3001/8001 未动。
+
+按用户要求，根 README 与公开版 README 顶部的项目定位段及手机响应式应用声明已删除；保留学生痛点、功能和截图。便携版当前在本机启动并通过浏览器操作，不提供公网网站或原生手机应用。未做 Office 渲染、真实模型服务或 OCR 模型权重验收，也未跑全套测试。详见[便携版指南](docs/github/PORTABLE.md)。
+
+## 当前修订：科研想法字号与全宽排版（已部署3001）
+
+仅本页CSS：入口双栏解除920px上限，设计/已有想法/审查/导出铺满可用内容区；正文与表单16px、分区标题26–30px，输入增高，窄屏单栏。Astra审查、Sol实施；复选框18px和Markdown显式16px已补齐。两次必要frontend构建/仅frontend部署成功，最终1920入口与设计1552.8px、16px字号实测通过；390单栏无横溢。未改逻辑/数据、未调用模型或全套，深色未独立截图。见[交接与截图](docs/handoff/2026-10-04-ideas-layout.md)。
+
+## 当前修订：科研数据/想法功能补齐（已完成并部署3001/8001）
+
+已实施用户批准的三阶段改进：真实选中表格/论文证据与JSON格式，缺失/区间复核及逐列统计诊断，完整表格/工作表/分析入口，想法八字段编辑及实验设计九字段保存恢复，含数值/版本/来源的Markdown、Word与分页PPT，实际算法重算ZIP。Astra设计和审查、Sol实施；接口类型与OpenAPI同步，无DB迁移或首页修改。
+
+公开Table 2/6各11行已在真实界面复核并分析：缺失5、区间1；效率均值95.325455%，样本SD2.311793个百分点。真实候选首次长度失败后局部预算修正，重试idea2成功；design1九项保存/刷新恢复且真实审查成功。候选初稿有极差比较和跨表映射推断问题，保留原文证据并通过八字段编辑人工纠正，不能称科研质量自动正确。MD4/Word5/PPT7下载200，PPT7页有数字与DOI；ZIP修改下载副本后均值+1，线上数据未改。
+
+后端相关组15 passed/2 skipped，后续修订文件7 passed、预算定向2 passed、最终PPT定向1 passed；前端相关组9 passed、兼容修正1 passed/5 skipped。两次前端生产构建、四次必要后端增量构建及部署均成功；最后PPT小修正已部署。无全套、Office逐页渲染或移动端验收，本地全局tsc仍有其他编年史测试既有错误。下一步建议确定性校验模型新计算/排名及明确跨表映射，未经新授权不扩算法范围。见[完整实施与实测报告](docs/validation/2026-10-04-research-tools-completion/README.md)。
+
+## 当前修订：科研数据/科研想法真实数据测试与评估（已完成，未改应用）
+
+使用开放储热论文Table 2文献汇总与Table 6模拟数据，各11行，完成3001界面导入/保存/标记/手工立题/检查表/Markdown及8001数值统计/导出验证，留2条标注测试数据集、1条想法和相应设计/分析/导出。CSV全11行、区间和5处缺失保存完整；XLSX第二工作表通过API确认，UI缺少选择器。效率均值95.325455%、样本标准差2.311793个百分点，独立计算一致；DOCX/PPTX和分析ZIP生成下载成功，仅文件结构验收。
+
+真实候选生成与设计审查均502；定向64-token诊断确认上游400：启用JSON模式但提示未包含json；现有模型连接测试成功，未变更配置。其他缺口：自动完整性布尔值使缺失表也“已确认”，统计静默跳列，模型只收到证据名称/类型而非内容，设计无编辑/恢复入口，Markdown仅框架且下载404。Sol隔离Mock 4项通过，不能代表真实AI通过。报告包含使用方法、P0/P1/P2建议、公开CSV/XLSX和截图，见[实测报告](docs/validation/2026-10-04-research-tools/README.md)。本轮仅测试和文档，没有修复上述问题或运行构建/全套。
+
+## 当前修订：储热/液流订阅内容混入AI修复（已部署3001/8001）
+
+实查两订阅各40条既有文献记录、0主题新闻；原详情把通用日报全部新闻合入并放在论文前，造成“只有AI”观感。现详情只请求本主题推荐，论文优先、本主题资讯单列，空新闻明确提示；计数和自动中文整理不再包含通用日报。储热/热储能订阅对国际论文源使用thermal energy storage，保存query不变；新闻增加具体热储能同义锚，不匹配泛energy/AI。
+
+Sol后端2项/前端3项red→green；一次前端生产构建、后端两相关服务文件依赖复用构建及3001/8001部署均成功/Healthy。实际重新运行：液流run12新增18条、总58；储热run13新增20条、总60，arxiv临时不可用故partial，OpenAlex/Crossref和5新闻源返回正常。两者匹配新闻仍0，未补造结果。浏览器两详情各显示本次加载50条文献、论文在前、主题新闻0，无通用AI组；液流资讯页签明确空态。未全套、截图或移动端复测；沿用最多50条加载上限，无历史删除。见[交接](docs/handoff/2026-10-04-topic-subscriptions.md)。
+
+## 当前修订：科研日报多源能源新闻（已部署3001/8001）
+
+此前仅 MIT 能源/AI 两源且链接域名写死 MIT。现增加 EIA Today in Energy（官方）、Clean Energy Wire 和 ScienceDaily 能源与资源（媒体）；能源新闻置前，AI单列，按实际来源显示数量、日期和原文入口。各源固定域名/能源主题过滤；CLEW仅保留 `/news/`，活动、资助和专家资料排除。保留小时缓存、失败来源提示及旧缓存回退，无模型调用或API schema改动。
+
+Sol初版后端6项/前端1项定向通过；运行发现CLEW全站条目混入后，新增1项red/green通过。一次前端生产构建、后端单文件依赖复用镜像构建及3001/8001更新成功；CLEW修复仅追加后端构建/更新。最终实际API 41条：EIA10、MIT能源10、MIT AI10、CLEW1、ScienceDaily10，warnings=[]；页面能源31条/AI10条、5个来源、CLEW非新闻0、浏览器error=[]。未全套、截图矩阵或移动端复测。见[交接](docs/handoff/2026-10-04-energy-news-sources.md)。
+
+## 当前修订：学习卡片分段与来源折叠（已部署3001）
+
+卡片编号改为纯数字；现有纯文本按中文句号分段并加粗首句，已排版 Markdown/公式/列表/代码原样保留。“为什么重要”与“易错点”支持现有 Markdown 内联渲染。来源默认原生 details 收起，点击“展开来源”逐条显示完整原始来源，可“收起来源”。保留加载反馈、卡片操作和存储原文，未调用模型或修改数据。
+
+新增2项定向 red 失败、green 2通过/20跳过；一次 frontend 生产构建与仅frontend3001更新均exit0。实际第一张现有卡片编号1、正文5段/1重点句、4条来源默认隐藏，展开可见/再次收起隐藏，浏览器错误为空。未全组、截图矩阵或移动端复测。见[交接](docs/handoff/2026-10-04-learning-card-reading.md)。
+
+## 当前修订：学习各项加载动画（已部署3001）
+
+复用现有附件 React Bits LatticeLoader：学习中心创建学习包，以及详情知识卡片、自测、计划、薄弱概念、复习、版本的异步操作显示中文加载状态与计时，等待时禁用写入操作、失败后恢复重试。复习/版本首次读取也有加载提示；导出维持原生下载。Sol 实施，未改后端、依赖、共享 Loader 或首页。
+
+4 个新增延迟请求用例 red 失败，green 学习页 20/20 通过；一次 Docker 前端生产构建 exit0，仅 frontend3001 更新 exit0。部署后浏览器学习包初始 Loader、复习列表、版本列表与导出、自测生成入口正常，错误日志为空。没有调用真实模型或改变学习数据；慢生成和写入状态由受控 Promise 测试验证，未做全套、截图矩阵或移动端复测。见[交接](docs/handoff/2026-10-04-learning-loading.md)。
+
+## 当前修订：编年史GlideSelect文字动效（已部署3001）
+
+家族/路线/材料路线/企业四类原生选择器复用现有GlideSelect；保留controlled选项与联动、栏目及详解状态。仅本页启用160ms文字淡入/轻微blur和独立portal主题；原180ms菜单展开、220ms滑动pill、选中check、键盘和外点关闭保留。共享新props默认关闭，其他消费者行为不变，巨大年份布局不动。
+
+两项新行为red2失败、green2通过（23:20:27，2.82s，exit0）；第一次测试命令从项目根加--root产生文件定位错误，改为frontend cwd后才取得真实red。一次Docker frontend production build与仅frontend3001部署exit0/Healthy。实际1280/390×深浅四场景菜单未越界、BODY portal未裁切，主题色正确，企业标题/图片更新、详解保留、键盘/外点关闭通过，pageerror0。实测潜热材料/企业各行44px、第二项pill45px与offsetTop45px吻合；未穷举25路线所有长标签。未全套或截图，自动任务仍PAUSED。见[交接](docs/handoff/2026-10-03-chronicle-glide.md)。
+## 当前修订：编年史巨大年份重叠（已部署3001）
+
+年份由绝对定位改为真实舞台网格占位，按舞台可用宽度缩放；宽舞台保留正文左/年份右，窄舞台上下排列。仅修改ChronicleExhibition.tsx中原年份元素位置与chronicle.module.css局部规则，主题、动效、照片与正文不变。
+
+实际旧1280视口潜热储能适配，年份与h2相交约32.3px。修后1920/1280/390×深浅六场景，每场景核历史2024与储能适配“应用”，年份与标题/简介均不相交、年份未超舞台、无横溢；Node检查exit0。最终Docker前端构建exit0、仅frontend部署exit0/Healthy。较早初稿构建未包含宽桌面分列且未部署，最终版本才部署。未跑单元/全套测试或截图矩阵；自动任务仍PAUSED。见[布局交接](docs/handoff/2026-10-03-chronicle-year-layout.md)。
+## 当前修订：编年史真实配图覆盖（已部署3001）
+
+25路线布局与正文不变；新增45张真实照片，其中44张已可经现有年份/材料/企业/栏目选择命中，另1张丰宁下水库保留备用。11条机械/热/电磁重点路线各可切换3–5种真实背景；企业缺图23→2（IMA设备、Sinopec LOHC），无真实材料图的既有示意保留。
+
+新增3项图片行为定向通过；一次Docker前端生产构建、仅前端部署成功。正式3001代表EM/机械/热切换图片加载、Reader同步、深浅主题和390px无溢出通过；无页面JS错误。自动任务仍PAUSED，不自动新批。详情见[配图交接](docs/handoff/2026-10-03-chronicle-media.md)。
+
+## 储能编年史全部25路线已完成并部署3001 · 2026-10-03
+
+25/25路线全部接入并部署正式3001：252时间节点、99材料/部件专题、150详解章节、正文约72464汉字，509个去重研究链接（章节Markdown链接与节点原始来源；不含图片/公司档案）。素材108记录/99可用。所有入口均有独立研究，不再有实际待整理路线。
+
+最后EC3（铅酸/锌基/金属空气）30节点（10/9/11）、12材料、6主体、18章正文约10203汉字；新增8素材（5原始媒体、3通用机制图）。保留六栏目与用户已接受主题/动效/阅读结构。H/EM/EC纯文本事件不含字面**或Markdown源链接，来源保留参考折叠。
+
+新EC4项red全部失败确认未接入；green首次3通过1失败（21:31:57，2.51s），失败仅为测试预期1000与正确原文1,000的千分位不同。修断言后只复跑失败1项，并在同命令运行受铅酸上线影响的旧2项：3通过19跳过、exit0（21:33:09，4.60s）。没有重跑旧18全组。
+
+Docker前端生产构建exit0；因晚到Xcel2026官方公告补引用和当时MPUC待批准状态，追加一次必要生产构建exit0，之后仅frontend部署一次exit0/healthy。构建仍有其他页面原有Autoprefixer/缓存警告，未改无关CSS。
+
+一次最终Edge3001实际HTTP200：三路线首年选择/返回、论文8,529/2200h/30kWh、无字面星号、材料概念/企业媒体/政策原页加载、全国电储图关闭、Xcel300MW/30GWh计划段及原始链接、双主题/暂停阅读/390px无横溢，pageerror0。记录见docs/handoff/2026-10-03-chronicle-electrochemical-runtime.json。
+
+企业图片仍有缺口，未用他家设备代替；微观材料缺图用“示意图”，不代替实验。Form爱尔兰10MW/1000MWh预计2029、Xcel300MW/30GWh为计划/当时待批，订单积压/年化产能不写装机。铅酸8,529次10%DOD；锌2026不同DOD时长与软包独立；金属空气氧回收效率与电往返效率分开。25路线完成指本轮研究与页面接入，非所有企业/全球事件穷尽，未做全套回归或外部版权授权评审。
+
+自动推进任务已暂停（automation id：automation；native返回status PAUSED），停止每小时续接，后续仅响应新用户修订。见[最终交接](docs/handoff/2026-10-03-chronicle-electrochemical.md)。
+
+## 2026-10-03 首页底栏字号与滑动高亮（已部署3001）
+
+Sol仅修改HomeDock.tsx、hero.css与homepage-photographic.test.tsx。按用户截图及GlideSelect附件，将现有真链接菜单加入220ms滑动暖金pill、175ms向上弹出；pointer/focus使用同一高亮位置，当前项加粗/加深，展开分类有金色标记，减少动态效果时停动画。底栏桌面标题clamp(18px,23u,25px)、小字clamp(12.5px,17u,18px)，窄屏16/12px；菜单18px、摘要14px、行49px。保留六分类、19子路由、开闭逻辑及原玻璃底色，搜索提示删除保留，无新依赖。
+
+单份homepage-photographic定向新增断言旧实现先失败，修改后4项通过；一次前端生产构建、仅前端3001部署成功。实际1280×720标题18px/小字12.5px/菜单18px，活动项weight700、light rgb(8,37,54)，Tab切换pill从translateY(0px)移到49px，过渡0.22s；dark活动文字rgb(255,240,209)、金色半透明pill、分类底色透明。390×844页面无溢出，标题16px/小字12px，菜单x18.8–371.6/y370–676，Dock bottom830；默认尺寸与浅色已恢复。未全量/哈希/重复测试，后端不变。实际截图、三份改前基线与构建日志见docs/homepage-proposal/2026-10-03-dock-glide/。
+
+
+## 2026-10-03 编年史电磁已部署（历史记录）
+
+电磁2已部署3001：18节点（9/9）、8材料/部件、5企业与机构、12章正文约6545汉字。新增7素材（4产品/现场照片、1政策原文、2机制示意）；25入口已22完成，剩铅酸、锌基、金属空气3路线。
+
+新电磁4项red4失败确认未接入；green4通过，20:40:58，2.13s，exit0。唯一Docker frontend production build与仅frontend部署均exit0/healthy。Edge实际3001 HTTP200、两路线匹配素材/材料概念/政策原页加载、论文304Wh/m³与10MJ、双主题、暂停阅读、390px无溢出，pageerror0。首轮runtime全局同名论文按钮造成严格选择器歧义，限定编年史nav后完成检查，未改产品或复测旧批。
+
+见[电磁交接](docs/handoff/2026-10-03-chronicle-electromagnetic.md)。EC3随后已部署，见顶部最终记录。
+
+**首页搜索提示（2026-10-03，已部署3001）**：按用户截图，Sol仅删除Hero搜索框右侧⌘K提示；放大镜、搜索路由及实际Ctrl+K逻辑保留。一次前端生产构建/部署成功，3001实际搜索链接已不含提示，截图与备份在docs/homepage-proposal/2026-10-03-search-hint/。未运行测试。
+
+
+## 2026-10-03 编年史氢批已部署（历史记录）
+
+氢四路线已部署3001：37时间节点（9/10/9/9）、16部件与材料专题、10国内外企业/机构、24章正文约11630汉字；新增14素材（9原始媒体、5机制概念），素材库93条/84可用。25入口已20完成、剩电磁2与电化学3。
+
+新5项行为最终均通过：首次4/5，唯一失败为测试预期“热量”与正确原文“燃料热值”不一致；只改该断言并单项复跑1通过/4跳过。首次red3/3失败确认未接路线。Docker frontend生产构建exit0、仅前端部署exit0/healthy。Edge实际HTTP200，四路线匹配实景/材料概念/政策原页加载、首年阅读返回、共享双主题、暂停阅读及390px无横溢通过，pageerror0。首次runtime图片加载前断言产生竞态，改为等待load后完成；未改产品、未复测旧批或截图。
+
+见 [氢批交接](docs/handoff/2026-10-03-chronicle-hydrogen.md)。电磁随后已完成，见顶部最新记录。
+
+## 2026-10-03 首页六分类与轻粒子（当前已部署3001）
+
+按用户批准：首页底栏改为首页、论文、学习、竞赛、科研、系统，分类点击向上展开原侧栏全部19个子入口，图标/小字对应新主题；真实统计收纳菜单。六张场景代表卡为论文库、论文库问答、学习中心、科研创新竞赛、储能编年史、储能城市应用，避开左侧标语。接入附件React Bits透明OGL粒子：50个稀疏金白小点慢漂浮，无鼠标跟随和物体动效，减少动态效果/后台停止。保留单屏无下滑、原摄影、品牌和玻璃反馈。Sol实施，两文件8项定向通过，生产构建部署成功；实际深色底栏受全局规则覆盖，追加一次必要CSS构建部署后五分类保持透明。1280×720无标语重叠/滚轮位移，390×844六卡及菜单无溢出，粒子Canvas已加载、浏览器错误0。后端/数据不变。[交接与实际效果](docs/handoff/2026-10-03-homepage-categories.md)。
+
+
+
+## 2026-10-03 编年史热储能批（已部署3001）
+
+显热、潜热、热化学三路线已接入31时间节点（11/9/11）、12介质/机制专题、7企业档案、18章正文（约9483汉字，不含展示摘要）。三路均关闭全部新型储能电容量图；按MWh_th/e、MW_th/e与供热温区记录项目，材料保留率、减排率、反应转化和系统效率分别解释。当前25入口中16已完成、9待整理，下一批氢4。
+
+新批8项行为最终均通过：首次7/8，重复章节小标题修正后只重跑失败1项通过；未重复已过7项。一次Docker前端生产构建/仅前端部署成功。实际3001三路工程照、材料概念图及政策PDF原页加载、首年阅读返回、潜热保留率、MGA热电功率、Tempo目标状态、双主题、暂停阅读与390px无横溢通过，pageerror0。新增9素材，现70可用；部分企业缺实景保持空缺，概念图不冒充实测。见[热批交接](docs/handoff/2026-10-03-chronicle-thermal.md)。
+
+## 2026-10-03 编年史机械批（已部署3001）
+
+抽水蓄能、绝热/常规压缩空气、液态空气、飞轮及重力六路线已接入：59时间节点、24介质/部件专题、15企业/机构、36章正文（约10896汉字，不含展示摘要）。当前25入口中13条已研究并部署、12条待整理。抽蓄使用2025年独立65.94GW/新增7.48GW统计，关闭全部新型储能图；其余路线的该图仅作全技术市场背景。
+
+9项机械定向检查通过；一次Docker前端生产构建及仅前端部署成功，3001 HTTP200。实际六路线图片加载、所选年份进入详解/返回、双主题、暂停后阅读和390px无横溢通过，pageerror0。素材新增6工程照片、2概念结构图、5政策原页，现61可用；CAES企业独立照片仍缺，无冒用。未跑全套、未截图、未修改后端/数据库/其他页面。见[机械批交接](docs/handoff/2026-10-03-chronicle-mechanical.md)。
+
+## 2026-10-03 编年史全部待整理路线自动推进（已启用）
+
+用户授权当前批完成后无需逐批确认，自动完成全部待整理路线。原先21条中的全钒/铁铬/锌溴已完成，另新增有机液流，现25入口/16已研究/9待研究。已在本线程建立ACTIVE每小时heartbeat“自动完善储能编年史剩余路线”，无变化保持安静，批次实质完成或真实阻塞才通知，全部完成后停止。
+
+顺序：机械6条（抽水蓄能、绝热压缩空气、常规压缩空气、液态空气、飞轮、重力储能）→热储能3条→氢储能4条→电磁2条→其余电化学3条。机械批次已完成Astra研究规划、Sol整合部署、Luna公司和图片；热储能三条已完成，下一批推进氢储能4条。保持六栏目、主题、原始证据与对应配图，机械材料解释储能介质/部件；抽蓄统计不可套用全部新型储能统计。每批仅必要定向验证及最终前端3001部署，不碰其他功能和后端数据。
+
+**编年史加粗标记（2026-10-03，已部署3001）**：修正固态论文/储能适配展开内容12处冒号内嵌加粗标记，成本单位改美元/kWh、美元/kW，避免误识为数学。仅改chapters.ts；2个回归先失败再通过，一次构建/部署成功，实际两展开区12标签为strong、没有裸露星号、成本单位正常。
+
+**编年史按钮文字（2026-10-03，已部署3001）**：删除‘进入详解’及同一按钮待研究样板文案末尾的小箭头，仅改文字。一次前端生产构建/部署成功，3001 HTTP200实际HTML确认无箭头；未新增或运行测试。
+
+## 2026-10-03 储能编年史：四条液流路线（已部署3001）
+
+- 全钒、铁铬、锌溴、有机液流新增独立完整内容：41年份节点（11/10/9/11）、16材料专题、9企业条目、24章；保留历史/材料/论文/企业/政策市场/储能适配六栏和已接受浅深模式。有机液流单独入口，当前25路线中7条已建设、18条待研究。
+- 新7张官方图片及7张内置image_gen材料示意，manifest48可用素材；政策使用对应2025原文截图，全部新型储能统计不冒充液流市场。市值有日期/主体/币种；CMBlu私人估值、Invinity累计输出、Redflow退市历史各按真实含义展示。铁铬与全铁、有机混合电对与SolidFlow明确分开，论文条件/勘误和来源保留，减少重复指导段落。
+- 一次定向27项通过；两次生产构建（第二次仅纳入市值来源标签修正），一次仅前端部署。3001四路线六栏目、照片加载、详解/返回与参考折叠通过，真实共享主题按钮/正文18px、390px无横溢、pageerror0。初次浏览器脚本label匹配失败已修正，产品无此错误；没有全套/哈希检查，后端数据未动。见[交接与图源](docs/handoff/2026-10-03-chronicle-flow.md)。
+
+
+**首页品牌名称（2026-10-03，已部署3001）**：按用户确认保留三行英文，改为 Energy Storage / Research & Learning / Smart Platform，中文为“储能科研学习智慧平台”，首页品牌链接标签同步。Sol仅修改Hero.tsx一行，保留现有布局。一次前端生产构建与部署成功，3001实际文案与截图确认；未运行测试或全套检查。
+
+
+## 2026-10-03 首页单屏铺满（当前已部署3001）
+
+按用户所附图二：首页仅保留摄影Hero、八入口和底部Dock，100%宽度/100dvh铺满；下方指标、最近论文、提醒、快捷操作和该页页脚移除，首页范围禁止滚动。场景静止，按钮保持主题玻璃底色。Sol实施，两份定向8项通过；生产构建部署成功，窄屏搜索框实际问题修复后追加一次CSS构建部署。3001的1280×720、1920×960、390×844铺满与屏内控件已确认，桌面滚轮下滑两页scrollTop仍为0。后端与数据未动。[本轮交接和实际效果](docs/handoff/2026-10-03-homepage-fullscreen.md)。
+
+
+## 2026-10-03 储能编年史：统一六栏与企业简介（已部署）
+
+- 正式入口仍为 http://127.0.0.1:3001/research/chronicle。展厅与详解统一“历史、材料、论文、企业、政策市场、储能适配”六栏，切换和返回保持所选栏目；材料/企业选择在详解仍可用。详解以对应照片固定背景、68%主题遮罩及94%正文底色展示，避免横图随长文章极端裁切。展示小字14–18px、正文18px；清除章节导读编号、标题下整理说明、旧SEM说明、重复AI标签和正文来源行；保留表格、技术正文、条件，来源收纳底部折叠“参考资料”，示意图仅一个中性标记。
+- 19个企业条目（固态11＋锂钠8组）新增国家、主营、上市关系、规模及日期；适用的市值按主体/币种/快照日期显示，部分行情仅从提供方索引取得历史日期值，不能称即时行情。未上市企业不套用母公司市值，母集团参考单独标识。新增BYD官方编辑用途电池宣传图、Faradion品牌图；33可用素材，Sony图片单次访问403仍缺。
+- 两份相关Vitest最终合计18项通过；本轮一次Docker生产构建和仅前端3001部署，双主题详解背景、六栏一致、来源清理/折叠、表格、企业规模/市值和390px无横溢通过。自动审批曾拒绝组件替换，经提供定向映射证据后通过，未留下审批阻塞。没有全套或哈希检查，后端和用户数据未动。[交接](docs/handoff/2026-10-03-chronicle-revision.md)。
+
+## 2026-10-03 首页静态摄影版（历史布局，已由单屏铺满取代）
+
+用户指出动效生硬，明确撤掉全部场景动效，仅保留按钮反馈。首页恢复原完整浅/深摄影图，纸张/地球仪/风机/灯光全部静止，没有Canvas、贴片、物体热区或视差。追加交互框不变深：卡片悬停/聚焦保持主题玻璃底色，只高亮当前入口和连线；Dock保持透明。双主题、八入口、真实统计、最近论文/科研提醒保留。Sol实施，两份定向9项通过，静态移除及追加CSS修正各一次实际前端构建部署成功；3001双主题、无场景层、卡片底色/单焦点/Dock透明确认。后端不变。此决定取代2.5D与真实3D首页方案。[最终交接与效果](docs/handoff/2026-10-03-homepage-static-final.md)。
+
+
+- **城市演示模式与页首说明（2026-10-03，已部署3001）**：模式按钮退出共享玻璃样式注入，选中深蓝白字、其他模式浅色，浅深主题均区分选中项；删除“从发电侧到用电端……”页首说明句。首次局部CSS被共享ID规则覆盖，修正后已实际确认三模式切换；未运行测试，交互逻辑未改。
+
+## 2026-10-03 储能城市应用：阅读与场景解释优化（已部署3001）
+
+- 放大右侧正文、图解标签、场景按钮及底注；栏目数字统一 Times New Roman。箭头更大更粗、光球更大且加速，保持暂停与减少动态效果支持。
+- 八景分别解释风光消纳、电网调节、园区峰谷电价与需量、社区光伏自用、集中快充、关键负荷连续供电、火储调频、抽蓄势能转换。两个展开项各三条分段要点、重点加粗，并加入针对机制的示意图。医院/数据中心区分UPS短时承接和备用发电支撑，避免将普通BESS描述为天然无缝UPS。
+- Sol执行，定向测试 7 项通过；Docker前端两次构建部署成功，第二次仅修正实际截图发现的UPS小图标与标签相碰。3001实际字号、数字字体、箭头/光球及展开配图已检查。没有修改首页、后端或数据库，未全量测试。
+- [本轮交接](docs/handoff/2026-10-03-storage-city-readability.md)。
+
+## 2026-10-03 储能编年史（正式3001，三条路线）
+
+- 已接入正式主项目「科研 → 储能编年史」：http://127.0.0.1:3001/research/chronicle。保留主项目既有导航、首页及共享主题，扩大此页展示区并减少外围留白。固态电池16年份，锂离子和钠离子各10年份；每条路线均有时光、材料、企业/政策/市场展示和六章详解，原始来源随节点阅读。
+- 31份可用素材：12真实照片、9原文/官方图解、10明确标注的AI材料结构示意。固态采用Toyota全固态原型；政策分别配税务、标准及工信部实际原文截图；企业按自身或明确联合验证对象配图。Sony、BYD、Faradion仍缺可用官方图片，保留资料入口，不以其他企业代替。其余21条路线入口待独立史料建设。
+- Sol实施、Astra规划与来源整理、Luna素材登记；9项定向测试通过，Docker前端生产构建及正式部署成功。实际3001双主题、近全宽展厅、暂停后阅读/返回、独立路线、政策/材料绑定及31图片解码通过；390px无横溢、无pageerror。修正一次实际发现的全局玻璃按钮覆盖，相关实际检查续跑通过。没有全量测试；只更新前端，后端与数据未动。
+- [交接与截图](docs/handoff/2026-10-03-storage-chronicle.md)。后续优先选定液流或机械储能方向，逐路线建设；不将待整理入口误称完成。
+
+## 2026-10-03 首页2.5D摄影动效（历史方案，已由静态最终版取代）
+
+用户最新批准摄影质感与分层动效，取代上一轮真实3D恢复。保留双主题、八入口、Dock真实统计和最近论文/科研提醒，加入风机旋转、纸张抬起、储能流光、城市灯光、太阳能扫光、地球光环与轻微视差；卡片与热点共享悬停/键盘联动。首页不挂载Canvas/GLB，原3D资源保留。Astra规划、Sol实施，10项定向通过，主目录实际新源码生产编译/类型检查与前端部署成功；实际双主题、纸张/储能/键盘联动和窄屏确认。后端与数据库未动，没有自由视角功能，减少动态效果停止持续动画。见[交接及截图](docs/handoff/2026-10-03-homepage-2d-motion.md)。
+
+
+## 2026-10-03 论文库关键词、体裁与名词补齐（已部署）
+
+- 按用户澄清细分研究体裁，不新增研究主题分类。逐篇依据正文修正33篇体裁：综述13、实验研究6、实验与仿真研究10、仿真研究2、方法研究2；全部33篇保存8个针对性中文专业关键词。
+- 使用Codex额度补齐10篇缺失名词解释，每篇20项，原23份保持不变；现在33篇均有持久化清单，打开及刷新读取已保存结果。本轮用户模型API调用0，三类报告和图表解读未改。
+- 论文库标题、预览标题和关键词复用化学式显示规范，Ni(OH)₂、CO₂等正确下标，P2/P3/O2/O3结构相保持普通数字；数据库原始标题保持不变。后续上传本地关键词与体裁识别规则同步改进，不额外调用模型。
+- Sol执行代码与内容加工：前端25项、后端及保存脚本40项定向检查通过；前后端各一次构建并部署至3001/8001。实际论文库显示规范标题、8关键词和细分体裁，已保存名词GET返回20项，后端健康ok。没有全量测试或首页改动。详情见[交接](docs/handoff/2026-10-03-library-metadata.md)。
+
+## 2026-10-03 储能城市应用（已部署至主项目3001）
+
+- 主项目为 Energy-Research-Copilot-DeepSeek-Harness-2026-08-21，入口「科研 → 储能城市应用」：http://127.0.0.1:3001/research/city-applications。此前3033仅为隔离工作树预览，本轮已修正接入实际主项目。
+- 八个城市地点由七条电能流动线路连接，选中线路突出；应急模式演示局部备用供电。右侧新增各场景SVG插画、箭头步骤框、位置/作用/运行图标行及两个独立展开项。医院标签留在图内，页面左右边距收紧，底部场景按钮独立网格排布。
+- Sol执行前端修改；定向Vitest 6/6通过。主项目Docker前端生产构建与部署各一次成功；3001实际页面确认1920宽屏医院标签在图内、七条线路动画，1024窗口无横向溢出且热点均在图内，暂停同时停止地图与图解动画，应急切换/说明展开正常。后端、数据库和首页未改，未全量测试。
+- [本轮交接与实际效果](docs/handoff/2026-10-03-storage-city-applications.md)。后续按用户视觉反馈局部调整。
+
+- **2026-10-03 真实3D与原有模型动效（历史方案，已由2.5D取代）**：用户明确选择恢复真实3D，保留新版入口布局，接受物体质感与摄影参考差异。首页重新加载Scene与六类物体，取消完整摄影底图，模型/卡片悬停及键盘焦点共享动效；原地球仪转动、纸张翻动和设备光效恢复。新品牌、标题、主题开关、八入口、真实统计与下半区保留。2文件9项定向通过，一次生产构建与3001部署成功；实际Canvas1、摄影场景图片0、地球/纸张/设备命中及键盘联动确认，双主题可见，窄屏不横溢。后端未动。此版本取代同日静态摄影方案；没有新增自由拖转或相机操作。[交接](docs/handoff/2026-10-03-homepage-live.md)。
+
+- **2026-10-03 摄影场景首页（历史方案，已被真实3D恢复取代）**：按用户批准稿替换首页3D展示层，浅／深WebP约201／223 KiB，品牌、太阳月亮主题开关、搜索、八入口及Dock仍可交互；下方最近论文和科研提醒保留。论文总数读取API total，实测33篇、2订阅、6未读。定向8项通过，最终Docker生产构建与3001部署成功；实际双主题/刷新、论文库跳转、Ctrl+K、窄屏和下半区已确认。保留旧Scene/GLB及布局类型，但首页不挂载Canvas；后端未动。原首页冻结限制已由本轮批准的升级范围解除。该摄影版已由用户最新选择的真实3D恢复版取代。详情与构建经过见[交接](docs/handoff/2026-10-03-homepage-photographic.md)，[浅色](docs/homepage-proposal/2026-10-02/implemented-light.jpg)／[深色](docs/homepage-proposal/2026-10-02/implemented-dark.jpg)。
+
+- **2026-10-03 库内批量研读与图表详细版（已完成并部署）**：直接使用Codex会话额度，不调用用户配置模型API。11篇缺失的33份三类报告已保存，33篇现有三类报告均非空。全库逐页读图／相关正文，按最新要求重加工已有208条内容并完成剩余图表：正式数据库523条均已保存详细版，含476条原图／表格／续表解读和47条目录引用指引；原目录480条，补43条遗漏原图或续表。真实解读均为五节、分点短段、重点加粗及规范角标，区分子图条件、机制与量化口径。局部正文18px、行高1.85已实际浏览器确认；未来页级分析提示词也同步五节规范，定向2项通过并刷新后端源码镜像部署，3001/8001读取正常。没有未处理条目、没有外部模型调用；未重跑全套或改首页。私有正文、结果、旧内容快照与保存记录仅位于local_state/batch-paper-processing/2026-10-02。详细范围见[交接](docs/handoff/2026-10-03-library-visual-analysis.md)。
+
+这是新对话的短交接。此前 198 行逐轮记录及原始验证链接保存在[状态历史](docs/handoff/2026-09-27-status-history.md)；各轮定向测试与构建证据见 [TEST_REPORT.md](TEST_REPORT.md)。历史快照不代表此刻运行配置。
+
+- **2026-10-02 证据映射与科研表单（已部署）**：映射原来只读旧summary/deep字段并要求外部建索引，错误又只在页顶。现在读取当前三类报告，只准备/复用本篇索引，保留原文页码/坐标；服务失败回滚保留旧映射，进度/错误就地显示。科研数据改为15种算法对应的中文数据表、单位和必要参数；保留算法草稿，人工确认后运行，修改后需重新保存确认，保存JSON仅在折叠区查看。明确当前不自动从图片提取曲线点，EIS为初值估计、XPS为区间峰位。后端12项、前端映射1项与科研31项定向通过；前后端各一次构建部署，保持3001/8001健康ok。实际paper16自动索引后8条映射，原文跳到第4页，刷新仍有8条；新表单默认容量保持率、两数据行、单位、无需额外参数、核对确认操作均显示。实际只调用本地Ollama，不重新生成报告或调用付费文本模型，未向论文写入演示数值。帮助与README已同步。
+
+- **2026-10-02 PDF完整标题与期刊（已部署并回填）**：原上传直接用文件名作标题，期刊规则漏掉Elsevier属性与Springer页眉/页脚。现在优先可靠PDF标题属性，缺失时读取首张多行标题；排除刊头、作者和默认软件属性，保留完整标题。扩展本地期刊识别，缺失且有DOI时可通过已启用Crossref精确补齐，8秒上限、失败不丢上传，不调用文本模型。回填先预览，只修文件名标题/明确截断前缀和缺失期刊，同步标题索引，保留自定义及正式标题。定向38项及最后标题校正1项通过；仅后端一次构建部署，正式33篇中26条更新（20标题、9期刊），失败0。API确认#36完整标题及#18 Redox flow batteries: a review / J Appl Electrochem；只剩#3无可识别期刊或DOI。实际修复完全本地，无真实网络或模型调用；前端保持3001，后端8001健康ok。README含预览/应用命令，详情见TEST_REPORT。
+
+- **2026-10-01 名词解释持久保存（已部署）**：原实现仅React状态，刷新丢失且可能重复调用模型。现新增paper_glossaries表与0029迁移，成功清单连同模型信息写入数据库；打开/刷新只读恢复，普通生成请求复用缓存，显式重新生成才再次调用模型，失败保留旧清单。提供无模型的旧清单恢复接口，不覆盖已有结果；当前可访问页面没有旧清单，未恢复历史输出。概念问答仍为页面会话。后端受控3项、前端5项定向检查通过，OpenAPI与生成类型同步；前后端各一次构建部署保持3001/8001，实际迁移0029 head、代理健康ok及保存读取接口200。没有真实模型调用。帮助与README已同步。
+
+- **2026-09-30 名词解释专业选词与15–20项（已部署）**：修复全大写普通词被误判缩写的问题，候选及最终列表过滤 research/RESEARCH、研究、章节名和简单括号译名。生成改为15–20项，提示至少8项材料/结构/机理/表征/性能专业短语，兼顾技术缩写；必选缩写最多12项，为短语留位，输出预算3200。过滤、补全、去重后不足15项返回重生成提示，不用普通词凑数、不自动追加模型调用。UI删除指定通用知识说明并同步帮助；Mock为18项混合列表。定向回归及部署运行检查通过，前后端各一次构建部署保持3001/8001。实际提示已为15–20，受控运行列表18项含12专业短语且普通词被过滤；没有真实模型调用，需用户手动重新生成术语。
+
+- **2026-09-30 流程图化学角标与术语覆盖（已部署）**：仅流程图标签将明确化学式、显式分数/小数下标及离子电荷转换为 Unicode，保留节点 ID、单位及有歧义的普通 O2；P2/P3/O2/O3 结构相数字保持普通格式。报告提示词同步化学角标规则。点击生成名词解释时读取已保存三类报告，并扫描报告及全文缩写；优先覆盖实际出现的 XRD、HAADF-STEM／STEM-HAADF、mRIXS 及有结构语境的 P2/P3/O2/O3，已知项模型漏选时补齐、别名去重、最多 12 项。遵照用户选择，没有报告生成后的自动名词调用。前端定向 12 项、后端 3 项通过；前后端各一次构建部署保持 3001/8001，实际两图 ready，代理健康 ok，部署模块识别截图五个缩写。无真实模型调用、数据库或 API 结构变化；现有术语清单需手动重新生成。
+
+- **2026-09-30 删除论文解析证据状态行（已部署）**：移除快速理解、通俗理解、审稿人速解共用的“证据状态：……”整行，以及图表解读对应状态行。论文组件目录无该标签；前端一次生产构建并部署到 3001，实际 paper 16 正文正常且无该状态行。仅删除 UI 文案，无新增测试或模型调用。
+
+- **2026-09-30 论文正文隐藏内联标注（已部署）**：论文自动生成正文不再显示 `[AI质疑, 第9页]`、`[作者结论, 第6页]` 等类别/页码标签，兼容半全角方括号和圆括号。适用于三个研读报告、追问/外部比较答案、图表解读和科研报告；普通链接、科学记号、代码、数学及用户笔记保持原样。显示层处理已有报告，无需重生成，存储及独立证据入口未改。Markdown 单文件 9 项测试通过，前端一次生产构建并部署到 3001；实际 paper 16 已有正文同类括号标注为 0，无真实模型调用。
+
+- **2026-09-30 订阅详情排版与中文重点（已部署）**：主题头改为浅深适配卡片、交互标题和按钮返回，检索词独立显示；全部/论文/资讯页签提供数量与刷新。详情直接读取官方资讯，不再只依赖旧订阅记录；本主题资讯、能源与 AI 快讯、相关论文分区，资讯优先且按日期排序。当前页签最新 5 条自动调用已配置模型生成中文标题与 3 条重点，保留可展开原文与来源链接；本地缓存跨重启复用，来源文字变更才重新整理。后端 4 项、前端 2 项定向测试通过，最终资讯排序调整经构建和运行检查；前后端各一次构建部署，保持 3001/8001。实际主题 2 显示 20 条官方资讯及 50 条已加载论文，GLM-4.7 单次批量生成 5 条成功，刷新命中缓存；桌面宽度 1110px 无横向溢出。帮助说明已同步，无数据库迁移或全量测试。
+
+- **2026-09-30 订阅内容独立详情页（已部署）**：订阅卡片和日报提醒/运行记录改为跳转 `/subscriptions/{id}`，本次运行附带 `?run={id}`；列表不再内嵌结果，立即检查只显示反馈。详情宽单栏（桌面上限 1100px）显示完整长标题与摘要、来源/日期、原文和返回入口。复用现有单条订阅及推荐 API，无后端或数据库变化。相关测试 4 项通过，前端单次构建部署成功；真实点击钠离子主题进入详情、完整 1219 字符摘要及返回操作通过，桌面正文 1100px 且无横向溢出。帮助页用法已同步。
+
+- **2026-09-30 界面精简与科研资讯（已部署）**：按用户清单移除冗余说明，指定小字局部放大；已有流程图渲染去页码，新提示词禁止图内页码，正文引用保留。用户选定风机、光伏、储能设施浅深导航壁纸，静态低对比接入。订阅旧页面没有读取已持久的结果，现可立即检查、展开内容和打开原文；日报首屏新增 MIT News 官方能源/AI 资讯，不依赖用户主题，小时缓存并在失败时保留旧内容。MIT 宽泛分类会混入校园新闻，现再次按标题摘要筛选。相关定向测试、TypeScript、前端单次生产构建与后端增量部署通过，保持 3001/8001；真实资讯 20 条且无来源警告，订阅已存论文原文入口、问答/诊断字号和双图无页码均已检查，浅深壁纸切换正常。帮助页用法已更新；无真实模型调用、数据库迁移或全量测试。范围与边界见 TEST_REPORT.md。
+
+- **2026-09-30 GLM 流程图显示修复（已部署）**：paper 16 的真实报告把 `mermaid` 与 `flowchart TD` 分在两行，上一版只兼容同一行格式。前端现支持两种裸输出并将其转为 Mermaid 组件格式，已有报告无需重生成。Mermaid 定向测试 7 项通过，frontend 已部署到 3001，代理健康为 `ok`。
+- **2026-09-29 GLM-4.7 报告格式修复（已部署）**：智谱 GLM-4.7 默认启用思考模式，而本地结构化 JSON 调用未关闭该模式；此前 JSON 解析失败被合并为“模型返回不符合当前报告格式”。现仅对智谱 GLM-4.7 的 JSON 请求发送 `thinking: {type: disabled}`。定向载荷测试 1 项通过；只刷新 backend 源码镜像并重启 8001 服务，`/health` 与数据库健康均为 `ok`，运行设置仍为 `zhipu / glm-4.7`。未发起真实付费模型调用；已有报告不会自动重生成，需在对应论文页手动重新生成。
+- **2026-09-29 名词解释加载动效（已部署）**：术语生成按钮复用研读报告现有 LatticeLoader 与计时。定向论文交互测试 1 项通过；前端生产构建及仅 frontend 部署成功，服务保持 3001，代理健康检查 `ok`。
+
+- **运行已恢复**：Docker/WSL 引擎在 2026-09-27 14:10 UTC 左右重启后，backend 留在停止状态，前端论文库请求返回 500。已直接启动原 backend 容器，并为前后端添加 `unless-stopped` 重启策略；当前 8001 健康接口与 3001 论文库代理均返回 HTTP 200。引擎重启的触发原因尚未确定。
+- **已部署**：论文详情顶部局部字号已按用户要求放大，分析页签支持窄列换行；论文证据精选、失败保稿和“名词解释”也已部署。快速理解、通俗理解与审稿人速解的生成按钮在忙碌时改用现有 LatticeLoader 动画与计时；前端生产构建及仅 frontend 部署成功，当前服务为前端 3001、后端 8001；本轮没有做截图视觉复验。
+- **最新部署**：论文快速理解现可在详情报告中显示独立的核心逻辑图与方法流程图。间距、节点样式与输出预算修正后已成功重建部署；第三次真实快速理解生成成功，双图各 7 个节点、全部连线带标签，DOM 状态均为 ready 且无错误。图尺寸为核心逻辑图 270×952px、方法流程图 503×809px。运行检查仍为 backend health `ok`、前端代理论文列表 200 且 10 篇（收藏 0、已读 1、未读 9）。真实调用共 3 次：第一次成功但图偏高且缺标签，第二次触及输出上限并保留旧报告，第三次为最终成功。此前保存的报告不会自动更新；需要用户在论文页签手动重新生成。[部署与验收记录](docs/handoff/2026-09-27-mermaid-deployment.md)
+
+## 当前产品与部署
+
+- 唯一主项目是 `Energy-Research-Copilot-DeepSeek-Harness-2026-08-21`；兄弟项目 `phase-0-phase-1-api-mock` 只是旧版。Next.js、FastAPI、SQLite、本地文件与 Docker Compose 架构保持不变。`/dashboard` 首页及 `frontend/components/home-hero/`、`frontend/public/home-hero/` 已冻结。
+- 2026-09-27 当前 Harness 前后端运行于前端 3001、后端 8001；端口会自动避让，以根目录 `start.ps1` 当次输出为准。先检查当前容器和实际源码，再决定是否构建，不能把历史端口或历史测试当作现状。
+- 非首页工作区包含论文检索/库/上传/详情、问答与比较、订阅/日报、学习、校园资讯、科研数据/想法/竞赛、设置/引导、诊断/备份和帮助。浅深主题、局部能源背景及标题动效已接入；研究结论仍必须区分全文、摘要、元数据、规则与 AI 推断。
+
+## 已交付且需保持的行为
+
+- 系统设置与首次引导共用 18 类供应商及模型目录，支持自定义模型 ID；密钥仅在后端保存，前端只见配置状态和末四位。[目录交接](docs/handoff/2026-09-27-model-catalog-sources.md)。
+- 校园资讯 AI 每日尝试上限默认 20，可选 100 或设 0 不限；单条最大输出 Token 默认 2400，失败尝试计入上海自然日额度。它们限制校园整理调用，较高额度可能产生费用；未做真实付费模型批量验收。队列优先科研、竞赛、推免、讲座、活动。[预算交接](docs/handoff/2026-09-27-campus-ai-budget.md)。
+- 论文库与科研数据有全部/收藏/已读/未读的独立持久状态；论文封面优先从本地 PDF 前 8 页、最多 40 张嵌入图选择合适裁片，无合适图或无本地 PDF 时回退材料主题插画，插画不是论文原图。[交接](docs/handoff/2026-09-27-glass-collections.md)、[视觉范围](docs/handoff/2026-09-27-readability-energy.md)。
+- 帮助中心现有 37 条说明，已按当时源码修正订阅入口、数据/想法功能、校园和预算等描述；三种使用模式目前只存偏好，不改变入口、权限、模型或提示词。[帮助交接](docs/handoff/2026-09-27-help-content-refresh.md)、[模式说明](docs/handoff/2026-09-27-onboarding-repeat-help.md)。
+- 论文分析在有限上下文内优先保留完整结论、作者贡献和关键定量证据，并标明精选片段与页码；模型超时、格式错误或截断不会覆盖已有有效报告。“名词解释”页签按需生成术语并支持连续概念提问，区分通用知识与论文证据；对话只保存在当前页面会话，刷新后清空。旧分析不会自动重算，需手动重新生成。OCR 流程未改。最新小修让名词解释页签隐藏研究工具，并在帮助页说明三项论文工具的用途与模型调用边界；前端单独构建部署成功，后端未重启。部署后 DOM 检查确认其他研读页签仍显示研究工具，名词解释页签不显示，而术语面板和本篇追问仍在。[交接](docs/handoff/2026-09-27-paper-glossary.md)。
+
+## 验证边界与已知局限
+
+- **2026-09-27 论文解析/理解定向评价**：在 3 篇已有数字文本 PDF 上，已存全文与当次原生 PDF 提取一致；但独立分析证据包只保留原生正文约 21.6%、5.8%、13.0%，可漏掉关键数值与完整结论。#13 已存报告有受原文支持的概括，也有上下文裁切导致的误判。#11 唯一一次真实快速理解调用返回失败占位文案却以 HTTP 200 持久化并记录 completed；#12 未新增调用。尚未评价扫描 OCR、中文论文或云视觉。见[评价交接](docs/handoff/2026-09-27-paper-parsing-evaluation.md)。
+- **2026-09-27 论文证据与名词解释**：实现者报告后端定向检查 31 项（最终兼容调整前）及最终 4 项通过，前端定向 2 项、13 轮追问回归 1 项和 TypeScript 检查通过。复用依赖的后端构建与最终前端构建成功。真实 `/papers/13` 检查确认名词解释可生成术语并回答通用概念，最终修正页签在 3001 显示；本次两次模型调用均由用户操作触发。未做长报告重新生成测试、OCR 验证或截图检查。[交接](docs/handoff/2026-09-27-paper-glossary.md)。
+- 各轮有各自的定向测试、TypeScript、单次 Docker 构建/部署或代表性浏览器证据，详见 [TEST_REPORT.md](TEST_REPORT.md) 和[状态历史](docs/handoff/2026-09-27-status-history.md)；没有可宣称的当前全套测试或所有业务端到端验收。新对话不默认重复全套、构建、截图或首页哈希。
+- 本轮只读运行设置观察为 **DeepSeek / deepseek-flash**，文档视觉为 Mock；设置可随用户操作变化。新对话涉及模型时先只读 GET `/api/v1/settings` 核对供应商和模型，不输出或索取密钥，也不凭旧记录发起付费调用。
+- 重复打开首次配置引导不会删除资料，但第 2 步保存会用页面默认值覆盖全局模型和部分预算，且可能重置文档视觉设置；该覆盖问题尚未修复。金额型单篇/每日/每月预算目前只是设置值，并非自动硬性止损；校园 AI 次数及输出 Token 有独立实际请求限制。
+- 校园公共来源会出现页面级登录、限流或日期无证据；不能绕过认证，旧来源冷却按原定时间到期。公众号仅公开外链索引，群消息和小程序未接入。论文 OCR、云端视觉和模型分析需按入口明确触发；不能把规则摘录当作完整 AI 解读。
+
+## 新对话与清理
+
+- **2026-09-27 清理已完成**：仅清除 18 个精确路径中的再生成缓存和两个 0 B 旧日志，共 1,198 个文件、1,375,831,701 B（约 1.28 GiB）。清理前已核验绝对路径、reparse point 与 Git 跟踪状态，清理后目标路径不存在；[清理清单](docs/handoff/2026-09-27-cleanup-manifest.json)记录具体对象。源码、公共素材、冻结首页、依赖、用户数据与备份、密钥和模型、工作树及历史输出均保留。生产 3001/8001 持续运行，清后只读 HTTP 检查均为 200；未做业务回归。首次本地开发或构建会重建缓存，详见[新对话交接](docs/handoff/2026-09-27-next-session.md)。
+- 新对话先读 `START_HERE.md`、`AGENTS.md`、本文件和 `docs/handoff/README.md`，再按用户下一项新功能读取对应源码。只执行用户新的明确目标，不自动推进旧 `PLAN.md` 路线图；先核对运行版本与接口，再做必要的一组定向验证。
+
+最终补充：目视发现深色悬停规则仍覆盖选中背景，局部保留html[data-theme]优先级并提高CTA元素级，重新增量构建/前端部署后仅验证此新问题。浅/深选中hover分别为rgb(90,129,126)/rgb(164,199,180)，对应文字与主题bg一致；CTA无全局渐变覆盖、前景背景不同，检查exit0。更新三张深色截图以等待主题过渡完成；功能全套未重复。悬停数据见docs/screenshots/chronicle-main/hover-runtime.json。
+
+## GitHub 干净发布准备 · 2026-10-04
+
+公开 `main` 仓库 [Viyao691/energy-storage-research-learning-platform](https://github.com/Viyao691/energy-storage-research-learning-platform) 已成功推送，初次提交按约定使用 `[skip ci]`，本次未运行全量测试。公开版使用独立 Git 目录 `outputs/github-release`；原开发目录及其 `.git` 历史、用户数据完整保留，原开发目录不可直接推送到新仓库。后续 dot 应以 GitHub 公开仓库为协作基础。发布前前后端 Docker 镜像构建 exit 0、独立 TypeScript 检查 0 errors；隔离发布运行在 3018/8019 上的 health、dashboard、论文 API proxy、paper 1 figure thumbnail（image/png，61,989 bytes）及校园 sources 均 HTTP 200。临时运行服务与 `outputs/github-preview` 演示数据已清理，原 3001/8001 未改动。
+
+最终远端确认：公开 GitHub `main` 为提交 `7776424`，官方 API 返回 `Public=true`、`License=MIT`；remote 与独立发布工作树一致，发布工作树 clean，包含 807 个跟踪文件、6 张截图、147 个编年史文件和 8 个校园后端文件。确认对象为 `outputs/github-release`，不是原开发目录的 Git 仓库。
+
+## 储能编年史机械批资料准备 · 2026-10-03
+
+- 用户已授权自动推进全部待整理路线，无需逐批审批。本批抽水蓄能、绝热压缩空气、常规压缩空气、液态空气、飞轮、固体重力六条研究底稿已交付；索引：[机械储能资料](docs/research/chronicle-mechanical-research.md)。
+- 六份均含历史、介质与关键部件、论文、企业工程、政策市场、储能适配六栏；每路9—10个历史节点、4类部件、至少3项原始研究或报告，附原始URL与测试/设计/计划条件。企业财务及素材由独立批次提供。
+- 已执行一次文档结构检查，确认正式路径六份正文均有六栏及来源。本记录仅表示研究准备完成，不表示机械批源码接入、测试、生产构建、Docker部署或运行验收已完成；执行任务仍在接入。
+- 关键口径：抽蓄2025年底65.94 GW独立统计，不属新型储能图；传统CAES含燃料；Carrington仍在建且2026一期稳定模块不等于液空全站；如东2024是充放电单元测试/调试；重力模型TWh潜力及2035开发意向不算投运量。
+
+

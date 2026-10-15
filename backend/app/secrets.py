@@ -27,7 +27,10 @@ def _vision_identity(provider: str) -> str:
 
 
 def _runtime_directory() -> Path:
-    return get_settings().paper_storage_dir.parent
+    settings = get_settings()
+    if settings.web_mode:
+        return Path(settings.paper_storage_path).resolve().parent
+    return settings.paper_storage_dir.parent
 
 
 def secret_store_path() -> Path:

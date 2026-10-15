@@ -9,11 +9,13 @@ import { FullMaterialBackdrop, type FullMaterialKind } from "./FullMaterialBackd
 import { EnergyHeaderBackdrop, type EnergyHeaderKind } from "./EnergyHeaderBackdrop";
 import { SpecularInteractions } from "../react-bits/SpecularInteractions";
 import ThemePillSwitch from "../react-bits/ThemePillSwitch";
+import { useAuth } from "../auth/AuthProvider";
 import "./energy-material-backdrop.css";
 import "./workspace.css";
 import "./page-atmosphere.css";
 import "./navigation-motion.css";
 import "./motion-skin.css";
+import "./mobile-web.css";
 
 const routeTitles: Record<string, string> = {
   "/upload": "上传论文", "/search": "论文搜索", "/library": "论文库",
@@ -57,18 +59,21 @@ function artworkStyle(scene: number, motif: number, glow: string): CSSProperties
 }
 
 function isLegacyRoute(pathname: string) {
-  return pathname === "/" || pathname === "/dashboard";
+  return pathname === "/" || pathname === "/dashboard" || pathname.startsWith("/hero-");
 }
 
 export function WorkspaceShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";
+  const { webMode } = useAuth();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    setTheme(window.localStorage.getItem("energy-copilot-theme") === "dark" ? "dark" : "light");
-  }, [pathname]);
+    const savedTheme = window.localStorage.getItem("energy-copilot-theme") === "dark" ? "dark" : "light";
+    setTheme(savedTheme);
+    if (webMode && pathname === "/login") document.documentElement.dataset.theme = savedTheme;
+  }, [pathname, webMode]);
   useEffect(() => { setMenuOpen(false); }, [pathname]);
   useEffect(() => {
     if (!menuOpen) return;
@@ -83,9 +88,9 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
     return () => { window.clearTimeout(focusTimer); document.removeEventListener("keydown", close); };
   }, [menuOpen]);
 
-  const footer = <footer className="app-footer">© 2026 储能科研学习平台 · Viyao</footer>;
+  const footer = <footer className="app-footer">© 2026 储能科研学习平台 · Viyao{webMode && <> · <a href="https://beian.miit.gov.cn/">陕ICP备2026028175号</a></>}</footer>;
   if (isLegacyRoute(pathname)) {
-    return <div className="app-shell"><Nav /><main className="app-main">{children}{footer}</main></div>;
+    return <div className={"app-shell" + (webMode ? " web-mobile-ready" : "")}><Nav /><main className="app-main">{children}{footer}</main></div>;
   }
 
   const section = "/" + pathname.split("/")[1];
@@ -108,7 +113,16 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
     window.localStorage.setItem("energy-copilot-theme", next);
   };
 
-  return <div className={"app-shell workspace-v2" + (menuOpen ? " workspace-v2-menu-open" : "") + (materialRoute ? " workspace-v2-material" : "") + (section === "/research-data" ? " workspace-v2-research-material" : "") + (fullMaterialKind ? " workspace-v2-full-material" : "") + (artwork ? " workspace-v2-atmospheric" : "") + (section === "/papers" ? " workspace-v2-reader-atmosphere" : "")} style={artwork ? artworkStyle(...artwork) : undefined}>
+  if (webMode && pathname === "/login") return <div className="web-auth-layout">
+    <header className="web-auth-header">
+      <Link className="web-auth-brand" href="/dashboard"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="1" y="1" width="34" height="34" rx="10" fill="currentColor" /><path d="M20 7L11 20H18L16 29L26 15H19L20 7Z" fill="var(--auth-paper)" /></svg><span>能研智助<small>储能科研学习平台</small></span></Link>
+      <div className="web-auth-header-actions"><button type="button" onClick={() => chooseTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "深色模式" : "浅色模式"}</button><Link href="/dashboard">返回首页 <span aria-hidden="true">↗</span></Link></div>
+    </header>
+    <main className="web-auth-main" id="workspace-action-surface">{children}</main>
+    {footer}
+  </div>;
+
+  return <div className={"app-shell workspace-v2" + (webMode ? " web-mobile-ready" : "") + (menuOpen ? " workspace-v2-menu-open" : "") + (materialRoute ? " workspace-v2-material" : "") + (section === "/research-data" ? " workspace-v2-research-material" : "") + (fullMaterialKind ? " workspace-v2-full-material" : "") + (artwork ? " workspace-v2-atmospheric" : "") + (section === "/papers" ? " workspace-v2-reader-atmosphere" : "")} style={artwork ? artworkStyle(...artwork) : undefined}>
     <Nav workspace />
     <div className="workspace-v2-column">
       <div className="workspace-v2-topbar">

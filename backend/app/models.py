@@ -7,12 +7,14 @@ from sqlalchemy import Boolean, CheckConstraint, Date, DateTime, Float, ForeignK
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.ownership import OwnedRow
 from app.paper_identity import normalize_title
 import app.campus_models  # noqa: F401  # register independent campus tables with Base
 
 
-class Paper(Base):
+class Paper(OwnedRow, Base):
     __tablename__ = "papers"
+    __table_args__ = tuple(UniqueConstraint("user_id", field, name=f"uq_papers_owner_{field}") for field in ("file_hash", "doi", "arxiv_id"))
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     original_filename: Mapped[str | None] = mapped_column(String(255), nullable=True)
     title: Mapped[str] = mapped_column(String(500))
@@ -20,7 +22,6 @@ class Paper(Base):
     file_hash: Mapped[str | None] = mapped_column(
         String(64),
         nullable=True,
-        unique=True,
         index=True,
     )
     file_size: Mapped[int] = mapped_column(Integer)
@@ -33,13 +34,11 @@ class Paper(Base):
     doi: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
-        unique=True,
         index=True,
     )
     arxiv_id: Mapped[str | None] = mapped_column(
         String(100),
         nullable=True,
-        unique=True,
         index=True,
     )
     normalized_title: Mapped[str] = mapped_column(
@@ -95,10 +94,11 @@ def _derive_normalized_title(_mapper, _connection, paper: Paper) -> None:
         paper.normalized_title = normalize_title(paper.title)
 
 
-class PaperSourceRecord(Base):
+class PaperSourceRecord(OwnedRow, Base):
     __tablename__ = "paper_source_records"
     __table_args__ = (
         UniqueConstraint(
+            "user_id",
             "source",
             "external_id",
             name="uq_paper_source_records_source_external_id",
@@ -130,7 +130,7 @@ class PaperSourceRecord(Base):
     paper: Mapped[Paper] = relationship(back_populates="source_records")
 
 
-class PaperVisual(Base):
+class PaperVisual(OwnedRow, Base):
     __tablename__ = "paper_visuals"
     __table_args__ = (
         UniqueConstraint(
@@ -172,7 +172,7 @@ class PaperVisual(Base):
     )
 
 
-class PaperChunk(Base):
+class PaperChunk(OwnedRow, Base):
     __tablename__ = "paper_chunks"
     __table_args__ = (
         UniqueConstraint(
@@ -216,7 +216,7 @@ class PaperChunk(Base):
     )
 
 
-class PaperClaim(Base):
+class PaperClaim(OwnedRow, Base):
     __tablename__ = "paper_claims"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -242,7 +242,7 @@ class PaperClaim(Base):
     )
 
 
-class ClaimEvidence(Base):
+class ClaimEvidence(OwnedRow, Base):
     __tablename__ = "claim_evidence"
     __table_args__ = (
         UniqueConstraint(
@@ -277,7 +277,7 @@ class ClaimEvidence(Base):
     chunk: Mapped[PaperChunk] = relationship(back_populates="claim_links")
 
 
-class KnowledgeConversation(Base):
+class KnowledgeConversation(OwnedRow, Base):
     __tablename__ = "knowledge_conversations"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -302,7 +302,7 @@ class KnowledgeConversation(Base):
     )
 
 
-class KnowledgeConversationTurn(Base):
+class KnowledgeConversationTurn(OwnedRow, Base):
     __tablename__ = "knowledge_conversation_turns"
     __table_args__ = (
         UniqueConstraint(
@@ -330,7 +330,7 @@ class KnowledgeConversationTurn(Base):
     conversation: Mapped[KnowledgeConversation] = relationship(back_populates="turns")
 
 
-class SavedComparison(Base):
+class SavedComparison(OwnedRow, Base):
     __tablename__ = "saved_comparisons"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -349,7 +349,7 @@ class SavedComparison(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class PaperVisualCrop(Base):
+class PaperVisualCrop(OwnedRow, Base):
     __tablename__ = "paper_visual_crops"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -381,7 +381,7 @@ class PaperVisualCrop(Base):
     visual: Mapped[PaperVisual] = relationship(back_populates="crops")
 
 
-class Analysis(Base):
+class Analysis(OwnedRow, Base):
     __tablename__ = "analyses"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     paper_id: Mapped[int] = mapped_column(Integer, unique=True, index=True)
@@ -409,7 +409,7 @@ class Analysis(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class PaperParseRun(Base):
+class PaperParseRun(OwnedRow, Base):
     __tablename__ = "paper_parse_runs"
     __table_args__ = (
         CheckConstraint("status IN ('queued','running','completed','failed','cancelled')", name="ck_paper_parse_runs_status"),
@@ -439,7 +439,7 @@ class PaperParseRun(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class PaperPageExtraction(Base):
+class PaperPageExtraction(OwnedRow, Base):
     __tablename__ = "paper_page_extractions"
     __table_args__ = (
         UniqueConstraint("parse_run_id", "page_number", name="uq_page_extractions_run_page"),
@@ -464,7 +464,7 @@ class PaperPageExtraction(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ScientificDataset(Base):
+class ScientificDataset(OwnedRow, Base):
     __tablename__ = "scientific_datasets"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -492,7 +492,7 @@ class ScientificDataset(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ScientificAnalysisRun(Base):
+class ScientificAnalysisRun(OwnedRow, Base):
     __tablename__ = "scientific_analysis_runs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -511,7 +511,7 @@ class ScientificAnalysisRun(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
-class Note(Base):
+class Note(OwnedRow, Base):
     __tablename__ = "notes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     paper_id: Mapped[int] = mapped_column(Integer, unique=True, index=True)
@@ -519,7 +519,7 @@ class Note(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class UserSetting(Base):
+class UserSetting(OwnedRow, Base):
     __tablename__ = "user_settings"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     model_provider: Mapped[str] = mapped_column(String(80), default="mock")
@@ -544,7 +544,7 @@ class UserSetting(Base):
     document_vision_timeout_seconds: Mapped[int] = mapped_column(Integer, default=90)
 
 
-class TaskRun(Base):
+class TaskRun(OwnedRow, Base):
     __tablename__ = "task_runs"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     task_name: Mapped[str] = mapped_column(String(100))
@@ -564,7 +564,7 @@ class TaskRun(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ContestProject(Base):
+class ContestProject(OwnedRow, Base):
     __tablename__ = "contest_projects"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -583,7 +583,7 @@ class ContestProject(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ContestSource(Base):
+class ContestSource(OwnedRow, Base):
     __tablename__ = "contest_sources"
     __table_args__ = (UniqueConstraint("project_id", "sha256", name="uq_contest_sources_project_hash"),)
 
@@ -599,7 +599,7 @@ class ContestSource(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestRule(Base):
+class ContestRule(OwnedRow, Base):
     __tablename__ = "contest_rules"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("contest_projects.id", ondelete="CASCADE"), index=True)
@@ -611,7 +611,7 @@ class ContestRule(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestRubricItem(Base):
+class ContestRubricItem(OwnedRow, Base):
     __tablename__ = "contest_rubric_items"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("contest_projects.id", ondelete="CASCADE"), index=True)
@@ -623,7 +623,7 @@ class ContestRubricItem(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestMilestone(Base):
+class ContestMilestone(OwnedRow, Base):
     __tablename__ = "contest_milestones"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("contest_projects.id", ondelete="CASCADE"), index=True)
@@ -634,7 +634,7 @@ class ContestMilestone(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestRubricCheck(Base):
+class ContestRubricCheck(OwnedRow, Base):
     __tablename__ = "contest_rubric_checks"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("contest_projects.id", ondelete="CASCADE"), index=True)
@@ -645,7 +645,7 @@ class ContestRubricCheck(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestDefenseSession(Base):
+class ContestDefenseSession(OwnedRow, Base):
     __tablename__ = "contest_defense_sessions"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("contest_projects.id", ondelete="CASCADE"), index=True)
@@ -653,7 +653,7 @@ class ContestDefenseSession(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ContestDefenseTurn(Base):
+class ContestDefenseTurn(OwnedRow, Base):
     __tablename__ = "contest_defense_turns"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     session_id: Mapped[int] = mapped_column(ForeignKey("contest_defense_sessions.id", ondelete="CASCADE"), index=True)
@@ -665,12 +665,13 @@ class ContestDefenseTurn(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ScientificImport(Base):
+class ScientificImport(OwnedRow, Base):
     __tablename__ = "scientific_imports"
+    __table_args__ = (UniqueConstraint("user_id", "sha256", name="uq_scientific_imports_owner_hash"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     original_filename: Mapped[str] = mapped_column(String(500))
     file_path: Mapped[str] = mapped_column(String(1000))
-    sha256: Mapped[str] = mapped_column(String(64), unique=True)
+    sha256: Mapped[str] = mapped_column(String(64))
     file_format: Mapped[str] = mapped_column(String(20))
     available_sheets_json: Mapped[str] = mapped_column(Text, default="[]")
     selected_sheet: Mapped[str | None] = mapped_column(String(300), nullable=True)
@@ -683,7 +684,7 @@ class ScientificImport(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class ResearchIdea(Base):
+class ResearchIdea(OwnedRow, Base):
     __tablename__ = "research_ideas"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(500))
@@ -702,7 +703,7 @@ class ResearchIdea(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ExperimentDesign(Base):
+class ExperimentDesign(OwnedRow, Base):
     __tablename__ = "experiment_designs"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     idea_id: Mapped[int | None] = mapped_column(ForeignKey("research_ideas.id", ondelete="SET NULL"), nullable=True)
@@ -723,7 +724,7 @@ class ExperimentDesign(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class ResearchExport(Base):
+class ResearchExport(OwnedRow, Base):
     __tablename__ = "research_exports"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(500))
@@ -737,7 +738,7 @@ class ResearchExport(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
-class LearningPack(Base):
+class LearningPack(OwnedRow, Base):
     __tablename__ = "learning_packs"
     __table_args__ = (
         CheckConstraint(
@@ -780,7 +781,7 @@ class LearningPack(Base):
     )
 
 
-class LearningPackSource(Base):
+class LearningPackSource(OwnedRow, Base):
     __tablename__ = "learning_pack_sources"
     __table_args__ = (UniqueConstraint("pack_id", "paper_id", name="uq_learning_pack_sources_pack_paper"),)
 
@@ -797,7 +798,7 @@ class LearningPackSource(Base):
     paper: Mapped[Paper | None] = relationship()
 
 
-class LearningCard(Base):
+class LearningCard(OwnedRow, Base):
     __tablename__ = "learning_cards"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -823,7 +824,7 @@ class LearningCard(Base):
     )
 
 
-class LearningQuestion(Base):
+class LearningQuestion(OwnedRow, Base):
     __tablename__ = "learning_questions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -843,7 +844,7 @@ class LearningQuestion(Base):
     attempts: Mapped[list["LearningAttempt"]] = relationship(back_populates="question", cascade="all, delete-orphan")
 
 
-class LearningAttempt(Base):
+class LearningAttempt(OwnedRow, Base):
     __tablename__ = "learning_attempts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -861,7 +862,7 @@ class LearningAttempt(Base):
     question: Mapped[LearningQuestion] = relationship(back_populates="attempts")
 
 
-class LearningWeakness(Base):
+class LearningWeakness(OwnedRow, Base):
     __tablename__ = "learning_weaknesses"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -880,7 +881,7 @@ class LearningWeakness(Base):
     card: Mapped[LearningCard | None] = relationship()
 
 
-class LearningPlan(Base):
+class LearningPlan(OwnedRow, Base):
     __tablename__ = "learning_plans"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -894,7 +895,7 @@ class LearningPlan(Base):
     tasks: Mapped[list["LearningPlanTask"]] = relationship(back_populates="plan", cascade="all, delete-orphan", order_by="LearningPlanTask.position")
 
 
-class LearningPlanTask(Base):
+class LearningPlanTask(OwnedRow, Base):
     __tablename__ = "learning_plan_tasks"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -910,7 +911,7 @@ class LearningPlanTask(Base):
     plan: Mapped[LearningPlan] = relationship(back_populates="tasks")
 
 
-class LearningReviewState(Base):
+class LearningReviewState(OwnedRow, Base):
     __tablename__ = "learning_review_states"
     __table_args__ = (
         CheckConstraint(
@@ -943,7 +944,7 @@ class LearningReviewState(Base):
     card: Mapped[LearningCard] = relationship(back_populates="review_state")
 
 
-class LearningReviewEvent(Base):
+class LearningReviewEvent(OwnedRow, Base):
     __tablename__ = "learning_review_events"
     __table_args__ = (
         CheckConstraint(
@@ -969,7 +970,7 @@ class LearningReviewEvent(Base):
     card: Mapped[LearningCard] = relationship(back_populates="review_events")
 
 
-class ResearchSubscription(Base):
+class ResearchSubscription(OwnedRow, Base):
     __tablename__ = "research_subscriptions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -1005,7 +1006,7 @@ class ResearchSubscription(Base):
     )
 
 
-class ResearchRun(Base):
+class ResearchRun(OwnedRow, Base):
     __tablename__ = "research_runs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -1030,7 +1031,7 @@ class ResearchRun(Base):
     )
 
 
-class ResearchRecommendation(Base):
+class ResearchRecommendation(OwnedRow, Base):
     __tablename__ = "research_recommendations"
     __table_args__ = (
         UniqueConstraint(
@@ -1063,7 +1064,7 @@ class ResearchRecommendation(Base):
     run: Mapped[ResearchRun | None] = relationship(back_populates="recommendations")
 
 
-class ResearchNotification(Base):
+class ResearchNotification(OwnedRow, Base):
     __tablename__ = "research_notifications"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -1087,7 +1088,7 @@ class ResearchNotification(Base):
     run: Mapped[ResearchRun | None] = relationship(back_populates="notifications")
 
 
-class PaperGlossary(Base):
+class PaperGlossary(OwnedRow, Base):
     __tablename__ = "paper_glossaries"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     paper_id: Mapped[int] = mapped_column(ForeignKey("papers.id", ondelete="CASCADE"), unique=True)

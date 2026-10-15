@@ -1,0 +1,33 @@
+# Build with the repository root as context.
+FROM node:24-alpine AS dependencies
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+ARG NPM_REGISTRY=https://registry.npmjs.org
+RUN npm ci --no-audit --no-fund --registry "$NPM_REGISTRY"
+
+FROM node:24-alpine AS builder
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY frontend/ ./
+COPY scripts/web/ ./scripts/web/
+ENV ENERGY_WEB_MODE=true
+ENV PORTABLE_BUILD=1
+ENV BACKEND_API_URL=http://backend:8000
+RUN node scripts/web/optimize-public.mjs /app/public /app/public-web /app/public-optimization-summary.json \
+    && rm -rf /app/public && mv /app/public-web /app/public
+RUN npm run build
+
+FROM node:24-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV ENERGY_WEB_MODE=true
+ENV BACKEND_API_URL=http://backend:8000
+ENV PORT=3000
+ENV NODE_OPTIONS=--max-old-space-size=160
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/public-optimization-summary.json ./public-optimization-summary.json
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]

@@ -8,6 +8,8 @@ import { PdfWorkspace } from "../components/papers/PdfWorkspace";
 import PaperDetail from "../app/papers/[id]/page";
 
 const detailMock = vi.hoisted(() => ({ current: {} as Record<string, unknown> }));
+const auth = vi.hoisted(() => ({ webMode: false }));
+vi.mock("../components/auth/AuthProvider", () => ({ useAuth: () => auth }));
 
 const apiMocks = vi.hoisted(() => ({
   paperFileUrl: vi.fn((_id: string, _variant: string) => "/papers/7/file"),
@@ -22,6 +24,8 @@ vi.mock("../components/papers/PaperFollowUp", () => ({ PaperFollowUp: () => <sec
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.unstubAllGlobals();
+  auth.webMode = false;
 });
 
 function Reader({ pageCount, initialPage = 1 }: { pageCount: number; initialPage?: number }) {
@@ -57,6 +61,17 @@ function Reader({ pageCount, initialPage = 1 }: { pageCount: number; initialPage
 }
 
 describe("refined PDF reader", () => {
+  it("uses page images on web phones and keeps original PDF access and paging", () => {
+    auth.webMode = true;
+    vi.stubGlobal("matchMedia", () => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+    render(<Reader pageCount={3} />);
+    expect(screen.queryByTitle("PDF 阅读器")).toBeNull();
+    expect(screen.getByRole("link", { name: "打开原始 PDF ↗" }).getAttribute("href")).toBe("/papers/7/file");
+    expect(screen.getByAltText("第 1 页预览")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "下一页" }));
+    expect(screen.getByAltText("第 2 页预览")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "跳转到第 2 页" }).getAttribute("aria-current")).toBe("page");
+  });
   it("shows at most five real nearby page images and changes the selected PDF page", () => {
     render(<Reader pageCount={12} initialPage={6} />);
     const originalReader = screen.getByTitle("PDF 阅读器");

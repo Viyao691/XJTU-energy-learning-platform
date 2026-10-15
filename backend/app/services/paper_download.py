@@ -21,6 +21,8 @@ from urllib.parse import SplitResult, urljoin, urlsplit, urlunsplit
 import fitz
 import httpcore
 import httpx
+from app.config import get_settings
+from app.web_limits import WEB_MAX_EXTRACTED_CHARS, assert_owned_storage_capacity, async_native_parse_slot
 
 from app.services.paper_orphans import (
     OrphanLifecycleError,
@@ -781,6 +783,13 @@ def _terminate_process(process: multiprocessing.Process) -> None:
 async def _extract_pdf_in_process(
     path: Path,
 ) -> tuple[str, int, float, str | None, str]:
+    async with async_native_parse_slot():
+        return await _extract_pdf_in_process_slot(path)
+
+
+async def _extract_pdf_in_process_slot(
+    path: Path,
+) -> tuple[str, int, float, str | None, str]:
     context = multiprocessing.get_context("spawn")
     receiver, sender = context.Pipe(duplex=False)
     process = context.Process(
@@ -788,8 +797,8 @@ async def _extract_pdf_in_process(
         args=(
             str(path),
             sender,
-            _MAX_PDF_PAGES,
-            _MAX_EXTRACTED_CHARS,
+            min(_MAX_PDF_PAGES, get_settings().web_max_pdf_pages) if get_settings().web_mode else _MAX_PDF_PAGES,
+            min(_MAX_EXTRACTED_CHARS, WEB_MAX_EXTRACTED_CHARS) if get_settings().web_mode else _MAX_EXTRACTED_CHARS,
         ),
         daemon=True,
     )
@@ -1201,6 +1210,7 @@ async def _download_pdf_with_client(
             fulltext_status,
         ) = await _extract_pdf_in_process(temporary_path)
         final_path = destination / f"{digest}.pdf"
+        assert_owned_storage_capacity(0 if final_path.is_file() else file_size, ignore_path=temporary_path)
         lease_id: str | None = None
         try:
             lease_id = acquire_download_lease(destination, digest)

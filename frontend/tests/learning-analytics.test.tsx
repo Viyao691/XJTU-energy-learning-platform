@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { LearningAnalyticsPanel } from "../components/LearningAnalyticsPanel";
 import type { LearningAnalytics } from "../lib/api";
 
+const auth = vi.hoisted(() => ({ webMode: false }));
+vi.mock("../components/auth/AuthProvider", () => ({ useAuth: () => auth }));
+
 const fixture: LearningAnalytics = {
   days: 7, from_date: "2026-09-18", to_date: "2026-09-24", history_start_date: "2026-09-18",
   daily: [{ date: "2026-09-18", reviews: 0, attempts: 0, completed_tasks: 0 }, { date: "2026-09-24", reviews: 4, attempts: 2, completed_tasks: 1 }],
@@ -15,7 +18,20 @@ const fixture: LearningAnalytics = {
 };
 
 describe("LearningAnalyticsPanel", () => {
-  afterEach(cleanup);
+  afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); auth.webMode = false; });
+
+  it("fits all activity series and both endpoint dates inside a phone chart", () => {
+    auth.webMode = true;
+    vi.stubGlobal("matchMedia", () => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+    vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ width: 280, height: 240, x: 0, y: 0, top: 0, left: 0, right: 280, bottom: 240, toJSON: () => ({}) });
+    const { container } = render(<LearningAnalyticsPanel data={fixture} days={7} onDays={vi.fn()} />);
+    const chart = container.querySelector<SVGSVGElement>(".la-activity-svg")!;
+    expect(Number(chart.getAttribute("viewBox")?.split(" ")[2])).toBeLessThanOrEqual(280);
+    expect(chart.querySelectorAll("rect")).toHaveLength(3);
+    expect(chart.textContent).toContain("09-18");
+    expect(chart.textContent).toContain("09-24");
+  });
 
   it("keeps actual zero activity at zero height and shows missing accuracy as a dash", () => {
     const zero = { ...fixture, daily: [{ date: "2026-09-24", reviews: 0, attempts: 0, completed_tasks: 0 }] };

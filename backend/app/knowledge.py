@@ -11,6 +11,7 @@ import json
 import math
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Protocol
 
 import httpx
@@ -387,6 +388,78 @@ class OllamaEmbeddingProvider:
             return False, "无法连接 Ollama 嵌入服务，请确认 Ollama 已启动"
 
 
+@lru_cache(maxsize=1)
+def _remote_embedding_client() -> httpx.Client:
+    return httpx.Client(trust_env=False, limits=httpx.Limits(max_connections=2, max_keepalive_connections=2))
+
+
+class UnavailableEmbeddingProvider:
+    name = "unavailable"
+    model_name = "unavailable"
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        raise EmbeddingProviderError("尚未配置远端嵌入服务，请联系管理员")
+
+    def test_connection(self) -> tuple[bool, str]:
+        return False, "尚未配置远端嵌入服务，请联系管理员"
+
+
+class OpenAICompatibleEmbeddingProvider:
+    name = "openai_compatible"
+
+    def __init__(self, base_url: str, model_name: str, timeout_seconds: int, api_key: str) -> None:
+        self.base_url = base_url.strip().rstrip("/")
+        self.remote_model = model_name.strip()
+        self.model_name = f"{self.name}:{self.remote_model}"
+        self.timeout_seconds = timeout_seconds
+        self._api_key = api_key
+        self.client = _remote_embedding_client()
+        self.dimensions: int | None = None
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        if not texts:
+            return []
+        try:
+            response = self.client.post(
+                f"{self.base_url}/embeddings",
+                headers={"Authorization": f"Bearer {self._api_key}"},
+                json={"model": self.remote_model, "input": texts, "encoding_format": "float"},
+                timeout=self.timeout_seconds,
+            )
+            response.raise_for_status()
+            data = response.json()["data"]
+            if not isinstance(data, list) or len(data) != len(texts):
+                raise ValueError("embedding count mismatch")
+            vectors: dict[int, list[float]] = {}
+            dimensions = self.dimensions
+            for item in data:
+                index, vector = item["index"], item["embedding"]
+                if type(index) is not int or index not in range(len(texts)) or index in vectors:
+                    raise ValueError("embedding index mismatch")
+                if not isinstance(vector, list) or not vector or any(type(value) not in (int, float) for value in vector):
+                    raise ValueError("invalid embedding values")
+                numeric = [float(value) for value in vector]
+                dimensions = dimensions or len(numeric)
+                if len(numeric) != dimensions or not all(math.isfinite(value) for value in numeric):
+                    raise ValueError("embedding dimension or value mismatch")
+                vectors[index] = _normalize_vector(numeric)
+            self.dimensions = dimensions
+            return [vectors[index] for index in range(len(texts))]
+        except httpx.TimeoutException as exc:
+            raise EmbeddingProviderError("远端嵌入服务响应超时，请稍后重试") from exc
+        except httpx.HTTPError as exc:
+            raise EmbeddingProviderError("远端嵌入服务不可用，请联系管理员") from exc
+        except (ValueError, TypeError, KeyError, OverflowError, EmbeddingProviderError) as exc:
+            raise EmbeddingProviderError("远端嵌入模型返回格式无效") from exc
+
+    def test_connection(self) -> tuple[bool, str]:
+        try:
+            self.embed(["connection test"])
+            return True, f"远端嵌入模型 {self.remote_model} 已就绪"
+        except EmbeddingProviderError as exc:
+            return False, str(exc)
+
+
 def cosine_similarity(left: list[float], right: list[float]) -> float:
     if len(left) != len(right) or not left:
         return -1.0
@@ -398,7 +471,27 @@ def make_embedding_provider(
     base_url: str,
     model_name: str,
     timeout_seconds: int,
+    *,
+    api_key: str | None = None,
+    web_mode: bool | None = None,
 ) -> EmbeddingProvider:
+    if api_key is None or web_mode is None:
+        from app.config import get_settings
+
+        settings = get_settings()
+        api_key = settings.embedding_api_key.get_secret_value() if api_key is None else api_key
+        web_mode = settings.web_mode if web_mode is None else web_mode
+    if web_mode and (provider != "openai_compatible" or not api_key.strip() or not model_name.strip()):
+        return UnavailableEmbeddingProvider()
+    if provider == "openai_compatible":
+        if not api_key.strip():
+            return UnavailableEmbeddingProvider()
+        remote = OpenAICompatibleEmbeddingProvider(base_url, model_name, timeout_seconds, api_key)
+        if web_mode:
+            from app.web_model import wrap_web_embedding_provider
+
+            return wrap_web_embedding_provider(remote)
+        return remote
     if provider == "mock":
         return MockEmbeddingProvider()
     if provider == "ollama":

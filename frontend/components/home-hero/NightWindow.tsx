@@ -1,0 +1,4 @@
+// Defocused lights beyond the existing right window, behind the live 3D canvas.
+export function NightWindow(){
+ return <svg className="hi-night-window" viewBox="0 0 1920 1080" aria-hidden="true"><defs><filter id="night-bokeh"><feGaussianBlur stdDeviation="2.1"/></filter><linearGradient id="night-fade" x2="0" y2="1"><stop stopColor="white"/><stop offset="1" stopColor="black"/></linearGradient><mask id="night-mask"><rect x="1530" y="0" width="390" height="430" fill="url(#night-fade)"/></mask></defs><g mask="url(#night-mask)" filter="url(#night-bokeh)">{[1618,1680,1765,1838,1908].flatMap((x,b)=>Array.from({length:18},(_,i)=>{const occupied=(i*17+b*7)%11>4;if(!occupied)return null;return <rect key={b+'-'+i} x={x+(i%3)*13} y={54+b*21+Math.floor(i/3)*36} width={4+b%2} height="9" rx="1" fill={(i+b)%4?'#e9c692':'#a4d6ed'} opacity={.2+((i*3+b)%5)*.10}/>;}))}</g></svg>;
+}

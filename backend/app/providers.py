@@ -790,6 +790,13 @@ class OpenAICompatibleProvider:
         strict_max_tokens: bool = False,
         timeout: int | None = None,
     ) -> str:
+        if self.name == "deepseek" and getattr(self, "web_no_retry", False):
+            if len(prompt.encode("utf-8")) > 128000:
+                raise ModelProviderError("Web DeepSeek 输入超过128000字节，请缩小选定材料范围后重试")
+            if max_tokens is None:
+                max_tokens = 64000
+            elif max_tokens > 64000:
+                raise ModelProviderError("Web DeepSeek 单次输出预算不能超过64000 tokens，请拆分任务后重试")
         payload: dict[str, object] = {
             "model": self.model_name,
             "messages": [{"role": "user", "content": prompt}],
@@ -1005,7 +1012,7 @@ class OpenAIChatVisionProvider(OpenAICompatibleProvider):
         image_data = base64.b64encode(png_bytes).decode("ascii")
         try:
             content = ""
-            for attempt in range(2):
+            for attempt in range(1 if getattr(self, "web_no_retry", False) else 2):
                 prompt = _visual_analysis_prompt(
                     title,
                     caption,
@@ -1234,7 +1241,7 @@ class AnthropicProvider(OpenAICompatibleProvider):
     def analyze_visual(self, title: str, caption: str, page_text: str, png_bytes: bytes) -> VisualModelResult:
         try:
             content = ""
-            for attempt in range(2):
+            for attempt in range(1 if getattr(self, "web_no_retry", False) else 2):
                 content = self._image_content(
                     _visual_analysis_prompt(title, caption, page_text, retry_in_chinese=attempt == 1),
                     png_bytes,
@@ -1310,7 +1317,7 @@ class OpenAIProvider(OpenAICompatibleProvider):
         image_data = base64.b64encode(png_bytes).decode("ascii")
         try:
             content = ""
-            for attempt in range(2):
+            for attempt in range(1 if getattr(self, "web_no_retry", False) else 2):
                 prompt = _visual_analysis_prompt(
                     title,
                     caption,
@@ -1765,7 +1772,7 @@ class OllamaProvider:
             raise ModelProviderError(f"Ollama {task_type} 返回不符合结构化 schema") from exc
 
 
-def make_provider(
+def _make_provider(
     provider: str,
     api_key: str,
     base_url: str,
@@ -1773,6 +1780,9 @@ def make_provider(
     timeout_seconds: int,
     vision_model: str = "",
 ) -> ModelProvider:
+    from app.config import get_settings
+    if get_settings().web_mode and provider in {"mock", "ollama"}:
+        return UnconfiguredProvider()
     if provider == "mock":
         return MockModelProvider()
     if provider == "ollama":
@@ -1795,5 +1805,23 @@ def make_provider(
     if provider == "anthropic" and api_key:
         return AnthropicProvider(api_key, base_url, model_name, timeout_seconds)
     return UnconfiguredProvider()
+
+
+def make_provider(
+    provider: str,
+    api_key: str,
+    base_url: str,
+    model_name: str,
+    timeout_seconds: int,
+    vision_model: str = "",
+) -> ModelProvider:
+    result = _make_provider(provider, api_key, base_url, model_name, timeout_seconds, vision_model)
+    from app.config import get_settings
+
+    if not get_settings().web_mode or result.name == "unconfigured":
+        return result
+    from app.web_model import wrap_web_provider
+
+    return wrap_web_provider(result)
 
 

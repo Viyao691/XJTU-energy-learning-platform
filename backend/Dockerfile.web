@@ -1,0 +1,29 @@
+# Build on CI/a development machine; the final container has no compiler or models.
+ARG PYTHON_BASE_IMAGE=python:3.12.15-slim-bookworm
+FROM ${PYTHON_BASE_IMAGE} AS sqlite-builder
+WORKDIR /build
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev && rm -rf /var/lib/apt/lists/*
+# https://www.sqlite.org/download.html; SHA3-256 published by SQLite.
+RUN python -c "import hashlib,urllib.request; data=urllib.request.urlopen('https://www.sqlite.org/2026/sqlite-autoconf-3540000.tar.gz',timeout=60).read(); assert hashlib.sha3_256(data).hexdigest()=='f5e3e724e9c9b3b5d512c76b02082091a59eeea9becd169a9fbf4d376403acce'; open('sqlite.tar.gz','wb').write(data)" \
+    && tar -xzf sqlite.tar.gz --strip-components=1 \
+    && gcc -O2 -fPIC -shared -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_FTS5 -DSQLITE_ENABLE_COLUMN_METADATA \
+       -Wl,-soname,libsqlite3.so.0 sqlite3.c -o libsqlite3.so.0 -lm -ldl -pthread
+
+FROM ${PYTHON_BASE_IMAGE}
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app \
+    ENERGY_WEB_MODE=true DATABASE_URL=sqlite:////data/energy_copilot.db PAPER_STORAGE_PATH=/data/papers
+COPY --from=sqlite-builder /build/libsqlite3.so.0 /usr/local/lib/libsqlite3.so.0
+RUN ldconfig && python -c "import sqlite3; assert sqlite3.sqlite_version_info == (3,54,0), sqlite3.sqlite_version"
+COPY requirements.web.txt ./
+RUN pip install --no-cache-dir --only-binary=:all: -r requirements.web.txt
+COPY app ./app
+COPY alembic ./alembic
+COPY scripts ./scripts
+COPY alembic.ini pyproject.toml ./
+RUN groupadd --gid 10001 energy && useradd --uid 10001 --gid 10001 --no-create-home energy \
+    && mkdir -p /data/papers && chown -R energy:energy /data
+USER 10001:10001
+EXPOSE 8000
+# Migrations are a separate, explicit deployment step.
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

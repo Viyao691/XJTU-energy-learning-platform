@@ -5,6 +5,7 @@ import type { DocumentParsersStatus, EvidenceLocation, OcrRun, Paper, PaperVisua
 import { api } from "../../lib/api";
 import { EvidencePagePreview } from "./EvidencePagePreview";
 import { ParseCandidateControls } from "./ParseCandidateControls";
+import { useAuth } from "../auth/AuthProvider";
 
 function PageThumbnail({ id, page, selected, onSelect }: { id: string; page: number; selected: boolean; onSelect: () => void }) {
   const [failed, setFailed] = React.useState(false);
@@ -46,6 +47,15 @@ type PdfWorkspaceProps = {
 };
 
 export function PdfWorkspace(props: PdfWorkspaceProps) {
+  const { webMode } = useAuth();
+  const [phoneReader, setPhoneReader] = React.useState(false);
+  React.useEffect(() => {
+    const media = window.matchMedia?.("(max-width: 620px)");
+    const update = () => setPhoneReader(webMode && !!media?.matches);
+    update();
+    media?.addEventListener("change", update);
+    return () => media?.removeEventListener("change", update);
+  }, [webMode]);
   const {
     id,
     paper,
@@ -81,7 +91,7 @@ export function PdfWorkspace(props: PdfWorkspaceProps) {
       <div className="reader-section-heading"><span>01 / SOURCE DOCUMENT</span><h2>PDF 原文</h2></div>
       {hasLocalPdf ? (
         <p className="muted">
-          PDF 在本机浏览器中打开。图表目录来自本地文字识别，选择条目可跳到相应页。
+          {phoneReader ? "手机使用逐页原文图像阅读，可翻页或打开原始 PDF。" : "PDF 在本机浏览器中打开。图表目录来自本地文字识别，选择条目可跳到相应页。"}
         </p>
       ) : (
         <p className="muted">当前仅有摘要或元数据。</p>
@@ -137,13 +147,14 @@ export function PdfWorkspace(props: PdfWorkspaceProps) {
             <nav className="reader-thumbnail-rail" aria-label="PDF 页面缩略图">
               {thumbnailPages.map(page => <PageThumbnail key={page} id={id} page={page} selected={page === boundedCurrentPage} onSelect={() => setCurrentPage(page)} />)}
             </nav>
-            <iframe
+            {!phoneReader && <iframe
               key={`${id}:${pdfVariant}:${boundedCurrentPage}`}
               className="pdf-reader"
               title="PDF 阅读器"
               src={`${api.paperFileUrl(id, pdfVariant)}#page=${boundedCurrentPage}`}
-            />
+            />}
           </div>
+          {phoneReader && <a className="reader-original-link" href={api.paperFileUrl(id, pdfVariant)} target="_blank" rel="noreferrer">打开原始 PDF ↗</a>}
           <div className="page-toolbar" aria-label="PDF 页码控制">
             <button
               className="secondary"

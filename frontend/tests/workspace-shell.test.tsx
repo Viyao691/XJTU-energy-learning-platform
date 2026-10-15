@@ -15,7 +15,7 @@ afterEach(() => {
 });
 
 describe("WorkspaceShell", () => {
-  it.each(["/dashboard"])("keeps the legacy shell for %s", pathname => {
+  it.each(["/dashboard", "/hero-workspace", "/hero-integration", "/hero-visual-lab"])("keeps the legacy shell for %s", pathname => {
     route.pathname = pathname;
     const { container } = render(<WorkspaceShell><p>content</p></WorkspaceShell>);
     expect(container.querySelector(".workspace-v2")).toBeNull();

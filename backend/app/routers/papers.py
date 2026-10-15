@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import asyncio
 import json
 from pathlib import Path
 from threading import Lock
@@ -15,6 +16,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
+from app.web_limits import assert_owned_storage_capacity
 from app.formula_ocr import FormulaOcrError, transcribe_formula
 from app.claim_evidence import extract_claim_candidates, list_claim_evidence, rebuild_claim_evidence
 from app.knowledge import EmbeddingProviderError, index_paper, make_embedding_provider
@@ -151,7 +153,8 @@ def register_papers_routes(app, get_db) -> None:
             temporary.unlink(missing_ok=True)
             raise HTTPException(409, {"message": "检测到重复上传：该 PDF 已存在于论文库", "paper_id": existing.id})
         try:
-            extracted, page_count, confidence, warning, fulltext_status, document_metadata = _extract_pdf(temporary)
+            assert_owned_storage_capacity(file_size, ignore_path=temporary)
+            extracted, page_count, confidence, warning, fulltext_status, document_metadata = await asyncio.to_thread(_extract_pdf, temporary) if get_settings().web_mode else _extract_pdf(temporary)
         except HTTPException:
             temporary.unlink(missing_ok=True)
             raise
@@ -164,6 +167,11 @@ def register_papers_routes(app, get_db) -> None:
             if existing:
                 temporary.unlink(missing_ok=True)
                 raise HTTPException(409, {"message": "检测到重复上传：该 PDF 已存在于论文库", "paper_id": existing.id})
+            try:
+                assert_owned_storage_capacity(file_size, ignore_path=temporary)
+            except HTTPException:
+                temporary.unlink(missing_ok=True)
+                raise
             temporary.replace(destination)
             paper = Paper(
                 original_filename=filename,

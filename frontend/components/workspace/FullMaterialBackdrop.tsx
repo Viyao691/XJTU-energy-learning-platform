@@ -65,6 +65,7 @@ export function FullMaterialBackdrop({ kind, theme = "light" }: { kind: FullMate
     const root = rootRef.current, viewport = viewportRef.current;
     const main = root?.closest("main");
     if (!root || !viewport) return;
+    if (root.closest(".web-mobile-ready") && window.matchMedia?.("(max-width: 620px)")?.matches) return;
     const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     let cleanupRuntime = () => {};
     const onMediaChange = () => {

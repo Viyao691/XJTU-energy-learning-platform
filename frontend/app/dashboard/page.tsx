@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, Settings } from "../../lib/api";
 import { nextOnboardingPath } from "../../lib/presentation";
+import { useAuth } from "../../components/auth/AuthProvider";
 
 function configuredModelLabel(settings: Settings | null): string {
   if (!settings?.api_key?.configured) return "等待配置";
@@ -16,6 +17,7 @@ function configuredModelLabel(settings: Settings | null): string {
 
 export default function Dashboard() {
   const router = useRouter();
+  const { webMode, user, loading } = useAuth();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [paperCount, setPaperCount] = useState<number | null>(null);
   const [subscriptionCount, setSubscriptionCount] = useState<number | null>(null);
@@ -24,10 +26,17 @@ export default function Dashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (webMode) {
+      setSettings(null); setPaperCount(null); setSubscriptionCount(null); setUnread(null); setError("");
+      if (loading || !user) return;
+      let active = true;
+      api.papers().then(result => { if (active) setPaperCount(result.total); }).catch(reason => { if (active) setError(reason instanceof Error ? reason.message : "加载失败"); });
+      return () => { active = false; };
+    }
     Promise.all([api.settings(), api.papers()]).then(([nextSettings, result]) => { setSettings(nextSettings); setPaperCount(result.total); }).catch(reason => setError(reason instanceof Error ? reason.message : "加载失败"));
     api.listResearchSubscriptions().then(result => setSubscriptionCount(result.total)).catch(() => setSubscriptionCount(null));
     Promise.all([api.listResearchRuns(), api.listResearchNotifications()]).then(([, notifications]) => setUnread(notifications.items.filter(notification => !notification.read_at).length)).catch(() => setUnread(null));
-  }, []);
+  }, [webMode, user?.id, loading]);
 
   useEffect(() => { setDarkMode(window.localStorage.getItem("energy-copilot-theme") === "dark"); }, []);
   useEffect(() => {

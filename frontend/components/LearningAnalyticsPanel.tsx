@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LearningAnalytics } from "../lib/api";
+import { useAuth } from "./auth/AuthProvider";
 import "./learning/learning-analytics.css";
 
 type Range = 7 | 30 | 90;
@@ -44,20 +45,37 @@ export function LearningAnalyticsPanel({ data, days, onDays, loading = false, er
 
 function ActivityChart({ data, days }: { data: LearningAnalytics; days: Range }) {
   const daily = data.daily;
+  const { webMode } = useAuth();
+  const viewport = useRef<HTMLDivElement>(null);
+  const [phoneWidth, setPhoneWidth] = useState<number | null>(null);
+  useEffect(() => {
+    const element = viewport.current;
+    const media = window.matchMedia?.("(max-width: 620px)");
+    if (!webMode || !element || !media) return;
+    const update = () => {
+      const width = element.getBoundingClientRect().width;
+      setPhoneWidth(media.matches && width > 0 ? width : null);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    media.addEventListener("change", update);
+    return () => { observer.disconnect(); media.removeEventListener("change", update); };
+  }, [webMode, daily.length]);
   const peak = Math.max(0, ...daily.flatMap(item => series.map(entry => item[entry.key])));
   const axisTop = Math.max(1, Math.ceil(peak / 4) * 4);
-  const chart = { left: 52, right: 16, top: 18, bottom: 46, width: 900, height: 240 };
+  const chart = { left: 52, right: 16, top: 18, bottom: 46, width: phoneWidth ?? 900, height: 240 };
   const plotW = chart.width - chart.left - chart.right;
   const plotH = chart.height - chart.top - chart.bottom;
   const slot = daily.length ? plotW / daily.length : plotW;
-  const barW = Math.max(1, Math.min(15, slot * 0.2));
-  const labelEvery = Math.max(1, Math.ceil(daily.length / 6));
+  const barW = Math.min(15, slot * 0.2);
+  const labelEvery = Math.max(1, Math.ceil(daily.length / (phoneWidth ? 3 : 6)));
   return <section className="la-panel la-activity" aria-labelledby="la-activity-title">
     <div className="la-panel-heading"><div><h3 id="la-activity-title">每日学习活动</h3><p>{data.from_date} 至 {data.to_date} · {days} 天范围</p></div></div>
     <div className="la-legend">{series.map(item => <span key={item.key}><i style={{ background: item.color }} />{item.label}</span>)}</div>
     {!daily.length ? <p className="la-empty">此范围暂无已记录活动。</p> : <>
-      <p className="la-scroll-hint">图表较窄时可左右滑动查看日期</p>
-      <div className="la-activity-scroll"><svg className="la-activity-svg" viewBox={`0 0 ${chart.width} ${chart.height}`} role="img" aria-label={`${days} 天学习活动柱状图，纵轴为每日事件数；显示复习、自测作答和完成任务`}>
+      <p className="la-scroll-hint">{phoneWidth ? "展开明细可查看每日记录" : "图表较窄时可左右滑动查看日期"}</p>
+      <div className="la-activity-scroll" ref={viewport}><svg className="la-activity-svg" style={phoneWidth ? { minWidth: 0, aspectRatio: `${chart.width} / ${chart.height}` } : undefined} viewBox={`0 0 ${chart.width} ${chart.height}`} role="img" aria-label={`${days} 天学习活动柱状图，纵轴为每日事件数；显示复习、自测作答和完成任务`}>
         <title>{days} 天学习活动</title><desc>每日活动按日期分组，三种颜色分别表示复习、自测作答和完成任务。仅显示接口返回日期。</desc>
         {[0, 1, 2, 3, 4].map(index => { const value = axisTop * (4 - index) / 4; const y = chart.top + plotH * index / 4; return <g key={index}><line x1={chart.left} x2={chart.width - chart.right} y1={y} y2={y} className="la-grid-line" /><text x={chart.left - 8} y={y + 4} textAnchor="end" className="la-axis-label">{value}</text></g>; })}
         {daily.map((item, index) => {

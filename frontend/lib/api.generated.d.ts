@@ -25,6 +25,15 @@ export interface ApiSchemas {
     configured: boolean;
     last4?: string | null;
   };
+  AuthResponse: {
+    user: ApiSchemas["AuthUserResponse"];
+    csrf_token: string;
+  };
+  AuthUserResponse: {
+    id: number;
+    email: string;
+    is_admin: boolean;
+  };
   BackupDeleteResponse: {
     deleted_name: string;
     remaining_count: number;
@@ -379,6 +388,14 @@ export interface ApiSchemas {
   DuplicateReasonResponse: {
     kind: string;
     paper_id: number;
+  };
+  EmailCodeRequest: {
+    email: string;
+    intent?: "login" | "register" | null;
+  };
+  EmailCodeResponse: {
+    message: string;
+    retry_after_seconds: number;
   };
   EvidenceBboxResponse: {
     left: number;
@@ -844,6 +861,14 @@ export interface ApiSchemas {
   LearningWeaknessUpdate: {
     concept?: string | null;
     description?: string | null;
+  };
+  LoginRequest: {
+    email: string;
+    intent?: "login" | "register" | null;
+    code: string;
+  };
+  LogoutResponse: {
+    message: string;
   };
   ModelInstallRequest: {
     confirmed: boolean;

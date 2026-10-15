@@ -14,6 +14,7 @@ from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Protocol
 
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -243,6 +244,9 @@ class PaperImportService:
                     )
             except asyncio.CancelledError:
                 self._rollback_preserving_cancellation()
+                raise
+            except HTTPException:
+                self._rollback_or_database_error()
                 raise
             except PaperDownloadError:
                 warning = _DOWNLOAD_FAILURE_WARNING

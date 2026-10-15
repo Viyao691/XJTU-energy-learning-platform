@@ -1,0 +1,104 @@
+/* Web phone layouts; desktop and local workspace presentation stay in their own styles. */
+@media (max-width: 620px) {
+  .workspace-v2.web-mobile-ready { font-size: 14px; }
+  .workspace-v2.web-mobile-ready .workspace-v2-column { min-width: 0; }
+  .workspace-v2.web-mobile-ready .app-main { padding: 16px 16px 28px; }
+  .workspace-v2.web-mobile-ready .workspace-v2-topbar { gap: 8px; padding: 8px 12px; min-height: 60px; }
+  .workspace-v2.web-mobile-ready .workspace-v2-location { min-width: 0; }
+  .workspace-v2.web-mobile-ready .workspace-v2-location small { font-size: 10px; }
+  .workspace-v2.web-mobile-ready .workspace-v2-location strong { font-size: 14px; }
+  .workspace-v2.web-mobile-ready .workspace-v2-menu-button { width: 44px; height: 44px; }
+  .workspace-v2.web-mobile-ready .app-sidebar-user--web { display: grid !important; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) h1 { font-size: 25px; line-height: 1.4; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) h2 { font-size: 21px; line-height: 1.45; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .workspace-header.workspace-header-artwork { min-height: 132px; padding: 18px; gap: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .workspace-header.workspace-header-artwork > div:first-child { width: 100%; min-width: 0; padding: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .workspace-header p { font-size: 13px; line-height: 1.7; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .workspace-illustration-slot { display: none; }
+  .workspace-v2.web-mobile-ready .full-material-backdrop-viewport { position: absolute; height: 180px; top: 0; }
+  .workspace-v2.web-mobile-ready .full-material-backdrop-static { background-size: contain; background-position: right top; opacity: .3; }
+  .workspace-v2.web-mobile-ready .full-material-backdrop-viewport::after { background: none; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .glass-icons { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 4px 0 12px; }
+  html .workspace-v2.web-mobile-ready #workspace-action-surface .glass-icons__button[role="tab"] { min-height: 78px; gap: 7px; padding: 8px 1px !important; }
+  .workspace-v2.web-mobile-ready .glass-icons__tile { width: 28px; height: 28px; }
+  .workspace-v2.web-mobile-ready .glass-icons__back, .workspace-v2.web-mobile-ready .glass-icons__front { border-radius: 8px; }
+  .workspace-v2.web-mobile-ready .glass-icons__icon { width: 16px; height: 16px; }
+  .workspace-v2.web-mobile-ready .glass-icons__label { font-size: 12px; gap: 3px; }
+  .workspace-v2.web-mobile-ready .glass-icons__count { font-size: 11px; min-width: 18px; padding: 1px 3px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .library-paper-card { grid-template-columns: 76px minmax(0, 1fr); min-height: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .library-paper-visual { min-height: 0; align-self: start; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .library-pdf-cover { height: auto; max-height: 116px; object-fit: contain; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .library-paper-card h2 { font-size: 16px; line-height: 1.5; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-stage { min-height: 0; padding: 24px 20px; gap: 22px; grid-template-rows: auto auto auto; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-page { min-height: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-copy h1 { font-size: 25px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-copy > p:last-child { font-size: 14px; margin-top: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-dropzone { min-height: 160px; padding: 16px 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-dropzone strong { font-size: 21px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-file-select,
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-actions .material-submit-wrap button { min-height: 46px; font-size: 16px; padding: 10px 12px; }
+  .workspace-v2.web-mobile-ready .material-hero-upload { opacity: .18; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-upload-footnote { font-size: 12px; margin-top: 16px; line-height: 1.7; }
+  .workspace-v2.web-mobile-ready .workspace-drawer { width: calc(100vw - 16px); max-height: 100dvh; }
+  .workspace-v2.web-mobile-ready .workspace-drawer-header { padding: 14px 16px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .workspace-drawer-header h2 { font-size: 18px; }
+  .workspace-v2.web-mobile-ready .workspace-drawer-content { padding: 16px; }
+  .workspace-v2.web-mobile-ready .workspace-drawer-close { width: 44px; height: 44px; flex-basis: 44px; }
+  .workspace-v2.web-mobile-ready .app-main > .workspace-page-atmosphere { width: 180px; height: 180px; aspect-ratio: auto; opacity: .18; animation: none; }
+  .workspace-v2.web-mobile-ready .app-main > .energy-material-backdrop { height: 180px; }
+  .workspace-v2.web-mobile-ready .app-main > .material-stack-scene { position: relative; top: auto; right: auto; width: 180px; height: 194px; margin: 0 auto 12px; }
+  .workspace-v2.web-mobile-ready .material-stack-group { height: 145px; }
+  .workspace-v2.web-mobile-ready .material-stack-copper { top: 25px; }
+  .workspace-v2.web-mobile-ready .material-stack-separator { top: 58px; }
+  .workspace-v2.web-mobile-ready .material-stack-aluminum { top: 91px; }
+  .workspace-v2.web-mobile-ready .material-stack-caption { top: 150px; right: 0; gap: 8px; }
+  .workspace-v2.web-mobile-ready .material-stack-caption button { min-height: 44px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-pack-intro { grid-template-columns: 96px minmax(0, 1fr); }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-detail-artwork,
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-detail-artwork .topic-artwork-visual { width: 96px; height: 96px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-pack-intro h2 { font-size: 18px; text-wrap: balance; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .ideas-ion-heading h1 { font-size: 25px !important; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-help-hero { min-height: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-help-intro { padding: 32px 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .material-help-intro h1 { text-wrap: balance; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .paper-visual-analysis .markdown-content { font-size: 14px; line-height: 1.8; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .markdown-content h1 { font-size: 21px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .markdown-content :is(h2,h3) { font-size: 18px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .markdown-content h4 { font-size: 16px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .markdown-content :is(th,td) { font-size: 13px; padding: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .mermaid-block-wrap .mermaid-block-scaler { display: block; width: calc(100% * var(--diagram-scale, 1)); margin: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .mermaid-block-wrap .mermaid-block svg { width: 100%; max-width: 100% !important; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .mermaid-block-toolbar button { min-height: 44px; min-width: 44px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-document-frame { display: block; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-thumbnail-rail { display: flex; gap: 8px; padding: 8px; overflow-x: auto; border: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-thumbnail-rail button.reader-thumbnail { width: 48px; flex: 0 0 48px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .page-toolbar button { min-height: 44px; font-size: 13px; padding: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-original-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .research-data-workspace { grid-template-columns: minmax(0, 1fr); }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-detail-panel { min-width: 0; padding: 16px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-detail-heading { flex-wrap: wrap; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-detail-heading h2 { font-size: 18px; overflow-wrap: anywhere; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-quality-grid { grid-template-columns: minmax(0, 1fr); }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-detail-panel table { min-width: 100%; width: max-content; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-plan-form fieldset { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-plan-form fieldset label { align-items: center; min-height: 44px; margin: 0; white-space: nowrap; font-size: 13px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-plan-form input[type="checkbox"] { width: 18px; height: 18px; flex: 0 0 18px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-card.card { min-height: 108px; padding: 10px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-card > span:first-child { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-card > span:first-child strong { font-size: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-card small,
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-overview-card > span:last-child { font-size: 11px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-number { font-size: 25px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .la-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .la-summary span { font-size: 11px; padding: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .la-ranges button { font-size: 14px; min-height: 44px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .la-axis-label,
+  .workspace-v2.web-mobile-ready #workspace-action-surface .la-axis-title { font-size: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-goal-options > div { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-goal-options > div label { min-height: 44px; margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 13px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .learning-goal-options input[type="checkbox"] { width: 18px; height: 18px; flex: 0 0 18px; }
+  .web-mobile-ready .hi-photo .hi-photo-copy h1 img { width: min(100%, 240px); height: auto; }
+  .web-mobile-ready .hi-photo .hi-photo-dock strong { font-size: 14px; }
+  .web-mobile-ready .hi-photo .hi-photo-dock small { font-size: 11px; }
+}

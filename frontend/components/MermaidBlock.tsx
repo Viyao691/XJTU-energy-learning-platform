@@ -138,7 +138,7 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
         <div
           ref={scalerRef}
           className="mermaid-block-scaler"
-          style={{ zoom: scale }}
+          style={{ zoom: scale, "--diagram-scale": scale } as React.CSSProperties}
         />
       </div>
     </div>

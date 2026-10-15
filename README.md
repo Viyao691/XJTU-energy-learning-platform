@@ -15,6 +15,10 @@
 
 </div>
 
+公网轻量版：[energy.viyao.cn](https://energy.viyao.cn)。新用户在独立登录页选择“注册账号”，通过邮箱验证码注册并登录；已有账号选择“邮箱登录”。登录页支持浅色、深色和手机布局。“游客登录”弹窗可进入公开知识浏览，个人论文与科研功能需账号登录。工作台左下角账号卡显示当前身份和账号操作。
+
+手机Web使用紧凑标题、较小插画和单列表单；论文原文以逐页图像阅读，可翻页或打开原始PDF；流程图默认适应屏宽，放大后在图表内滚动。手机导航也显示账号卡。手机适配与验证范围见[逐页审查记录](docs/mobile/2026-10-15-mobile-audit.md)，本次无声竖屏截图巡览保存在本地output/mobile/2026-10-15/。
+
 ![平台首页 · 浅色主题](docs/github/screenshots/home-light.jpg)
 
 ## 🎬 平台演示
@@ -236,3 +240,7 @@ Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开
 - [素材来源与许可](docs/github/ASSETS.md) · [MIT License](LICENSE)
 
 MIT 适用于项目代码；摄影、字体、图标及其他第三方素材遵循各自许可，来源与署名记录随项目保留。
+# 公网轻量网站部署
+
+公网版本使用独立`compose.web.yml`和`Dockerfile.web`，邮箱登录后使用个人科研数据；桌面启动命令不变。服务器安装、私密环境、明确数据库迁移、DNS/Caddy及回退步骤见[deploy/web/README.md](deploy/web/README.md)，当前上线边界见[CURRENT_STATUS.md](CURRENT_STATUS.md)。首次网站部署使用空库，不上传本机私人论文或沿用本机会话。
+

@@ -16,6 +16,33 @@ _HTTP_URL_ADAPTER = TypeAdapter(AnyHttpUrl)
 class AppSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    web_mode: bool = Field(default=False, validation_alias=AliasChoices("ENERGY_WEB_MODE", "WEB_MODE", "web_mode"))
+    web_origin: str = "https://energy.viyao.cn"
+    web_max_pdf_pages: int = Field(default=100, ge=1)
+    web_user_storage_mb: int = Field(default=200, ge=1)
+    web_model_concurrency: int = Field(default=2, ge=1)
+    web_task_queue_limit: int = Field(default=20, ge=1)
+    web_model_call_reserve_cny: float = Field(default=0, ge=0, allow_inf_nan=False)
+    web_embedding_call_reserve_cny: float = Field(default=0, ge=0, allow_inf_nan=False)
+    web_user_daily_budget_cny: float = Field(default=5, ge=0, allow_inf_nan=False)
+    web_user_monthly_budget_cny: float = Field(default=50, ge=0, allow_inf_nan=False)
+    web_model_queue_timeout_seconds: float = Field(default=30, gt=0, allow_inf_nan=False)
+    auth_admin_email: str = ""
+    auth_code_secret: SecretStr = Field(default_factory=lambda: SecretStr(""), repr=False)
+    auth_code_ttl_seconds: int = Field(default=600, ge=1)
+    auth_code_resend_seconds: int = Field(default=60, ge=1)
+    auth_code_hourly_limit: int = Field(default=10, ge=1)
+    auth_client_hourly_limit: int = Field(default=30, ge=1)
+    auth_trust_proxy: bool = False
+    auth_code_max_attempts: int = Field(default=5, ge=1)
+    auth_session_days: int = Field(default=7, ge=1)
+    auth_smtp_host: str = ""
+    auth_smtp_port: int = Field(default=587, ge=1, le=65535)
+    auth_smtp_username: str = ""
+    auth_smtp_password: SecretStr = Field(default_factory=lambda: SecretStr(""), repr=False)
+    auth_smtp_from: str = ""
+    auth_smtp_ssl: bool = False
+    auth_smtp_starttls: bool = True
     database_url: str = "sqlite:///./data/energy_copilot.db"
     paper_storage_path: str = "./data/papers"
     document_ai_model_path: str = ""
@@ -51,6 +78,7 @@ class AppSettings(BaseSettings):
     embedding_provider: str = "ollama"
     embedding_model: str = "bge-m3"
     embedding_base_url: str = "http://host.docker.internal:11434"
+    embedding_api_key: SecretStr = Field(default_factory=lambda: SecretStr(""), repr=False)
     embedding_timeout_seconds: int = Field(default=120, ge=5, le=600)
     knowledge_chunk_size: int = Field(default=1600, ge=500, le=4000)
     knowledge_chunk_overlap: int = Field(default=180, ge=0, le=800)
@@ -108,7 +136,14 @@ class AppSettings(BaseSettings):
 
     @property
     def paper_storage_dir(self) -> Path:
-        return Path(self.paper_storage_path).resolve()
+        root = Path(self.paper_storage_path).resolve()
+        if self.web_mode:
+            from app.ownership import current_user_id
+
+            user_id = current_user_id.get()
+            if user_id is not None:
+                return root / "users" / str(user_id) / "papers"
+        return root
 
     @property
     def document_ai_model_dir(self) -> Path:
