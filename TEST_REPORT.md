@@ -2,6 +2,8 @@
 
 ## Web紧凑布局、密码登录与正式Logo
 
+- GitHub交接分支推送成功，ls-remote匹配 `15ecb811b018a33a01395d0a8d77133c35f07241`。私有Page五个本轮新附件（源码1,727,655字节、静态素材6,948,042字节、审查3,061字节及两张手机截图）均file_access_confirmed=true；读回确认提交/BUILD_ID与五份引用存在。
+
 - Python3.12密码、验证码、Web集成、迁移组45passed；密码校验不回显输入1passed。0033在隔离SQLite升级/降级保留账号会话。Linux生产依赖镜像临时库实际HTTP注册200、错密码401、密码登录200、读取会话200，未发邮件或调用模型。初版检查脚本会话工厂名写错，改为项目make_session_factory后通过，不是生产缺陷。
 - 前端web-auth24、WorkspaceShell7、homepage-photographic5、branched-nav3共39passed。新Logo公开资源测试先失败，修复brand白名单后通过；branched-nav旧清单18更新为现有20项，仅补已存在的编年史与城市应用。没有跑全量套件。
 - 最终Docker Web生产构建含类型检查通过，BUILD_ID SeH-5j_0F2ZiqrBHeV3rc；既有autoprefixer警告保留。仅针对实际手机观察发现的Logo资源拦截、关闭按钮被遮挡、菜单字号过大修订后重建；无后续未构建CSS。
