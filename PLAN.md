@@ -1,5 +1,11 @@
 ## 2026-10-15 首页电脑端菜单对齐 · 已部署
 
+## 手机编年史控制按钮移除 · 2026-10-16 已部署
+
+按用户截图，仅在<=620px隐藏“暂停/播放动效”和“重播入场”控制区，不占位；电脑按钮保留。仅chronicle.module.css一条局部规则，无业务/模型/API/数据库变更。生产构建含类型检查通过；浏览器390×844实读控制区display:none、按钮尺寸0，1440×900为flex、两个按钮各88.2px。截图.verification/chronicle-mobile-controls/mobile.jpg。按纯样式范围未重复业务套件。
+
+已发布Web web-20261016-chronicle-controls，BUILD_ID o6GtgISQrCgzea7Cv-MBr，image ID 48aca4bf7614feefef6c438002816a91f2627a4e8be89a206a1b5ab02e325d5e。前端健康，HTTPS编年史200且版本匹配；旧前端配置备份 /srv/energy-research-web/releases/20261016-chronicle-controls。API/数据库与考试大王未变更。
+
 ## 手机Web修订与反馈
 
 用户本轮明确重新开放手机首页与全页紧凑适配；首页/侧栏/背景/标题/卡片修订、双端反馈与帮助已发布。语义嵌入按用户选择保留，硅基流动专用密钥待安全录入后再配置/验证；不采用关键词替代。Web语义索引分批入口与预算事务锁修复已发布；嵌入密钥尚待安全录入。云端交接沿用既有分支。
@@ -669,4 +675,3 @@ Sol仅修改HomeDock.tsx、hero.css与homepage-photographic.test.tsx。按用户
 - [x] 126秒竖屏截图巡览视频及逐页审查记录交付。
 
 见[手机适配审查](docs/mobile/2026-10-15-mobile-audit.md)。
-

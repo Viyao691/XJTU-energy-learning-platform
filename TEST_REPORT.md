@@ -1,5 +1,11 @@
 # 最新验证报告 · 2026-10-15
 
+## 手机编年史控制按钮移除 · 2026-10-16 已部署
+
+按用户截图，仅在<=620px隐藏“暂停/播放动效”和“重播入场”控制区，不占位；电脑按钮保留。仅chronicle.module.css一条局部规则，无业务/模型/API/数据库变更。生产构建含类型检查通过；浏览器390×844实读控制区display:none、按钮尺寸0，1440×900为flex、两个按钮各88.2px。截图.verification/chronicle-mobile-controls/mobile.jpg。按纯样式范围未重复业务套件。
+
+已发布Web web-20261016-chronicle-controls，BUILD_ID o6GtgISQrCgzea7Cv-MBr，image ID 48aca4bf7614feefef6c438002816a91f2627a4e8be89a206a1b5ab02e325d5e。前端健康，HTTPS编年史200且版本匹配；旧前端配置备份 /srv/energy-research-web/releases/20261016-chronicle-controls。API/数据库与考试大王未变更。
+
 ## 2026-10-16 手机Web与反馈
 
 实际执行结果见 CURRENT_STATUS.md 本轮段与 docs/mobile/2026-10-16-mobile-v2-audit.md。后端定向38+21通过，后续Web分批/状态/预算25项通过(分组有重复项，不合并为唯一总数)、前端7+25+5+5通过，最终生产构建通过。额外知识API 10过2旧标题断言失败，未将其隐去。隔离浏览器反馈保存成功；正式HTTPS版本/健康/空反馈验证通过。未做真实SMTP、远端嵌入、付费模型、Android/iOS真机。
@@ -889,6 +895,3 @@ Edge四场景1280/390×light/dark runtime exit0：四类menu在视口内且porta
 主控报告前端与后端 Docker 镜像构建均 exit 0，独立 TypeScript 检查 0 errors。发布树独立运行在3018/8019：health、dashboard、论文 API proxy、paper 1 figure thumbnail（image/png，61,989 bytes）及校园 sources 均HTTP 200。README所列六张公开截图均为1280×720初始视口；home-dark在fullPage接口失败后使用viewport截图，其余五张fullPage截图，未对图片做编辑。公开 `main` 推送 exit 0，首两个提交均采用 `[skip ci]`；未运行前后端全量测试。临时 3018/8019 容器、3019 dev 与合成演示数据已清理；原 3001/8001 未改动。此记录不包含远端元数据或关键文件核对。
 
 最终远端确认：GitHub 官方 API 返回公开 `main` 提交 `7776424`、`Public=true`、`License=MIT`。独立发布工作树与 remote 一致且 clean，共807个跟踪文件、6张截图、147个编年史文件、8个校园后端文件；确认目录为 `outputs/github-release`，不是原开发仓库。未运行新增测试。
-
-
-

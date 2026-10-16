@@ -1,5 +1,7 @@
 <div align="center">
 
+手机端储能编年史不显示动效开关与重播入场按钮；电脑端保留。
+
 网站版当前支持邮箱密码登录、邮箱验证码登录和注册设密码，游客浏览公开内容。首页“意见反馈”先持久保存再通知管理员；轻量网站不加载重型OCR/语音模型。手机侧栏支持点外/左滑收起，手机背景静态化。个人知识问答须管理员另配远程语义嵌入服务，状态读取不会触发付费探测；网站每次最多更新5篇待索引论文，可重复继续。详情见 [手机Web修订记录](docs/mobile/2026-10-16-mobile-v2-audit.md)。
 
 # XJTU-energy-learning-platform
@@ -247,4 +249,3 @@ MIT 适用于项目代码；摄影、字体、图标及其他第三方素材遵�
 云端编辑使用 [dot 交接分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)，启动与编辑范围见[交接说明](docs/handoff/2026-10-15-dot-cloud-handoff.md)。[私有资料页](https://chatgpt.com/space/page_5c4fbfe044d48191b07919ac010fe77e)保存手机视频、审查清单及可编辑素材；需要用户账号访问。GitHub提交不会自动部署网站。
 
 公网版本使用独立`compose.web.yml`和`Dockerfile.web`，邮箱登录后使用个人科研数据；桌面启动命令不变。服务器安装、私密环境、明确数据库迁移、DNS/Caddy及回退步骤见[deploy/web/README.md](deploy/web/README.md)，当前上线边界见[CURRENT_STATUS.md](CURRENT_STATUS.md)。首次网站部署使用空库，不上传本机私人论文或沿用本机会话。
-

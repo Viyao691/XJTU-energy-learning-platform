@@ -30,7 +30,7 @@ services:
       retries: 3
 
   frontend:
-    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261015-mobile-v2}
+    image: ${ENERGY_WEB_IMAGE:-energy-research-web:web-20261016-chronicle-controls}
     build:
       context: .
       dockerfile: frontend/Dockerfile.web
