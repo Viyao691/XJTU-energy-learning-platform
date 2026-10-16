@@ -39,6 +39,10 @@ TOPIC_TERMS = {
 }
 
 
+class NewsFeedFormatError(ValueError):
+    """A successful HTTP response contained a web page rather than a feed."""
+
+
 def topic_terms(query: str) -> set[str]:
     lowered = query.lower()
     anchors = (
@@ -77,6 +81,9 @@ class ResearchNewsSource:
         response.raise_for_status()
         if len(response.content) > 2 * 1024 * 1024:
             raise ValueError("news feed too large")
+        prefix = response.text[:1024].lstrip("\ufeff \t\r\n").lower()
+        if re.match(r"(?:<\?xml[^>]*>\s*)?(?:<!doctype html\b|<html(?:\s|>))", prefix):
+            raise NewsFeedFormatError("来源返回网页或访问验证页，当前服务器暂时无法读取 RSS")
         root = ElementTree.fromstring(response.content)
         papers = []
         for item in root.findall("./channel/item")[:50]:
@@ -129,7 +136,10 @@ class ResearchNewsDigest:
             warnings = []
             for feed, outcome in zip(FEEDS, outcomes):
                 if isinstance(outcome, Exception):
-                    warnings.append(f"{feed[1]} 暂时无法获取，稍后会重试。")
+                    if isinstance(outcome, NewsFeedFormatError):
+                        warnings.append(f"{feed[1]} 来源返回网页或访问验证页，当前服务器暂时无法读取 RSS；其他来源仍可阅读，5分钟后重试。")
+                    else:
+                        warnings.append(f"{feed[1]} 暂时无法获取，稍后会重试。")
                     if self._cache:
                         items.extend(item for item in self._cache["items"] if item["source"] == feed[1])
                 else:

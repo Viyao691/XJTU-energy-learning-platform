@@ -29,6 +29,10 @@ html[data-theme="dark"] .workspace-v2-atmospheric .app-main .campus-page .campus
 .campus-button-primary { border-color: #456f9f; background: #456f9f; color: #fff; }
 .campus-overview { display: grid; grid-template-columns: minmax(220px, min(30%, 428px)) minmax(0, 1fr); gap: 16px; }
 .campus-panel { min-width: 0; padding: 22px; border: 1px solid var(--workspace-border, #dce4ed); border-radius: 19px; background: var(--workspace-surface, #fff); }
+.campus-sources-panel { grid-column: 1; grid-row: 1; }
+.campus-events-panel { grid-column: 2; grid-row: 1; }
+.campus-page .campus-sources-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent !important; color: inherit !important; font: inherit; cursor: default; box-shadow: none; }
+.campus-directory-chevron { display: none; }
 .campus-panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
 .campus-panel-heading h2 { margin: 0; color: var(--workspace-ink, #172637); font-size: 19px; letter-spacing: -.02em; }
 .campus-panel-heading > span { color: var(--workspace-muted, #758194); font-size: 15px; white-space: nowrap; }
@@ -125,9 +129,17 @@ html[data-theme="dark"] .campus-source .campus-source-badges [data-state="ok"] {
 .campus-public-link-times { margin: 9px 0; color: var(--workspace-muted); font-size: 14px; }
 .campus-public-link-original { color: var(--workspace-accent); font-size: 14px; text-decoration: none; }
 .campus-public-link-original:hover { text-decoration: underline; }
-@media (max-width: 950px) { .campus-overview { grid-template-columns: 1fr; } }
+@media (max-width: 950px) { .campus-overview { grid-template-columns: 1fr; } .campus-sources-panel { grid-column: 1; grid-row: 1; } .campus-events-panel { grid-column: 1; grid-row: 2; } }
 @media (max-width: 620px) { .campus-hero { display: grid; padding: 22px; } .campus-action-row { justify-content: flex-start; } .campus-source-list { grid-template-columns: 1fr; } .campus-panel { padding: 16px; } .campus-controls { align-items: flex-start; } .campus-event-footer { align-items: flex-start; } }
 @media (max-width: 620px) {
+  .campus-events-panel { grid-row: 1; }
+  .campus-sources-panel { grid-row: 2; align-self: start; }
+  .campus-sources-panel .campus-panel-heading { margin-bottom: 0; align-items: center; }
+  .campus-sources-panel .campus-panel-kicker { display: none; }
+  .campus-page .campus-sources-toggle { min-height: 32px; cursor: pointer; }
+  .campus-directory-chevron { display: inline-block; }
+  .campus-sources-toggle[aria-expanded="true"] .campus-directory-chevron { transform: rotate(180deg); }
+  #campus-source-directory:not([hidden]) { margin-top: 12px; }
   .workspace-v2-atmospheric .app-main .campus-page .campus-hero {
     background-image: linear-gradient(90deg, rgba(241,244,243,.98), rgba(241,244,243,.86) 72%, rgba(241,244,243,.7)), url('/workspace/campus-header/campus-light.png') !important;
     background-position: center, 75% center !important;

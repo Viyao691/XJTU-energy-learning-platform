@@ -8,6 +8,7 @@ import { StatusBadge } from "../../components/WorkspacePrimitives";
 import { api, CampusEvent, CampusNotice, CampusSource } from "../../lib/api";
 import CampusPublicLinks from "./CampusPublicLinks";
 import TitleMotion from "../../components/workspace/TitleMotion";
+import { useAuth } from "../../components/auth/AuthProvider";
 import "./campus.css";
 
 const PAGE_SIZE = 20;
@@ -58,6 +59,7 @@ const scopeLabel: Record<string, string> = { recent: "近 90 天", unknown: "日
 const genericUnknowns = new Set(["具体要求请核对原文", "日期未确认", "日期待核实", "活动/截止日期未能从原文确认"]);
 
 export default function CampusPage() {
+  const { webMode, user } = useAuth();
   const [sources, setSources] = useState<CampusSource[]>([]);
   const [events, setEvents] = useState<CampusEvent[]>([]);
   const [notices, setNotices] = useState<CampusNotice[]>([]);
@@ -72,8 +74,19 @@ export default function CampusPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<number | "activate" | null>(null);
   const [expandedInstitutions, setExpandedInstitutions] = useState<Set<string>>(new Set());
+  const [mobile, setMobile] = useState(false);
+  const [sourcesExpanded, setSourcesExpanded] = useState(false);
   const directoryInitialized = useRef(false);
   const requestSequence = useRef(0);
+
+  useEffect(() => {
+    const query = window.matchMedia?.("(max-width: 620px)");
+    if (!query) return;
+    const update = () => setMobile(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   const load = useCallback(async (quiet = false) => {
     const sequence = ++requestSequence.current;
@@ -83,7 +96,7 @@ export default function CampusPage() {
       const [sourceResult, eventResult, noticeResult] = await Promise.all([
         api.listCampusSources(),
         api.listCampusEvents({ offset, limit: PAGE_SIZE, scope, days: 90, category, subtype, followed }),
-        api.listCampusNotices(),
+        webMode && !user ? Promise.resolve({ items: [] }) : api.listCampusNotices(),
       ]);
       if (sequence !== requestSequence.current) return;
       if (!directoryInitialized.current && sourceResult.items.length) {
@@ -100,7 +113,7 @@ export default function CampusPage() {
     } finally {
       if (sequence === requestSequence.current) setLoading(false);
     }
-  }, [category, followed, offset, scope, subtype]);
+  }, [category, followed, offset, scope, subtype, webMode, user]);
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
@@ -138,37 +151,7 @@ export default function CampusPage() {
     {busy !== null && <LatticeLoader label={busy === "activate" ? "正在启用自动发现…" : "正在更新校园资讯…"} showTimer />}
 
     <div className="campus-overview">
-      <section className="campus-panel" aria-labelledby="campus-sources-title">
-        <div className="campus-panel-heading"><div><p className="campus-panel-kicker">PUBLIC SOURCE MONITOR</p><h2 id="campus-sources-title">监测来源</h2></div><span>{sources.length} 个登记栏目</span></div>
-        <div className="campus-channel-list" aria-label="来源渠道概况">
-          <span>官网网站 · {sources.length} 个栏目</span>
-          <a href="#campus-public-links-title">公众号 · 公开外链索引</a>
-          <span>群消息 · 未接入</span>
-          <span>小程序 · 未接入</span>
-        </div>
-        {loading && sources.length === 0 ? <LatticeLoader label="正在读取来源状态…" showTimer className="campus-state" />
-          : sources.length ? <div className="campus-source-groups">{groupSources(sources).map(([institution, entries]) => <details className="campus-source-group" key={institution} open={expandedInstitutions.has(institution)} onToggle={event => {
-            const open = event.currentTarget.open;
-            setExpandedInstitutions(previous => {
-              if (previous.has(institution) === open) return previous;
-              const next = new Set(previous);
-              if (open) next.add(institution); else next.delete(institution);
-              return next;
-            });
-          }}>
-            <summary><span>{institution} · {entries.length} 个栏目</span><span aria-hidden="true" className="campus-source-chevron">⌄</span></summary>
-            <div className="campus-source-list">{entries.map(source => {
-            const status = sourceStatus(source);
-            const inactive = source.activation_state !== "enabled";
-            return <article className="campus-source" key={source.id}>
-              <div className="campus-source-copy"><a className="campus-source-name" href={source.url} title={source.name} aria-label={source.name.includes(" · ") ? undefined : source.name} target="_blank" rel="noreferrer">{sourceColumnName(source)}</a><p><span className="campus-source-channel">官网网站</span> · {source.coverage === "homepage" ? "官网入口" : source.coverage === "unverified" ? "栏目待核实" : "公开栏目"}</p><small className="campus-source-url">{source.url}</small><div className="campus-source-badges"><span data-state={inactive ? "quiet" : "ok"}>{activationLabel(source)}</span><span data-state={source.access_state === "login_required" || source.access_state === "unreachable" ? "warning" : "quiet"}>{accessLabel(source)}</span><span data-state={status.state}>{status.text}</span></div><small>最近检查：{dateTimeLabel(source.last_checked_at)} · 下次计划：{dateTimeLabel(source.next_check_at)}</small></div>
-              <div><button className="campus-source-toggle" type="button" aria-label={source.activation_state === "enabled" ? "暂停此来源" : "启用此来源"} disabled={busy !== null} onClick={() => void run(source.id, () => api.updateCampusSource(source.id, { enabled: source.activation_state !== "enabled" }))}>{source.activation_state === "enabled" ? "暂停" : source.activation_state === "paused" ? "恢复" : "启用"}</button></div>
-            </article>;
-          })}</div>
-          </details>)}</div> : <p className="campus-state">暂无登记来源。</p>}
-      </section>
-
-      <section className="campus-panel" aria-labelledby="campus-events-title">
+      <section className="campus-panel campus-events-panel" aria-labelledby="campus-events-title">
         <div className="campus-panel-heading"><div><p className="campus-panel-kicker">DISCOVERED OPPORTUNITIES</p><h2 id="campus-events-title">发现与整理</h2></div><span>{loading ? "读取中…" : `${total} 条资讯`}</span></div>
         <div className="campus-scope-tabs" role="tablist" aria-label="资讯时间范围">
           {(["recent", "unknown", "archive"] as const).map(key => <button key={key} type="button" role="tab" aria-selected={scope === key} onClick={() => changeFilter(() => setScope(key))}>{scopeLabel[key]} <span>{counts[key]}</span></button>)}
@@ -195,6 +178,38 @@ export default function CampusPage() {
           </article>; })}</div>
             : <p className="campus-state">{error ? "资讯暂不可用，请稍后刷新。" : "当前范围与筛选条件下暂无资讯。"}</p>}
         {total > PAGE_SIZE && <nav className="campus-pagination" aria-label="校园资讯分页"><span>第 {pageNumber} / {pageCount} 页</span><div className="campus-pagination-controls"><button className="campus-button" type="button" disabled={offset === 0 || loading} onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}>上一页</button><button className="campus-button" type="button" disabled={offset + PAGE_SIZE >= total || loading} onClick={() => setOffset(offset + PAGE_SIZE)}>下一页</button></div></nav>}
+      </section>
+
+      <section className="campus-panel campus-sources-panel" aria-labelledby="campus-sources-title">
+        <div className="campus-panel-heading"><div><p className="campus-panel-kicker">PUBLIC SOURCE MONITOR</p><h2 id="campus-sources-title">{mobile ? <button className="campus-sources-toggle" type="button" aria-expanded={sourcesExpanded} aria-controls="campus-source-directory" onClick={() => setSourcesExpanded(value => !value)}>监测来源<span className="campus-directory-chevron" aria-hidden="true">⌄</span></button> : "监测来源"}</h2></div><span>{sources.length} 个登记栏目</span></div>
+        <div id="campus-source-directory" hidden={mobile && !sourcesExpanded}>
+        <div className="campus-channel-list" aria-label="来源渠道概况">
+          <span>官网网站 · {sources.length} 个栏目</span>
+          <a href="#campus-public-links-title">公众号 · 公开外链索引</a>
+          <span>群消息 · 未接入</span>
+          <span>小程序 · 未接入</span>
+        </div>
+        {loading && sources.length === 0 ? <LatticeLoader label="正在读取来源状态…" showTimer className="campus-state" />
+          : sources.length ? <div className="campus-source-groups">{groupSources(sources).map(([institution, entries]) => <details className="campus-source-group" key={institution} open={expandedInstitutions.has(institution)} onToggle={event => {
+            const open = event.currentTarget.open;
+            setExpandedInstitutions(previous => {
+              if (previous.has(institution) === open) return previous;
+              const next = new Set(previous);
+              if (open) next.add(institution); else next.delete(institution);
+              return next;
+            });
+          }}>
+            <summary><span>{institution} · {entries.length} 个栏目</span><span aria-hidden="true" className="campus-source-chevron">⌄</span></summary>
+            <div className="campus-source-list">{entries.map(source => {
+            const status = sourceStatus(source);
+            const inactive = source.activation_state !== "enabled";
+            return <article className="campus-source" key={source.id}>
+              <div className="campus-source-copy"><a className="campus-source-name" href={source.url} title={source.name} aria-label={source.name.includes(" · ") ? undefined : source.name} target="_blank" rel="noreferrer">{sourceColumnName(source)}</a><p><span className="campus-source-channel">官网网站</span> · {source.coverage === "homepage" ? "官网入口" : source.coverage === "unverified" ? "栏目待核实" : "公开栏目"}</p><small className="campus-source-url">{source.url}</small><div className="campus-source-badges"><span data-state={inactive ? "quiet" : "ok"}>{activationLabel(source)}</span><span data-state={source.access_state === "login_required" || source.access_state === "unreachable" ? "warning" : "quiet"}>{accessLabel(source)}</span><span data-state={status.state}>{status.text}</span></div><small>最近检查：{dateTimeLabel(source.last_checked_at)} · 下次计划：{dateTimeLabel(source.next_check_at)}</small></div>
+              <div><button className="campus-source-toggle" type="button" aria-label={source.activation_state === "enabled" ? "暂停此来源" : "启用此来源"} disabled={busy !== null} onClick={() => void run(source.id, () => api.updateCampusSource(source.id, { enabled: source.activation_state !== "enabled" }))}>{source.activation_state === "enabled" ? "暂停" : source.activation_state === "paused" ? "恢复" : "启用"}</button></div>
+            </article>;
+          })}</div>
+          </details>)}</div> : <p className="campus-state">暂无登记来源。</p>}
+        </div>
       </section>
     </div>
 

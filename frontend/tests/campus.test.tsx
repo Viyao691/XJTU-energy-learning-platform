@@ -5,17 +5,21 @@ import { createElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CampusPage from "../app/campus/page";
 
-const { apiMock } = vi.hoisted(() => ({ apiMock: {
+const { authState, apiMock } = vi.hoisted(() => ({ authState: { webMode: false, user: null as { id: number } | null }, apiMock: {
   listCampusSources: vi.fn(), activateCampus: vi.fn(), updateCampusSource: vi.fn(),
   listCampusEvents: vi.fn(), updateCampusEvent: vi.fn(), listCampusNotices: vi.fn(), markCampusNoticeRead: vi.fn(),
   listCampusPublicLinks: vi.fn(),
 } }));
 vi.mock("../lib/api", async original => ({ ...(await original<typeof import("../lib/api")>()), api: apiMock }));
+vi.mock("../components/auth/AuthProvider", () => ({ useAuth: () => authState }));
 
 describe("CampusPage", () => {
-  afterEach(cleanup);
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
   beforeEach(() => {
     vi.clearAllMocks();
+    authState.webMode = false;
+    authState.user = null;
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })));
     apiMock.listCampusPublicLinks.mockResolvedValue({ items: [], total: 0, counts: { recent: 0, unknown: 0, archive: 0 }, days: 90 });
     apiMock.listCampusSources.mockResolvedValue({ items: [
       { id: 1, key: "future", name: "未来技术学院通知公告", group: "未来技术学院", url: "https://wljsxy.xjtu.edu.cn/", priority: 100, enabled: true, activation_state: "enabled", access_state: "login_required", coverage: "column", status: "blocked", detail: "跳转至统一身份认证", last_checked_at: "2026-09-25T01:00:00Z", last_success_at: "2026-09-25T01:00:00Z", next_check_at: "2026-09-25T13:00:00Z", robots_status: "missing" },
@@ -108,6 +112,30 @@ describe("CampusPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "刷新列表" }));
     await waitFor(() => expect(apiMock.listCampusSources).toHaveBeenCalledTimes(2));
     expect(group.open).toBe(true);
+  });
+
+  it("prioritizes mobile news and keeps source management collapsed until opened", async () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() })));
+    const { container } = render(createElement(CampusPage));
+    expect(await screen.findByText("西安交通大学《电信T.A杯》“AI+教育”创新应用技能大赛比赛方案")).toBeTruthy();
+    const toggle = screen.getByRole("button", { name: /监测来源/ });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(container.querySelector("#campus-source-directory")?.hasAttribute("hidden")).toBe(true);
+    const panels = container.querySelectorAll(".campus-overview > section");
+    expect(panels[0].getAttribute("aria-labelledby")).toBe("campus-events-title");
+    await userEvent.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(container.querySelector("#campus-source-directory")?.hasAttribute("hidden")).toBe(false);
+    expect(screen.getByRole("link", { name: "教学教务" })).toBeTruthy();
+  });
+
+  it("loads public campus news for guests without requesting private notices", async () => {
+    authState.webMode = true;
+    apiMock.listCampusNotices.mockRejectedValue(new Error("请先登录后使用科研功能"));
+    render(createElement(CampusPage));
+    expect(await screen.findByText("西安交通大学《电信T.A杯》“AI+教育”创新应用技能大赛比赛方案")).toBeTruthy();
+    expect(apiMock.listCampusNotices).not.toHaveBeenCalled();
+    expect(screen.queryByRole("alert")).toBeNull();
   });
 
   it("shows link-only public articles with unknown dates and both source links", async () => {

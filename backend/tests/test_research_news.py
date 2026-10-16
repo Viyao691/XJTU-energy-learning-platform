@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 
 import httpx
+import pytest
 
 from app.paper_sources.base import SearchFilters
 from app.services.research_news import FEEDS, ResearchNewsDigest, ResearchNewsSource, topic_terms
@@ -174,4 +175,58 @@ def test_multi_source_digest_keeps_cached_failed_feed_and_deduplicates_urls():
         assert len(second["items"]) == 4
         assert any(item["source"].startswith("EIA") for item in second["items"])
         assert any("EIA" in warning for warning in second["warnings"])
+    asyncio.run(run())
+
+
+def test_http_200_html_verification_page_is_not_treated_as_rss():
+    async def run():
+        html_page = "<!DOCTYPE html><html><body>Please enable JavaScript to verify your browser.</body></html>"
+        async with httpx.AsyncClient(transport=httpx.MockTransport(lambda _: httpx.Response(200, text=html_page))) as client:
+            with pytest.raises(ValueError, match="来源返回网页或访问验证页"):
+                await ResearchNewsSource(client, FEEDS[0]).search("", SearchFilters())
+    asyncio.run(run())
+
+
+def test_valid_rss_with_html_description_is_still_accepted():
+    xml = """<rss><channel><item><title>Battery energy research</title>
+    <link>https://news.mit.edu/2026/battery</link>
+    <description><![CDATA[<html><body>Energy storage advances.</body></html>]]></description>
+    </item></channel></rss>"""
+    async def run():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(lambda _: httpx.Response(200, text=xml))) as client:
+            items = await ResearchNewsSource(client, FEEDS[0]).search("", SearchFilters())
+        assert len(items) == 1 and "Energy storage advances." in items[0].abstract
+    asyncio.run(run())
+
+
+def test_html_feed_failure_explains_problem_and_preserves_cached_mit_items():
+    failing_mit = False
+
+    def handler(request):
+        if request.url.host == "news.mit.edu":
+            if failing_mit:
+                return httpx.Response(200, text="<!DOCTYPE html><html><body>Verify your browser. token-do-not-show</body></html>")
+            return httpx.Response(200, text=XML)
+        host = request.url.host
+        path = "/news/grid" if "cleanenergywire" in host else "/energy"
+        return httpx.Response(200, text=f"<rss><channel><item><title>Battery energy storage</title><link>https://{host}{path}</link></item></channel></rss>")
+
+    @asynccontextmanager
+    async def factory():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            yield client
+
+    async def run():
+        nonlocal failing_mit
+        digest = ResearchNewsDigest(factory)
+        first = await digest.latest()
+        assert first["warnings"] == []
+        failing_mit = True
+        digest._expires_at = datetime.min
+        second = await digest.latest()
+        assert len(second["warnings"]) == 2
+        assert all("返回网页或访问验证页" in warning for warning in second["warnings"])
+        assert "token-do-not-show" not in str(second)
+        assert {item["url"] for item in first["items"]} == {item["url"] for item in second["items"]}
+        assert (digest._expires_at - second["fetched_at"]).total_seconds() == 300
     asyncio.run(run())

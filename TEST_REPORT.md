@@ -1,5 +1,13 @@
 # 最新验证报告 · 2026-10-15
 
+## 校园手机布局与 RSS 诊断 · 2026-10-16
+
+- `npm.cmd --prefix frontend run test -- tests/campus.test.tsx`：8 passed，新增手机默认收起/展开和资讯优先、游客不请求私人提醒；均先红后绿。
+- `backend/.venv/Scripts/python.exe -m pytest tests/test_research_news.py -q --disable-warnings`：11 passed，使用MockTransport，新增200 HTML拒绝、有效RSS中HTML摘要及失败缓存/300秒重试。
+- Docker前端生产构建通过；390×844和1440×900浏览器检查资讯/来源顺序、展开/收起及无横向溢出。并非真机测试。
+- Web/API web-20261016-campus-news健康，数据库0034；HTTPS校园200且BUILD_ID izB7mfVtSbqXeaJrAMuR4匹配。日报返回40条真实资讯，五源均可读且无来源警告；上游访问验证可能再次出现。未运行全套测试、无模型调用、未激活校园抓取。
+
+
 ## 手机编年史控制按钮移除 · 2026-10-16 已部署
 
 按用户截图，仅在<=620px隐藏“暂停/播放动效”和“重播入场”控制区，不占位；电脑按钮保留。仅chronicle.module.css一条局部规则，无业务/模型/API/数据库变更。生产构建含类型检查通过；浏览器390×844实读控制区display:none、按钮尺寸0，1440×900为flex、两个按钮各88.2px。截图.verification/chronicle-mobile-controls/mobile.jpg。按纯样式范围未重复业务套件。
