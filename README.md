@@ -11,9 +11,22 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Python%203.12-3b786c?style=flat-square)
 ![Local First](https://img.shields.io/badge/Local-First-b08b50?style=flat-square)
 
-[📦 下载 Windows 便携版](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) · [🎬 在线播放完整演示](https://viyao691.github.io/XJTU-energy-learning-platform/) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
+[🌐 PC 网页体验](https://energy.viyao.cn) · [🎬 观看演示](https://viyao691.github.io/XJTU-energy-learning-platform/) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
 
 </div>
+
+## 参赛作品与团队
+
+**能研智助——面向储能领域的科研智慧学习平台**，参加传智杯 AI Web 开发赛道，参赛形式为 PC 网页端。
+
+项目由 **席铭蔚（西安交通大学）** 个人完成，负责产品设计、前后端开发、AI 功能集成、部署和参赛材料整理。
+
+评审可通过 [PC 网页端](https://energy.viyao.cn) 访问平台，评审账号随参赛材料提供。公开知识可直接浏览，个人论文与科研工作区需登录。
+
+## 源码版本
+
+- [`main`](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/main)：本地运行版本，安装方式见下方快速开始。
+- [Web 源码分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)：包含网页账户、数据隔离、网站部署配置和 PC 网页端源码。
 
 ![平台首页 · 浅色主题](docs/github/screenshots/home-light.jpg)
 
@@ -210,6 +223,12 @@ docker compose up -d --build
 Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开 `http://localhost:3000`。首次构建会下载依赖，需要一定时间与磁盘空间。
 
 [安装、配置与开发说明](docs/github/SETUP.md)
+
+### 环境与依赖
+
+本地源码运行使用 Node.js 24、Python 3.12；容器部署需要 Docker 与 Docker Compose。环境变量模板为 [`.env.example`](.env.example)，后端依赖见 [`backend/requirements.txt`](backend/requirements.txt)，前端依赖及锁定版本见 [`frontend/package.json`](frontend/package.json) 和 [`frontend/package-lock.json`](frontend/package-lock.json)。
+
+复制环境模板为 `.env` 后按需配置模型，Mock 模式可直接体验基础流程。真实模型的 API 密钥由后端读取，`.env` 已通过 `.gitignore` 排除。
 
 ## 模型与运行方式
 
