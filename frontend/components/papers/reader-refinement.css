@@ -227,3 +227,21 @@ html[data-theme="dark"] .workspace-v2 .app-main .reader-refined .visual-link.sel
   .workspace-v2 .reader-refined .page-toolbar button { font-size: 11px; padding: 6px; }
   .workspace-v2 .reader-refined .page-toolbar span { font-size: 11px; min-width: 0; }
 }
+
+@media (max-width: 620px) {
+  .workspace-v2.web-mobile-ready .app-main:has(> .reader-refined) { padding-inline: 8px; }
+  .workspace-v2 .reader-refined { padding: 8px 0 14px; }
+  .workspace-v2 .app-main .reader-refined .pdf-workspace,
+  .workspace-v2 .app-main .reader-refined .analysis-panel { padding: 10px; }
+  .workspace-v2 .reader-refined .reader-paper-header h1 { font-size: 18px; }
+  .workspace-v2 .reader-refined .reader-section-heading h2 { font-size: 20px; }
+  .workspace-v2 .reader-refined .reader-section-heading > span { font-size: 11px; }
+  .workspace-v2 .reader-refined .analysis-tabs { gap: 4px; margin-bottom: 8px; }
+  .workspace-v2 .app-main .reader-refined .analysis-tabs button { font-size: 13px; min-height: 36px; padding: 6px 8px; line-height: 1.35; white-space: nowrap; }
+  .workspace-v2 .reader-refined .analysis-tab-panel > .toolbar { gap: 8px; }
+  .workspace-v2 .reader-refined .analysis-tab-panel > .toolbar h2 { font-size: 18px; }
+  .workspace-v2 .app-main .reader-refined .analysis-tab-panel > .toolbar button { font-size: 12px; min-height: 36px; padding: 6px 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-refined .markdown-content h1 { font-size: 19px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-refined .markdown-content :is(h2, h3) { font-size: 17px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .reader-refined .markdown-content h4 { font-size: 15px; }
+}

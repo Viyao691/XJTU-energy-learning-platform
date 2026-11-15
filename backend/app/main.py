@@ -95,8 +95,9 @@ def create_app() -> FastAPI:
         get_settings().paper_storage_dir.mkdir(parents=True, exist_ok=True)
         app.state.document_ai_manager.recover_interrupted(app.state.session_factory)
         recover_interrupted_tasks(app.state.session_factory)
-        if not settings.web_mode:
+        if not settings.web_mode or settings.web_research_scheduler_enabled:
             await app.state.research_scheduler.start()
+        if not settings.web_mode or settings.web_campus_scheduler_enabled:
             await app.state.campus_service.start()
         await app.state.backup_scheduler.start()
         try:
@@ -132,6 +133,7 @@ def create_app() -> FastAPI:
         session_factory=factory,
         research_service=app.state.research_service,
         now_provider=datetime.utcnow,
+        web_scan_session_factory=sessionmaker(bind=engine) if settings.web_mode else None,
     )
     app.state.campus_service = CampusService(factory)
     app.state.document_ai_manager = DocumentAIManager(

@@ -30,5 +30,18 @@ it("shows multiple real sources with energy ahead of a separate AI group", async
   expect(within(energy).getByText("2026-10-03")).toBeTruthy();
   expect(within(energy).getByRole("link", { name: /Natural gas market/ }).getAttribute("href")).toBe("https://www.eia.gov/todayinenergy/detail.php?id=1");
   expect(within(ai).getByText("MIT News · 人工智能")).toBeTruthy();
-  expect(screen.getByText("3 个来源")).toBeTruthy();
+  expect(screen.getByText("已收录 3 个来源")).toBeTruthy();
+});
+
+it("keeps partial refresh notices compact and preserves readable news", async () => {
+  const warning = "MIT News · 人工智能 来源返回网页或访问验证页；已保留 1 条缓存资讯。";
+  const news = await apiMock.latestResearchNews();
+  apiMock.latestResearchNews.mockResolvedValue({ ...news, warnings: [warning] });
+  render(createElement(ResearchDailyPage));
+  const summary = await screen.findByText("1 个来源暂时无法更新，已有资讯仍可阅读");
+  const details = summary.closest("details");
+  expect(details).toBeTruthy();
+  expect(details?.hasAttribute("open")).toBe(false);
+  expect(within(details!).getByText(warning).classList.contains("error")).toBe(false);
+  expect(screen.getByRole("link", { name: /AI model update/ })).toBeTruthy();
 });

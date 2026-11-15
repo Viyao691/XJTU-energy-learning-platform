@@ -136,12 +136,13 @@ class ResearchNewsDigest:
             warnings = []
             for feed, outcome in zip(FEEDS, outcomes):
                 if isinstance(outcome, Exception):
+                    cached_items = [item for item in self._cache["items"] if item["source"] == feed[1]] if self._cache else []
+                    cache_status = f"已保留 {len(cached_items)} 条缓存资讯" if cached_items else "暂无缓存资讯"
                     if isinstance(outcome, NewsFeedFormatError):
-                        warnings.append(f"{feed[1]} 来源返回网页或访问验证页，当前服务器暂时无法读取 RSS；其他来源仍可阅读，5分钟后重试。")
+                        warnings.append(f"{feed[1]} 来源返回网页或访问验证页，当前服务器暂时无法读取 RSS；{cache_status}，5分钟后重试。")
                     else:
-                        warnings.append(f"{feed[1]} 暂时无法获取，稍后会重试。")
-                    if self._cache:
-                        items.extend(item for item in self._cache["items"] if item["source"] == feed[1])
+                        warnings.append(f"{feed[1]} 暂时无法更新；{cache_status}，5分钟后重试。")
+                    items.extend(cached_items)
                 else:
                     items.extend(dict(title=paper.title, source=paper.journal, url=paper.landing_url, published_date=paper.published_date, summary=paper.abstract) for paper in outcome)
             items = list({item["url"]: item for item in items}.values())

@@ -66,8 +66,12 @@ def _priority(event: CampusEvent) -> int:
 
 
 def configured_provider(db: Session) -> tuple[str, str, ModelProvider | None]:
-    setting = db.get(UserSetting, 1)
     config = get_settings()
+    # Shared public collection has no paying user. Keep its classification
+    # rule-based rather than bypassing the Web provider's owner/budget gate.
+    if config.web_mode:
+        return config.model_provider, config.model_name, None
+    setting = db.get(UserSetting, 1)
     name = setting.model_provider if setting else config.model_provider
     model = setting.model_name if setting else config.model_name
     if name == "mock":
@@ -80,6 +84,10 @@ def configured_provider(db: Session) -> tuple[str, str, ModelProvider | None]:
                              model, setting.timeout_seconds if setting else config.model_timeout_seconds,
                              setting.vision_model if setting else config.model_vision_model)
     return name, model, provider
+
+
+def _unconfigured_reason() -> str:
+    return "公共校园资讯使用规则整理，未启用后台 AI" if get_settings().web_mode else "尚未配置可用文本模型"
 
 
 def _validated(data: object, source_text: str, url: str) -> dict[str, object]:
@@ -166,7 +174,7 @@ class CampusAnalyzer:
             if provider is None:
                 event.analysis_json = json.dumps({"status": "not_configured", "method": "rule", "model": None,
                                                   "prompt_version": PROMPT_VERSION,
-                                                  "unknowns": ["尚未配置可用文本模型"], "evidence": []}, ensure_ascii=False)
+                                                  "unknowns": [_unconfigured_reason()], "evidence": []}, ensure_ascii=False)
                 db.commit()
                 return
             key = hashlib.sha256(f"{content_hash}:{name}:{model}:{PROMPT_VERSION}".encode()).hexdigest()
@@ -247,7 +255,7 @@ class CampusAnalyzer:
             if provider is None:
                 event.analysis_json = json.dumps({"status": "not_configured", "method": "rule",
                                                   "model": None, "prompt_version": PROMPT_VERSION,
-                                                  "unknowns": ["尚未配置可用文本模型"], "evidence": []}, ensure_ascii=False)
+                                                  "unknowns": [_unconfigured_reason()], "evidence": []}, ensure_ascii=False)
                 db.commit()
                 return False
             key = hashlib.sha256(f"{content_hash}:{name}:{model}:{PROMPT_VERSION}".encode()).hexdigest()

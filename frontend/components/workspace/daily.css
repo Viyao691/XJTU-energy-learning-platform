@@ -1,4 +1,10 @@
 .workspace-v2 .research-daily-refined { gap: 10px; margin: 0; max-width: none; }
+.workspace-v2 .research-daily-refined .daily-source-status { background: #faf5e8; border: 1px solid #e5d7b7; border-radius: 9px; color: #715527; font-size: 13px; line-height: 1.6; margin-bottom: 14px; padding: 9px 12px; }
+.workspace-v2 .research-daily-refined .daily-source-status summary { cursor: pointer; min-height: 24px; }
+.workspace-v2 .research-daily-refined .daily-source-status summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.workspace-v2 .research-daily-refined .daily-source-status ul { margin: 8px 0 0; padding-left: 20px; }
+.workspace-v2 .research-daily-refined .daily-source-status li + li { margin-top: 5px; }
+html[data-theme="dark"] .workspace-v2 .research-daily-refined .daily-source-status { background: #302c24; border-color: #6e5c38; color: #edce94; }
 .workspace-v2 .research-daily-refined :is(h1,h2,h3,p) { margin-top: 0; }
 .workspace-v2 .research-daily-refined .daily-hero {
   background-color: #f8f6ef;

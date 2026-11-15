@@ -18,11 +18,10 @@ ADMIN_PREFIXES = ("/api/v1/settings", "/api/v1/maintenance", "/api/v1/diagnostic
 DISABLED = re.compile(
     r"(?:/document-ai(?:/|$)|/ocr-runs(?:/|$)|/parse-runs(?:/|$)|"
     r"/transcribe-formula$|/cloud-enhance$|/audio$|/contest-sources/\d+/ocr$|"
-    r"/visuals/\d+/analyze$|/crops/\d+/(?:analyze|extract-data)$|"
-    r"/research/subscriptions(?:/|$))"
+    r"/visuals/\d+/analyze$|/crops/\d+/(?:analyze|extract-data)$)"
 )
 
-LONG_OPERATION = re.compile(r"/(?:upload|import|analyze|generate|ask|compare|external-comparison|reading-highlights|index|reindex)(?:/|$)|/analysis/|/research-ideas/review")
+LONG_OPERATION = re.compile(r"/(?:upload|import|analyze|generate|ask|compare|external-comparison|reading-highlights|index|reindex)(?:/|$)|/analysis/|/research-ideas/review|/research/subscriptions/\d+/run$")
 
 
 def install_web_access(app, settings, auth_factory):
@@ -64,6 +63,8 @@ def install_web_access(app, settings, auth_factory):
                         return JSONResponse({"detail": "此操作需要管理员权限"}, status_code=403)
                 if DISABLED.search(path):
                     return JSONResponse({"detail": "轻量网站首版尚未开放此功能"}, status_code=503)
+                if (path == "/api/v1/research/subscriptions" or path.startswith("/api/v1/research/subscriptions/")) and not settings.web_research_scheduler_enabled:
+                    return JSONResponse({"detail": "管理员尚未启用研究订阅"}, status_code=503)
                 if path == "/api/v1/tasks" and request.method == "POST":
                     return JSONResponse({"detail": "请从具体科研操作创建任务"}, status_code=403)
                 if request.method == "POST" and LONG_OPERATION.search(path):

@@ -256,9 +256,7 @@ def register_campus_routes(app, get_db) -> None:
         elif not archived:
             items = [item for item in items if item.feed_status == "recent"]
         def sort_key(item: CampusEventResponse):
-            future_days = [part.day for part in item.dates if part.day >= today.isoformat()]
-            verified = item.published_on or (min(future_days) if future_days else "")
-            return (verified, item.priority, item.id)
+            return (item.published_on or "", item.priority, item.id)
         items.sort(key=sort_key, reverse=True)
         return CampusEventList(items=items[offset:offset + limit], total=len(items), counts=counts, days=days)
 

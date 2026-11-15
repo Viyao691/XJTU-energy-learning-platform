@@ -113,9 +113,10 @@
 }
 
 @media (max-width: 620px) {
-  .workspace-v2.web-mobile-ready .workspace-v2-column { position: relative; isolation: isolate; }
-  .workspace-v2.web-mobile-ready .workspace-mobile-backdrop { display: block; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--mobile-material-image) center / cover no-repeat; }
-  .workspace-v2.web-mobile-ready .workspace-mobile-backdrop::after { content: ""; position: absolute; inset: 0; background: rgba(243, 246, 238, .6); }
+  .workspace-v2.web-mobile-ready { position: relative; isolation: isolate; }
+  .workspace-v2.web-mobile-ready .workspace-v2-column { position: relative; z-index: 1; }
+  .workspace-v2.web-mobile-ready > .workspace-mobile-backdrop { display: block; position: fixed; inset: 0; width: 100%; height: 100dvh; overflow: clip; z-index: 0; pointer-events: none; background: var(--mobile-material-image) center / cover no-repeat; }
+  .workspace-v2.web-mobile-ready .workspace-mobile-backdrop::after { content: ""; position: absolute; inset: 0; background: rgba(243, 246, 238, .82); }
   html[data-theme='dark'] .workspace-v2.web-mobile-ready .workspace-mobile-backdrop { background-image: var(--mobile-material-dark-image); }
   html[data-theme='dark'] .workspace-v2.web-mobile-ready .workspace-mobile-backdrop::after { background: rgba(4, 16, 27, .4); }
   .workspace-v2.web-mobile-ready .workspace-v2-topbar { position: relative; z-index: 2; background: #e1e6e2; border-bottom: 1px solid #aebdb7; box-shadow: 0 2px 8px rgba(22, 45, 42, .08); }
@@ -137,7 +138,7 @@
   .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) :is(p, li, td, label) { font-size: 13px; line-height: 1.5; }
   .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) :is(.workspace-page, .editorial-page, .workspace-grid, .tools-grid, .tools-two-column, .system-settings-grid) { gap: 10px; }
   .workspace-v2.web-mobile-ready #workspace-action-surface > :is(.workspace-page, .editorial-page) { gap: 10px; }
-  .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) :is(.card, .search-form, .search-result, .editorial-empty-state) { padding: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) :is(.card, .search-form, .search-result, .editorial-empty-state) { padding: 10px; }
   .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) :is(form, .subscription-create-form, .learning-plan-form) { gap: 10px; }
   .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) form label { gap: 5px; margin: 0 0 5px; }
   .workspace-v2.web-mobile-ready #workspace-action-surface > :not(.reader-workspace) .card > :is(h2, p) { margin-top: 0; margin-bottom: 8px; }
@@ -215,4 +216,29 @@
   .workspace-v2.web-mobile-ready #workspace-action-surface .material-help-group { gap: 10px; padding: 16px 0; }
   .workspace-v2.web-mobile-ready #workspace-action-surface .material-help-entries summary { gap: 8px; padding: 10px 0; font-size: 14px; grid-template-columns: 24px 1fr 20px; }
   .workspace-v2.web-mobile-ready #workspace-action-surface :is(.material-help-entries, .material-help-faq) details p { margin: 0 0 12px 32px; font-size: 13px; line-height: 1.5; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface > :is(.workspace-page, .editorial-page) { gap: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-workflow { gap: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-workflow > li { padding: 8px 10px; gap: 2px 8px; border-radius: 10px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-workflow strong { font-size: 14px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-workflow span { font-size: 12px; line-height: 1.4; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-metric { padding: 8px 10px; gap: 2px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .tools-metric strong { font-size: 22px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-status-panel { padding: 10px !important; gap: 7px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-status-panel > div { gap: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-status-track { height: 6px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface :is(.data-import-panel, .data-preview-panel) { padding: 10px !important; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-import-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-import-form label { min-width: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .data-import-form input[type='file'] { min-width: 0; font-size: 12px; padding: 8px 5px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-hero { min-height: 0; padding: 14px; border-radius: 14px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-hero-copy > p:last-child { margin-top: 8px; line-height: 1.45; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-panel { padding: 10px; border-radius: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-panel-heading { margin-bottom: 8px; gap: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-sources-panel .campus-panel-heading { margin-bottom: 0; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-panel-kicker { margin-bottom: 5px; font-size: 10px; letter-spacing: .08em; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-scope-tabs { margin-bottom: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-scope-tabs button { min-height: 36px; padding: 5px; font-size: 12px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-controls { gap: 6px; margin-bottom: 8px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface .campus-event { padding: 10px; border-radius: 10px; }
+  .workspace-v2.web-mobile-ready #workspace-action-surface :is(.daily-panel, .ideas-entry-card, .idea-card, .ideas-design-panel, .ideas-export-panel, .data-detail-panel) { padding: 10px !important; gap: 8px; }
 }

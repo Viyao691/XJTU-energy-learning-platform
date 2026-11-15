@@ -226,7 +226,22 @@ def test_html_feed_failure_explains_problem_and_preserves_cached_mit_items():
         second = await digest.latest()
         assert len(second["warnings"]) == 2
         assert all("返回网页或访问验证页" in warning for warning in second["warnings"])
+        assert all("已保留 1 条缓存资讯" in warning for warning in second["warnings"])
         assert "token-do-not-show" not in str(second)
         assert {item["url"] for item in first["items"]} == {item["url"] for item in second["items"]}
         assert (digest._expires_at - second["fetched_at"]).total_seconds() == 300
+    asyncio.run(run())
+
+
+def test_feed_unavailable_without_cache_does_not_claim_cached_content():
+    @asynccontextmanager
+    async def factory():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(lambda _: httpx.Response(503))) as client:
+            yield client
+
+    async def run():
+        result = await ResearchNewsDigest(factory).latest()
+        assert result["items"] == []
+        assert all("暂无缓存资讯" in warning for warning in result["warnings"])
+        assert all("5分钟后重试" in warning for warning in result["warnings"])
     asyncio.run(run())

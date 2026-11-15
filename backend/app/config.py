@@ -18,6 +18,8 @@ class AppSettings(BaseSettings):
 
     web_mode: bool = Field(default=False, validation_alias=AliasChoices("ENERGY_WEB_MODE", "WEB_MODE", "web_mode"))
     web_origin: str = "https://energy.viyao.cn"
+    web_research_scheduler_enabled: bool = False
+    web_campus_scheduler_enabled: bool = False
     web_max_pdf_pages: int = Field(default=100, ge=1)
     web_user_storage_mb: int = Field(default=200, ge=1)
     web_model_concurrency: int = Field(default=2, ge=1)

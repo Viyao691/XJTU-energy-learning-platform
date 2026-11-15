@@ -360,6 +360,45 @@ def test_existing_campus_event_uses_current_rule_without_reharvest(factory):
         assert item.analysis.status == 'pending'
 
 
+def test_events_sort_by_publication_before_pagination(tmp_path, monkeypatch):
+    import json
+    from fastapi.testclient import TestClient
+    from app.campus_models import CampusEvent
+    from app.config import reset_settings_cache
+    from app.database import Base
+    from app.main import create_app
+    from app.services.campus import campus_today
+
+    url = f"sqlite:///{(tmp_path / 'sorting.db').as_posix()}"
+    monkeypatch.setenv('DATABASE_URL', url)
+    reset_settings_cache()
+    engine = create_engine(url)
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(engine, expire_on_commit=False, autoflush=False)
+    today = campus_today(datetime.utcnow())
+    with factory() as db:
+        for title, published, deadline in [
+            ('unknown', None, today + timedelta(days=200)),
+            ('older', today - timedelta(days=10), today + timedelta(days=300)),
+            ('newer', today - timedelta(days=1), today + timedelta(days=30)),
+        ]:
+            db.add(CampusEvent(identity=title, title=title, category='', excerpt='',
+                               dates_json=json.dumps([{'kind': '报名', 'day': deadline.isoformat(), 'evidence': ''}]),
+                               published_on=published, priority=99, followed=False, conflict=False,
+                               first_seen_at=datetime.utcnow(), updated_at=datetime.utcnow()))
+        db.commit()
+    app = create_app()
+    app.state.session_factory = factory
+    client = TestClient(app)
+    response = client.get('/api/v1/campus/events', params={'scope': 'recent', 'limit': 2})
+    assert [item['title'] for item in response.json()['items']] == ['newer', 'older']
+    response = client.get('/api/v1/campus/events', params={'scope': 'recent', 'offset': 2, 'limit': 2})
+    assert [item['title'] for item in response.json()['items']] == ['unknown']
+    app.state.engine.dispose()
+    engine.dispose()
+    reset_settings_cache()
+
+
 def test_quality_api_scopes_keep_unknown_and_historical_separate(factory):
     from fastapi.testclient import TestClient
     from app.campus_models import CampusEvent

@@ -162,3 +162,11 @@
 @media (max-width: 600px) { :global(.app-main):has(.page), :global(.workspace-v2 .app-main):has(.page) { padding: 14px 12px 40px; }.page .hotspot, .page .hotspot:hover, .page .hotspot:active, .page .hotspot.hotspotFlip, .page .hotspot.hotspotFlip:hover, .page .hotspot.hotspotFlip:active { min-height: 30px; padding: 2px; transform: translate(-50%, -50%) !important; }.hotspotNumber { flex-basis: 26px; height: 26px; width: 26px; }.hotspotLabel { display: none; }.mapCorner { bottom: 9px; right: 9px; }.mapCorner span { display: none; }.mapCorner strong { font-size: 23px; }.legend small { flex-basis: 100%; margin: 0; }.sectionHeading > span { display: none; } }
 @media (max-width: 420px) { .modeControl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }.page .modeButton, .page .modeActive { font-size: 13px; padding: 9px 3px; }.sceneSection { padding: 16px; }.page .sceneButton { min-height: 62px; padding: 9px; }.sceneButton strong { font-size: 15px; }.mapHeading { padding: 10px 12px; }.mapTag { display: none; }.diagram { gap: 1px; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr) 30px minmax(0, 1fr); }.diagramNode strong { font-size: 14px; } }
 @media (prefers-reduced-motion: reduce) { .map *, .map *::before, .diagram *, .diagram *::after { animation: none !important; transition: none !important; }.page button { transition: none; } }
+@media (max-width: 620px) {
+  .page { gap: 10px; }
+  .infoCard, .sceneSection { padding: 12px; }
+  :global(.workspace-v2.web-mobile-ready #workspace-action-surface) .page button.hotspot[aria-pressed] { background: transparent !important; border: 0 !important; border-radius: 0; box-shadow: none !important; color: #fff !important; min-height: 36px !important; min-width: 36px; width: 36px; height: 36px; max-width: 36px; padding: 0 !important; justify-content: center; transform: translate(-50%, -50%) !important; }
+  .page .hotspot .hotspotNumber { background: transparent !important; color: inherit; border-radius: 0; box-shadow: none; animation: none; flex-basis: auto; height: auto; width: auto; font-size: 19px; line-height: 1; text-shadow: -1px -1px 0 #173650, 1px -1px 0 #173650, -1px 1px 0 #173650, 1px 1px 0 #173650, 0 2px 3px #173650; }
+  .page .hotspotActive .hotspotNumber { color: #ffda72; }
+  .page .hotspotLabel { display: none; }
+}

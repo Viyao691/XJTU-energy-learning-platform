@@ -98,9 +98,12 @@ export default function ResearchDailyPage() {
     </header>
 
     <section className="daily-panel research-news-panel" aria-labelledby="research-news-title">
-      <div className="daily-panel-heading"><div><p className="daily-panel-kicker">ENERGY + AI FRONTIERS</p><h2 id="research-news-title">能源与 AI 前沿</h2></div><span>{news ? `${sourceCount} 个来源` : "多源资讯"}</span></div>
+      <div className="daily-panel-heading"><div><p className="daily-panel-kicker">ENERGY + AI FRONTIERS</p><h2 id="research-news-title">能源与 AI 前沿</h2></div><span>{news ? `已收录 ${sourceCount} 个来源` : "多源资讯"}</span></div>
       {newsError ? <p className="error">{newsError}</p> : !news ? <LatticeLoader label="正在读取能源与 AI 资讯…" showTimer /> : <>
-        {news.warnings.map(warning => <p key={warning} className="error">{warning}</p>)}
+        {news.warnings.length > 0 && <details className="daily-source-status">
+          <summary>{news.warnings.length} 个来源暂时无法更新{news.items.length > 0 ? "，已有资讯仍可阅读" : "，正在等待恢复"}</summary>
+          <ul>{news.warnings.map(warning => <li key={warning}>{warning}</li>)}</ul>
+        </details>}
         {news.items.length ? newsGroups.map(group => <section className="research-news-group" aria-labelledby={group.id} key={group.id}>
           <h3 id={group.id}>{group.title}</h3>
           {group.items.length ? <div className="research-results research-news-grid">{group.items.map(item => <article className="research-result" key={item.url}><div className="research-result-meta"><span>{item.source}</span><time dateTime={item.published_date || undefined}>{item.published_date || "日期未提供"}</time></div><h4><a href={item.url} target="_blank" rel="noopener noreferrer">{item.title} ↗</a></h4><p>{item.summary}</p></article>)}</div> : <p>暂无{group.title}。</p>}

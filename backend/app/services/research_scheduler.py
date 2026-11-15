@@ -11,6 +11,7 @@ from typing import Any
 from sqlalchemy import select
 
 from app.models import ResearchSubscription
+from app.ownership import current_user_id
 
 
 class ResearchRunInProgress(RuntimeError):
@@ -26,10 +27,12 @@ class ResearchScheduler:
         session_factory: Callable[[], Any],
         research_service: Any,
         now_provider: Callable[[], datetime] = datetime.utcnow,
+        web_scan_session_factory: Callable[[], Any] | None = None,
     ) -> None:
         self._session_factory = session_factory
         self._research_service = research_service
         self._now_provider = now_provider
+        self._web_scan_session_factory = web_scan_session_factory
         self._locks: dict[int, asyncio.Lock] = {}
         self._task: asyncio.Task[None] | None = None
         self._last_error: str | None = None
@@ -50,10 +53,17 @@ class ResearchScheduler:
 
     async def run_due_once(self) -> list[Any]:
         now = self._now_provider()
-        with self._session_factory() as db:
-            subscription_ids = list(
-                db.scalars(
-                    select(ResearchSubscription.id)
+        # Only this enumeration uses a global session. Runs and writes always
+        # retain OwnedSession filtering under the subscription's actual owner.
+        factory = self._web_scan_session_factory or self._session_factory
+        with factory() as db:
+            query = select(ResearchSubscription.id, ResearchSubscription.user_id)
+            if self._web_scan_session_factory is not None:
+                from app.auth_models import WebUser
+                query = query.join(WebUser, WebUser.id == ResearchSubscription.user_id).where(ResearchSubscription.user_id > 0)
+            subscriptions = list(
+                db.execute(
+                    query
                     .where(
                         ResearchSubscription.enabled.is_(True),
                         ResearchSubscription.next_run_at.is_not(None),
@@ -66,13 +76,17 @@ class ResearchScheduler:
                 )
             )
         results = []
-        for subscription_id in subscription_ids:
+        for subscription_id, owner in subscriptions:
+            token = current_user_id.set(owner) if self._web_scan_session_factory is not None else None
             try:
                 if not self._is_still_due(subscription_id, now):
                     continue
                 results.append(await self.run_now(subscription_id))
             except (ResearchRunInProgress, ValueError):
                 continue
+            finally:
+                if token is not None:
+                    current_user_id.reset(token)
         return results
 
     def _is_still_due(self, subscription_id: int, now: datetime) -> bool:
@@ -98,6 +112,10 @@ class ResearchScheduler:
         return lock.locked() if lock is not None else False
 
     def diagnostic_status(self) -> dict[str, object]:
+        running_ids = [item_id for item_id, lock in self._locks.items() if lock.locked()]
+        if self._web_scan_session_factory is not None and running_ids:
+            with self._session_factory() as db:
+                running_ids = list(db.scalars(select(ResearchSubscription.id).where(ResearchSubscription.id.in_(running_ids))))
         if self._task is None or self._task.cancelled():
             status = "stopped"
             message = "研究订阅调度器未运行"
@@ -111,11 +129,7 @@ class ResearchScheduler:
             "status": status,
             "message": message,
             "interval_seconds": 60,
-            "running_subscription_ids": sorted(
-                subscription_id
-                for subscription_id, lock in self._locks.items()
-                if lock.locked()
-            ),
+            "running_subscription_ids": sorted(running_ids),
         }
 
     async def _loop(self) -> None:

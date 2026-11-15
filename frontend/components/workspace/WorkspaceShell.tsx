@@ -135,10 +135,10 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
   </div>;
 
   return <div className={"app-shell workspace-v2" + (webMode ? " web-mobile-ready" : "") + (menuOpen ? " workspace-v2-menu-open" : "") + (materialRoute ? " workspace-v2-material" : "") + (section === "/research-data" ? " workspace-v2-research-material" : "") + (fullMaterialKind ? " workspace-v2-full-material" : "") + (artwork ? " workspace-v2-atmospheric" : "") + (section === "/papers" ? " workspace-v2-reader-atmosphere" : "")} style={shellStyle}>
+    {webMode && mobileMaterial && <div className="workspace-mobile-backdrop" aria-hidden="true" />}
     <Nav workspace onNavigate={menuOpen ? closeMenu : undefined} />
     {menuOpen && webMode && <button type="button" className="workspace-navigation-backdrop" aria-label="收起导航菜单" onClick={closeMenu} />}
     <div className="workspace-v2-column">
-      {webMode && mobileMaterial && <div className="workspace-mobile-backdrop" aria-hidden="true" />}
       <div className="workspace-v2-topbar">
         <button ref={menuButton} type="button" className="workspace-v2-menu-button" aria-label={menuOpen ? "关闭导航" : "打开导航"} aria-controls="workspace-v2-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(open => !open)}>
           <span aria-hidden="true">{menuOpen ? "×" : "☰"}</span>
