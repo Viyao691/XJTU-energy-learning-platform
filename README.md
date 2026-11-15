@@ -22,6 +22,15 @@
 
 </div>
 
+## 参赛作品与团队
+
+**能研智助——面向储能领域的科研智慧学习平台**参加传智杯 AI Web 开发赛道，参赛形式为 PC 网页端。
+
+项目由 **席铭蔚（西安交通大学）** 个人完成，负责产品设计、前后端开发、AI 功能集成、部署和参赛材料整理。
+
+评审可通过 [PC 网页端](https://energy.viyao.cn) 访问平台，评审账号随参赛材料提供。网站源码和环境模板位于当前分支；网站部署步骤见[部署说明](deploy/web/README.md)。
+
+
 公网轻量版：[energy.viyao.cn](https://energy.viyao.cn)。新用户选择“注册账号”，验证邮箱并设置8–128字符密码；已有账号默认使用邮箱和密码登录。“忘记密码”切换为验证码登录，尚未设密码的旧账号也可使用。手机登录卡片紧凑显示，支持浅/深主题；“游客登录”弹窗进入公开知识，个人论文与科研功能需登录。侧栏账户卡显示完整换行邮箱，品牌统一采用已选A研能之环Logo。
 
 手机Web使用紧凑标题、较小插画和单列表单；论文原文以逐页图像阅读，可翻页或打开原始PDF；流程图默认适应屏宽，放大后在图表内滚动。手机导航也显示账号卡。手机适配与验证范围见[逐页审查记录](docs/mobile/2026-10-15-mobile-audit.md)，本次无声竖屏截图巡览保存在本地output/mobile/2026-10-15/。
@@ -249,6 +258,6 @@ Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开
 MIT 适用于项目代码；摄影、字体、图标及其他第三方素材遵循各自许可，来源与署名记录随项目保留。
 # 公网轻量网站部署
 
-云端编辑使用 [dot 交接分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)，启动与编辑范围见[交接说明](docs/handoff/2026-10-15-dot-cloud-handoff.md)。[私有资料页](https://chatgpt.com/space/page_5c4fbfe044d48191b07919ac010fe77e)保存手机视频、审查清单及可编辑素材；需要用户账号访问。GitHub提交不会自动部署网站。
+云端编辑使用 [dot 交接分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)，启动与编辑范围见[交接说明](docs/handoff/2026-10-15-dot-cloud-handoff.md)。GitHub提交不会自动部署网站。
 
 公网版本使用独立`compose.web.yml`和`Dockerfile.web`，邮箱登录后使用个人科研数据；桌面启动命令不变。服务器安装、私密环境、明确数据库迁移、DNS/Caddy及回退步骤见[deploy/web/README.md](deploy/web/README.md)，当前上线边界见[CURRENT_STATUS.md](CURRENT_STATUS.md)。首次网站部署使用空库，不上传本机私人论文或沿用本机会话。
