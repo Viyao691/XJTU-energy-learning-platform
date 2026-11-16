@@ -1,12 +1,5 @@
 <div align="center">
 
-手机校园资讯优先展示内容，监测来源默认收起，可点击展开；游客读取公开资讯无需请求个人提醒。科研日报的 MIT 来源可能返回访问验证网页，此时保留其他来源、缓存与重试，并明确提示，详见 [日报来源诊断](docs/handoff/2026-10-16-research-news-rss-diagnosis.md)。
-
-
-手机端储能编年史不显示动效开关与重播入场按钮；电脑端保留。
-
-网站版当前支持邮箱密码登录、邮箱验证码登录和注册设密码，游客浏览公开内容。首页“意见反馈”先持久保存再通知管理员；轻量网站不加载重型OCR/语音模型。手机侧栏支持点外/左滑收起，手机背景静态化。个人知识问答须管理员另配远程语义嵌入服务，状态读取不会触发付费探测；网站每次最多更新5篇待索引论文，可重复继续。详情见 [手机Web修订记录](docs/mobile/2026-10-16-mobile-v2-audit.md)。
-
 # XJTU-energy-learning-platform
 
 ### 能研智助 · 储能科研学习智慧平台
@@ -18,7 +11,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Python%203.12-3b786c?style=flat-square)
 ![Local First](https://img.shields.io/badge/Local-First-b08b50?style=flat-square)
 
-[📦 下载 Windows 便携版](https://github.com/Viyao691/XJTU-energy-learning-platform/releases/tag/v0.1.0-windows-portable) · [🎬 在线播放完整演示](https://viyao691.github.io/XJTU-energy-learning-platform/) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
+[🌐 PC 网页体验](https://energy.viyao.cn) · [🎬 在线播放完整演示](https://viyao691.github.io/XJTU-energy-learning-platform/) · [功能介绍](#功能介绍) · [快速开始](#快速开始)
 
 </div>
 
@@ -31,9 +24,7 @@
 评审可通过 [PC 网页端](https://energy.viyao.cn) 访问平台，评审账号随参赛材料提供。网站源码和环境模板位于当前分支；网站部署步骤见[部署说明](deploy/web/README.md)。
 
 
-公网轻量版：[energy.viyao.cn](https://energy.viyao.cn)。新用户选择“注册账号”，验证邮箱并设置8–128字符密码；已有账号默认使用邮箱和密码登录。“忘记密码”切换为验证码登录，尚未设密码的旧账号也可使用。手机登录卡片紧凑显示，支持浅/深主题；“游客登录”弹窗进入公开知识，个人论文与科研功能需登录。侧栏账户卡显示完整换行邮箱，品牌统一采用已选A研能之环Logo。
-
-手机Web使用紧凑标题、较小插画和单列表单；论文原文以逐页图像阅读，可翻页或打开原始PDF；流程图默认适应屏宽，放大后在图表内滚动。手机导航也显示账号卡。手机适配与验证范围见[逐页审查记录](docs/mobile/2026-10-15-mobile-audit.md)，本次无声竖屏截图巡览保存在本地output/mobile/2026-10-15/。
+[在线平台](https://energy.viyao.cn)提供论文研读、学习训练与科研工作区，支持账号登录和游客浏览。
 
 ![平台首页 · 浅色主题](docs/github/screenshots/home-light.jpg)
 
@@ -111,7 +102,7 @@
 - **快速理解**：梳理研究问题、方法、核心结果和局限。
 - **通俗理解与审稿人速解**：从入门解释与研究评价两个角度阅读。
 - **术语、图表与证据核验**：结合原文页码查看概念、实验条件与图表说明。
-- PDF 原文与研读报告并排展示，支持笔记及按需 OCR、版面分析和视觉增强。
+- PDF 原文与研读报告并排展示，支持笔记；本地部署提供 OCR、版面分析和视觉增强。
 
 | 原文与研读报告 | 专业术语解释 |
 | :---: | :---: |
@@ -188,7 +179,7 @@
 
 </details>
 
-截图展示实际演示界面；页面中的文献、分析与学习记录用于说明操作流程。详细步骤见[从论文到学习与研究](docs/github/WORKFLOWS.md)。
+详细步骤见[从论文到学习与研究](docs/github/WORKFLOWS.md)。
 
 ## 快速开始
 
@@ -200,7 +191,7 @@
 2. 双击 **`启动储能科研平台.cmd`**。
 3. 按启动器提示在浏览器中打开平台；使用期间保持控制台开启。
 
-运行包已集成 Python、Node 和所需运行依赖，无需另装 Docker。默认 **Mock 演示模式**不需要 API 密钥。真实模型服务与 OCR 权重按需配置。GitHub 自动生成的 “Source code” ZIP/TAR 是源码归档。
+运行包集成 Python、Node 和运行依赖，默认以 **Mock 演示模式**启动；可在系统设置中配置模型服务和 OCR。
 
 [便携版使用说明](docs/github/PORTABLE.md) · [所有 Releases](https://github.com/Viyao691/XJTU-energy-learning-platform/releases)
 
@@ -227,17 +218,16 @@ cp .env.example .env
 docker compose up -d --build
 ```
 
-Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开 `http://localhost:3000`。首次构建会下载依赖，需要一定时间与磁盘空间。
+Windows 启动器会选择空闲端口并打印访问地址；Linux 默认访问 `http://localhost:3000`。
 
 [安装、配置与开发说明](docs/github/SETUP.md)
 
-## 模型与运行方式
+## 本地模型与运行方式
 
 - **模型选择**：系统设置提供 18 项供应商选项，也可配置兼容接口或本地 Ollama。
-- **语义检索**：个人论文库可使用本地 Ollama `bge-m3`；Mock 基础演示不依赖它。
-- **文档处理**：按需启用 OCR、可选 Docling 解析或页面视觉增强。
-- **本地资料**：论文、文件和数据库保存在本机；API 密钥仅由后端保存。云端模型按所选功能接收相应输入。
-- **使用边界**：当前在本机启动并通过浏览器操作；模型归纳与科研候选需要对照来源人工复核。校园与文献来源的可用性以实际访问结果为准。
+- **语义检索**：使用 Ollama `bge-m3` 建立个人论文库向量索引。
+- **文档处理**：支持 OCR、Docling 解析和页面视觉增强。
+- **资料管理**：论文、文件和数据库保存在本机，模型密钥由后端管理。
 
 ## 开发历史
 
@@ -260,8 +250,6 @@ Windows 启动器会选择空闲端口并打印实际地址；Linux 默认打开
 - [素材来源与许可](docs/github/ASSETS.md) · [MIT License](LICENSE)
 
 MIT 适用于项目代码；摄影、字体、图标及其他第三方素材遵循各自许可，来源与署名记录随项目保留。
-# 公网轻量网站部署
+## 网站部署
 
-云端编辑使用 [dot 交接分支](https://github.com/Viyao691/XJTU-energy-learning-platform/tree/codex/energy-web-handoff-20261015)，启动与编辑范围见[交接说明](docs/handoff/2026-10-15-dot-cloud-handoff.md)。GitHub提交不会自动部署网站。
-
-公网版本使用独立`compose.web.yml`和`Dockerfile.web`，邮箱登录后使用个人科研数据；桌面启动命令不变。服务器安装、私密环境、明确数据库迁移、DNS/Caddy及回退步骤见[deploy/web/README.md](deploy/web/README.md)，当前上线边界见[CURRENT_STATUS.md](CURRENT_STATUS.md)。首次网站部署使用空库，不上传本机私人论文或沿用本机会话。
+Web 使用 `compose.web.yml`、`frontend/Dockerfile.web` 和 `backend/Dockerfile.web` 构建服务。配置模板、数据库迁移和部署步骤见[网站部署说明](deploy/web/README.md)。
